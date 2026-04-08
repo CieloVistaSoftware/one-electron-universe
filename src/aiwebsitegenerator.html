@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CieloVista Website Generator</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0d0f14;--bg2:#13161e;--bg3:#1a1e2a;--border:#2a2e3d;
+    --text:#d4d6e0;--muted:#6b7080;
+    --blue:#4a9eff;--purple:#8b7cf8;--coral:#f07a5a;--amber:#e8a730;--teal:#3ecfa8;
+  }
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;line-height:1.7;min-height:100vh}
+
+  header{text-align:center;padding:56px 24px 40px;background:radial-gradient(ellipse at 50% 0%,rgba(139,124,248,.12) 0%,transparent 70%);border-bottom:1px solid var(--border)}
+  header .kicker{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--purple);margin-bottom:14px}
+  header h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;background:linear-gradient(135deg,var(--blue) 0%,var(--purple) 50%,var(--coral) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:12px}
+  header p{max-width:560px;margin:0 auto;color:var(--muted);font-size:.95rem}
+
+  main{max-width:720px;margin:0 auto;padding:48px 24px 80px}
+
+  .form-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:24px}
+  .form-card h2{font-size:.85rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:22px}
+
+  .field{margin-bottom:18px}
+  .field label{display:block;font-size:.82rem;font-weight:600;color:var(--muted);margin-bottom:7px;letter-spacing:.04em}
+  .field input,.field textarea,.field select{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px 14px;font-size:.93rem;font-family:inherit;transition:border-color .2s;outline:none}
+  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--purple)}
+  .field textarea{resize:vertical;min-height:80px}
+  .field select option{background:var(--bg3)}
+
+  .style-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .style-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 6px;cursor:pointer;text-align:center;transition:border-color .2s,background .2s;font-size:.8rem;color:var(--muted)}
+  .style-btn:hover{border-color:var(--purple);color:var(--text)}
+  .style-btn.active{border-color:var(--purple);background:rgba(139,124,248,.12);color:var(--purple);font-weight:600}
+  .style-btn .icon{font-size:1.1rem;display:block;margin-bottom:3px}
+
+  .provider-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:18px}
+  .provider-tab{flex:1;padding:9px;text-align:center;cursor:pointer;font-size:.82rem;color:var(--muted);transition:background .2s,color .2s;border:none;background:transparent;font-family:inherit}
+  .provider-tab:not(:last-child){border-right:1px solid var(--border)}
+  .provider-tab.active{background:rgba(139,124,248,.15);color:var(--purple);font-weight:600}
+  .provider-tab:hover:not(.active){background:var(--bg3);color:var(--text)}
+
+  .key-row{display:flex;gap:8px;align-items:flex-end}
+  .key-row .field{flex:1;margin-bottom:0}
+  .vis-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:10px 12px;cursor:pointer;font-size:.82rem;white-space:nowrap;transition:color .2s,border-color .2s}
+  .vis-btn:hover{color:var(--text);border-color:var(--purple)}
+
+  .key-panel{display:none}.key-panel.show{display:block}
+
+  .section-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+  .section-tag{display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:.8rem;color:var(--muted);transition:border-color .2s,color .2s;user-select:none}
+  .section-tag:has(input:checked){border-color:var(--purple);color:var(--text)}
+  .section-tag input{display:none}
+
+  .gen-btn{width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:1rem;font-weight:700;cursor:pointer;transition:opacity .2s,transform .1s;margin-top:4px}
+  .gen-btn:hover{opacity:.9}
+  .gen-btn:active{transform:scale(.99)}
+  .gen-btn:disabled{opacity:.45;cursor:not-allowed}
+
+  #status{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:20px}
+  #status.show{display:block}
+  .status-hdr{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .spinner{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .status-text{font-size:.9rem;font-weight:600}
+  .status-detail{font-size:.8rem;color:var(--muted);line-height:1.5}
+  .progress-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:10px}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));border-radius:2px;transition:width .4s ease}
+
+  #result{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:26px}
+  #result.show{display:block}
+  #result h3{font-size:.95rem;font-weight:700;margin-bottom:14px;color:var(--teal)}
+  .result-actions{display:flex;gap:9px;flex-wrap:wrap}
+  .btn-dl{background:var(--teal);color:#000;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:700;transition:opacity .2s}
+  .btn-dl:hover{opacity:.88}
+  .btn-prev{background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:10px 16px;border-radius:8px;cursor:pointer;font-size:.88rem;transition:border-color .2s}
+  .btn-prev:hover{border-color:var(--purple)}
+  .btn-new{background:transparent;color:var(--muted);border:1px solid var(--border);padding:10px 16px;border-radius:8px;cursor:pointer;font-size:.88rem;transition:color .2s,border-color .2s}
+  .btn-new:hover{color:var(--text)}
+  .result-meta{margin-top:14px;font-size:.78rem;color:var(--muted);border-top:1px solid var(--border);padding-top:10px}
+
+  #preview-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.88);flex-direction:column}
+  #preview-modal.show{display:flex}
+  .preview-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:9px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+  .preview-bar span{font-size:.83rem;color:var(--muted);flex:1}
+  .preview-close{background:var(--bg3);border:1px solid var(--border);color:var(--muted);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:color .2s}
+  .preview-close:hover{color:var(--text)}
+  #preview-frame{flex:1;border:none;background:#fff}
+
+  details{margin-top:16px}
+  details summary{cursor:pointer;font-size:.8rem;color:var(--muted);padding:5px 0}
+  details summary:hover{color:var(--text)}
+  #log-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 13px;font-size:.76rem;font-family:monospace;color:var(--muted);line-height:1.6;margin-top:7px;white-space:pre-wrap;max-height:150px;overflow-y:auto}
+
+  .provider-note{font-size:.78rem;color:var(--muted);margin-top:8px;padding:8px 12px;background:var(--bg3);border-radius:6px;border-left:2px solid var(--purple)}
+</style>
+</head>
+<body>
+
+<div id="preview-modal">
+  <div class="preview-bar">
+    <span id="preview-label">Preview</span>
+    <button class="preview-close" onclick="closePreview()">×</button>
+  </div>
+  <iframe id="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+</div>
+
+<header>
+  <div class="kicker">CieloVista Software · wb-starter design system</div>
+  <h1>AI Website Generator</h1>
+  <p>Enter any subject — Claude or OpenAI generates real content and wraps it in production-quality HTML with the wb-starter visual language.</p>
+</header>
+
+<main>
+  <div class="form-card">
+    <h2>Website content</h2>
+
+    <div class="field">
+      <label>Subject / Topic</label>
+      <input type="text" id="subject" placeholder="e.g. The One Electron Universe, Roman History, Rust Programming…" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <label>Context or angle (optional)</label>
+      <textarea id="desc" placeholder="Focus on Feynman's path integrals and the parallels with AI probability…"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Target audience</label>
+      <select id="audience">
+        <option value="general">General audience</option>
+        <option value="technical">Technical / expert</option>
+        <option value="students">Students / beginners</option>
+        <option value="business">Business / professional</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Visual style</label>
+      <div class="style-grid">
+        <button class="style-btn active" data-style="dark-tech"><span class="icon">🌌</span>Dark &amp; Tech</button>
+        <button class="style-btn" data-style="light-clean"><span class="icon">☀️</span>Light Clean</button>
+        <button class="style-btn" data-style="editorial"><span class="icon">📰</span>Editorial</button>
+        <button class="style-btn" data-style="interactive"><span class="icon">⚡</span>Interactive</button>
+        <button class="style-btn" data-style="academic"><span class="icon">🎓</span>Academic</button>
+        <button class="style-btn" data-style="minimal"><span class="icon">◻️</span>Minimal</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Sections</label>
+      <div class="section-tags">
+        <label class="section-tag"><input type="checkbox" value="overview" checked> Overview</label>
+        <label class="section-tag"><input type="checkbox" value="concepts" checked> Key Concepts</label>
+        <label class="section-tag"><input type="checkbox" value="timeline"> Timeline</label>
+        <label class="section-tag"><input type="checkbox" value="cards" checked> Detail Cards</label>
+        <label class="section-tag"><input type="checkbox" value="quote"> Quote</label>
+        <label class="section-tag"><input type="checkbox" value="faq"> FAQ</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <h2>AI provider</h2>
+
+    <div class="provider-tabs">
+      <button class="provider-tab active" data-prov="auto" onclick="setProvider('auto')">Auto (Claude → OpenAI)</button>
+      <button class="provider-tab" data-prov="claude" onclick="setProvider('claude')">Claude only</button>
+      <button class="provider-tab" data-prov="openai" onclick="setProvider('openai')">OpenAI only</button>
+    </div>
+
+    <div class="provider-note" id="prov-note">
+      Auto mode tries Claude first. If credits are exhausted it falls back to OpenAI automatically.
+    </div>
+
+
+    <!-- OpenAI model selection only -->
+    <div class="key-panel show" id="panel-openai" style="margin-top:12px">
+      <div class="field" style="margin-top:10px">
+        <label>OpenAI Model</label>
+        <select id="openai-model">
+          <option value="gpt-4o-mini">gpt-4o-mini (fast, cheap)</option>
+          <option value="gpt-4o">gpt-4o (best quality)</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="gen-btn" id="gen-btn" onclick="generate()">✦ Generate Website</button>
+  </div>
+
+  <div id="status">
+    <div class="status-hdr">
+      <div class="spinner"></div>
+      <div class="status-text" id="status-text">Generating…</div>
+    </div>
+    <div class="status-detail" id="status-detail"></div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+
+  <div id="result">
+    <h3>✅ Website ready</h3>
+    <div class="result-actions">
+      <button class="btn-dl" id="btn-dl">⬇ Download HTML</button>
+      <button class="btn-prev" onclick="openPreview()">👁 Preview</button>
+      <button class="btn-new" onclick="resetForm()">＋ New website</button>
+    </div>
+    <div class="result-meta" id="result-meta"></div>
+  </div>
+
+  <details>
+    <summary>Session log</summary>
+    <div id="log-box">No activity yet.</div>
+  </details>
+</main>
+
+<script src="src/generator.js"></script>
+<script>
+  // Style picker
+  document.querySelectorAll('.style-btn').forEach(btn =>
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    })
+  );
+
+  const PROV_NOTES = {
+    auto:   'Auto mode tries Claude first. If credits are exhausted it falls back to OpenAI automatically.',
+    claude: 'Claude only — will error if credits are exhausted.',
+    openai: 'OpenAI only — uses GPT-4o or GPT-4o-mini. Same quality as Copilot\'s underlying model.',
+  };
+
+  function setProvider(p) {
+    document.querySelectorAll('.provider-tab').forEach(t => t.classList.toggle('active', t.dataset.prov === p));
+    document.getElementById('prov-note').textContent = PROV_NOTES[p];
+    document.getElementById('panel-claude').classList.toggle('show', p === 'auto' || p === 'claude');
+    document.getElementById('panel-openai').classList.toggle('show', p === 'auto' || p === 'openai');
+  }
+
+  function toggleVis(id, btn) {
+    const el = document.getElementById(id);
+    el.type = el.type === 'password' ? 'text' : 'password';
+    btn.textContent = el.type === 'password' ? 'Show' : 'Hide';
+  }
+
+  function setProgress(pct, text, detail) {
+    document.getElementById('progress-fill').style.width = pct + '%';
+    if (text   !== undefined) document.getElementById('status-text').textContent   = text;
+    if (detail !== undefined) document.getElementById('status-detail').textContent = detail;
+  }
+
+  function appendLog(msg) {
+    const box = document.getElementById('log-box');
+    const ts  = new Date().toLocaleTimeString();
+    box.textContent += `[${ts}] ${msg}\n`;
+    box.scrollTop = box.scrollHeight;
+  }
+
+  let _generatedHTML = '';
+
+  async function generate() {
+    const subject = document.getElementById('subject').value.trim();
+    if (!subject) { alert('Please enter a subject.'); return; }
+
+    const provider   = document.querySelector('.provider-tab.active').dataset.prov;
+    const desc        = document.getElementById('desc').value.trim();
+    const audience    = document.getElementById('audience').value;
+    const style       = document.querySelector('.style-btn.active').dataset.style;
+    const sections    = [...document.querySelectorAll('.section-tags input:checked')].map(i => i.value);
+    const openaiModel = document.getElementById('openai-model').value;
+
+    document.getElementById('gen-btn').disabled = true;
+    document.getElementById('result').classList.remove('show');
+    document.getElementById('status').classList.add('show');
+    setProgress(5, 'Starting…', 'Connecting to AI provider');
+    appendLog(`subject="${subject}" provider=${provider} style=${style} audience=${audience}`);
+
+    try {
+      const html = await generateWebsite({
+        subject, desc, audience, style, sections,
+        provider, openaiModel,
+        onStatus: (text, detail, pct) => {
+          setProgress(pct, text, detail);
+          appendLog(`${text}${detail ? ' — ' + detail : ''}`);
+        },
+      });
+
+      _generatedHTML = html;
+      appendLog(`Done — ${html.length.toLocaleString()} chars`);
+
+      setTimeout(() => {
+        document.getElementById('status').classList.remove('show');
+        document.getElementById('result').classList.add('show');
+        document.getElementById('result-meta').textContent =
+          `"${subject}" · ${style} · ${audience} · sections: ${sections.join(', ')} · ${(html.length/1024).toFixed(1)} KB`;
+
+        const slug = subject.replace(/\s+/g,'_').replace(/[^a-z0-9_]/gi,'').toLowerCase();
+        const blob = new Blob([html], {type:'text/html'});
+        const url  = URL.createObjectURL(blob);
+        document.getElementById('btn-dl').onclick = () => {
+          const a = document.createElement('a'); a.href=url; a.download=slug+'.html'; a.click();
+        };
+        document.getElementById('preview-label').textContent = subject;
+      }, 350);
+
+    } catch (err) {
+      appendLog(`ERROR: ${err.message}`);
+      document.getElementById('status').classList.remove('show');
+      alert(`Generation failed:\n\n${err.message}`);
+    } finally {
+      document.getElementById('gen-btn').disabled = false;
+    }
+  }
+
+  function openPreview() {
+    if (!_generatedHTML) return;
+    document.getElementById('preview-frame').srcdoc = _generatedHTML;
+    document.getElementById('preview-modal').classList.add('show');
+  }
+  function closePreview() { document.getElementById('preview-modal').classList.remove('show'); }
+  function resetForm() {
+    _generatedHTML = '';
+    document.getElementById('result').classList.remove('show');
+    document.getElementById('subject').value = '';
+    document.getElementById('desc').value = '';
+    document.getElementById('subject').focus();
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePreview(); });
+</script>
+</body>
+</html>

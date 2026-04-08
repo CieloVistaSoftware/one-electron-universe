@@ -1,0 +1,16 @@
+{
+  "type": "module",
+  "name": "cielovista-website-generator",
+  "version": "1.0.0",
+  "description": "CieloVista AI Website Generator — generates content-rich sites via Claude or OpenAI and saves each to generated/{slug}/index.html",
+  "main": "server.js",
+  "scripts": {
+    "prestart": "node check-env.js",
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "npx playwright test"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
