@@ -5,6 +5,8 @@ on:
     branches:
       - main
     paths:
+      - "index.html"
+      - "src/**"
       - "generated/**"
       - ".github/workflows/deploy-generated-pages.yml"
   workflow_dispatch:
@@ -32,10 +34,10 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload generated folder
+      - name: Upload site root
         uses: actions/upload-pages-artifact@v3
         with:
-          path: generated
+          path: .
 
       - name: Deploy
         id: deployment
