@@ -37,7 +37,7 @@ jobs:
       - name: Upload site root
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: generated/the-similiarites-of-llms-and-quantum-mechanics
 
       - name: Deploy
         id: deployment
