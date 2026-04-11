@@ -1,0 +1,146 @@
+{
+  "subject": "The James Webb Space Telescope",
+  "desc": "Focus on the engineering breakthroughs that made JWST possible, its first deep field images, and what it has revealed about the early universe, exoplanet atmospheres, and the large-scale structure of spacetime.",
+  "audience": "general",
+  "style": "dark-tech",
+  "layout": "showcase",
+  "autoStyle": true,
+  "autoKicker": "Deep Space Astronomy & Engineering",
+  "sections": [
+    "overview",
+    "concepts",
+    "cards"
+  ],
+  "generateImages": true,
+  "imageQuality": "standard",
+  "generateCardImages": true,
+  "content": {
+    "title": "Seeing the Invisible Universe: How the James Webb Space Telescope Changed Everything",
+    "tagline": "Built to see the first light of the cosmos, JWST is rewriting everything we thought we knew about the universe.",
+    "introduction": "The James Webb Space Telescope is the most powerful astronomical observatory ever placed in space, but its story begins not with a rocket launch or a mirror being polished, but with a question: what did the universe look like when it was brand new? In the decades following the Hubble Space Telescope's launch in 1990, astronomers grew increasingly eager to peer beyond what Hubble could see — past the oldest galaxies it had captured, back toward the very first stars that switched on after the Big Bang. Answering that question required an entirely different kind of telescope, one that could detect infrared light rather than visible light, because the expansion of the universe stretches the ancient light from those early galaxies into longer wavelengths that human eyes — and Hubble's instruments — simply cannot see. That ambition set engineers on a two-decade journey to build something that had never existed before.\n\nThe engineering challenges were staggering. A telescope sensitive enough to detect infrared radiation must itself be kept extraordinarily cold — below minus 233 degrees Celsius — otherwise the telescope's own heat would blind its instruments. This meant JWST could not use a rigid tube design like Hubble. Instead, engineers designed a tennis-court-sized sunshield made of five layers of a material called Kapton, each layer thinner than a human hair, which blocks solar heat so effectively that one side of the telescope bakes at 85 degrees Celsius while the other side stays colder than any place on Earth. The telescope's primary mirror, at 6.5 metres across, was also far too large to fit inside any rocket fairing, which led to one of the most audacious mechanical designs in spaceflight history: a mirror that folds up like origami and deploys itself automatically once in space.\n\nJWST launched on Christmas Day 2021 aboard an Ariane 5 rocket from the Guiana Space Centre in South America, and what followed was described by NASA engineers as \"29 days of terror\" — the sequence of 344 single-point failures, any one of which could have ended the mission. The sunshield had to unfurl correctly. The secondary mirror had to swing into position. Each of the 18 hexagonal gold-plated beryllium mirror segments had to be individually aligned using actuators capable of adjustments measured in nanometres — fractions the width of a single atom. The telescope ultimately settled at a gravitational sweet spot called the second Lagrange point, or L2, roughly 1.5 million kilometres from Earth, where it orbits in lockstep with our planet while always keeping its back to the Sun.\n\nWhen NASA released the first full-colour science images in July 2022, the reaction was immediate and global. One of those images — JWST's first deep field — showed thousands of galaxies in a patch of sky no larger than a grain of sand held at arm's length, some of them so distant that their light had been travelling for over 13 billion years. What JWST revealed in those first months alone reshaped multiple fields of astronomy simultaneously: it found galaxies that appeared too large and too mature to exist so early in cosmic history, detected water vapour and carbon dioxide in the atmospheres of planets orbiting other stars, and captured the sharpest infrared images ever taken of Jupiter's auroras and rings. The telescope was designed to last at least ten years, but the precision of its launch trajectory used so little fuel that scientists now believe it may operate for twenty years or more.",
+    "concepts": [
+      {
+        "id": "c1",
+        "title": "Infrared Astronomy",
+        "body": "Unlike visible light, infrared radiation passes through clouds of gas and dust that would otherwise block our view, making it the ideal tool for studying star-forming regions, the cores of galaxies, and the most ancient objects in the cosmos. JWST's infrared sensitivity also exploits a phenomenon called cosmological redshift: as the universe expands, light from the earliest galaxies gets stretched into infrared wavelengths, meaning JWST can literally see further back in time than any optical telescope ever built.",
+        "color": "blue"
+      },
+      {
+        "id": "c2",
+        "title": "The Deployable Mirror",
+        "body": "JWST's primary mirror consists of 18 hexagonal segments made of beryllium — a lightweight metal chosen for its stiffness at cryogenic temperatures — each coated with a microscopically thin layer of gold, which is exceptionally reflective at infrared wavelengths. Because the completed mirror at 6.5 metres wide was too large for any rocket, the entire structure was engineered to fold in thirds and lock into perfect alignment after launch using 132 actuators that can make adjustments smaller than a single wavelength of light.",
+        "color": "purple"
+      },
+      {
+        "id": "c3",
+        "title": "The Five-Layer Sunshield",
+        "body": "JWST's kite-shaped sunshield is roughly the size of a tennis court and is composed of five separate layers of aluminized Kapton film, with vacuum gaps between them that act as insulating barriers against heat. Each successive layer is cooler than the last, so that by the time you reach the telescope side of the shield, the temperature has dropped from roughly 85°C to minus 233°C — cold enough for JWST's detectors to function without their own heat contaminating the observations.",
+        "color": "coral"
+      },
+      {
+        "id": "c4",
+        "title": "The L2 Orbit",
+        "body": "JWST orbits the Sun at the second Lagrange point, a location where the gravitational pulls of the Earth and Sun combine with orbital mechanics to keep a spacecraft in a stable position roughly 1.5 million kilometres behind Earth. This orbit means the telescope always faces away from the Sun, Earth, and Moon simultaneously, keeping the sunshield permanently oriented to block all three heat sources while giving the instruments a clear, cold view of deep space.",
+        "color": "amber"
+      },
+      {
+        "id": "c5",
+        "title": "Exoplanet Atmosphere Detection",
+        "body": "When a planet passes in front of its host star, a tiny fraction of the starlight filters through the planet's atmosphere before reaching JWST's instruments. Different molecules absorb specific wavelengths of light, leaving characteristic dips in the spectrum — a fingerprint that allows scientists to identify the chemical composition of an alien atmosphere from trillions of kilometres away. JWST has already detected carbon dioxide, water vapour, methane, and sulfur dioxide in exoplanet atmospheres, marking the most detailed chemical portraits of other worlds ever produced.",
+        "color": "teal"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "1996",
+        "title": "JWST Concept Proposed",
+        "body": "A Next Generation Space Telescope was first formally recommended by an astronomical community report, envisioning a large, cold, infrared-optimized successor to Hubble that could observe the first galaxies."
+      },
+      {
+        "year": "2002",
+        "title": "Named After James Webb",
+        "body": "NASA Administrator Sean O'Keefe renamed the project after James E. Webb, who led NASA from 1961 to 1968 and oversaw the Apollo program's development during a formative era for the agency."
+      },
+      {
+        "year": "2010",
+        "title": "Full-Scale Sunshield Tested",
+        "body": "Engineers completed the first full-scale deployment test of JWST's five-layer sunshield, verifying that the structure could unfurl correctly from its tightly packed launch configuration."
+      },
+      {
+        "year": "2016",
+        "title": "Primary Mirror Completed",
+        "body": "All 18 gold-coated beryllium mirror segments were assembled into the completed primary mirror at NASA's Goddard Space Flight Center, marking a major milestone after years of precision manufacturing."
+      },
+      {
+        "year": "2021",
+        "title": "Launch on Christmas Day",
+        "body": "JWST lifted off on an Ariane 5 rocket from Kourou, French Guiana, beginning a 29-day deployment sequence during which every major component had to unfold and align perfectly for the mission to succeed."
+      },
+      {
+        "year": "2022",
+        "title": "First Science Images Released",
+        "body": "NASA released JWST's first full-colour science images in July 2022, including the deepest infrared image of the universe ever captured, showing thousands of galaxies some 13 billion light-years away."
+      }
+    ],
+    "cards": [
+      {
+        "num": "01",
+        "title": "Galaxies That Shouldn't Exist Yet",
+        "body": "Among JWST's most startling early findings were massive, fully formed galaxies observed just 500 to 700 million years after the Big Bang — far earlier than current models of galaxy formation predicted was possible. These objects appear to contain as many stars as the Milky Way but seem to have assembled in a fraction of the time, prompting cosmologists to revisit the fundamental timelines of how structure forms in the early universe.",
+        "color": "blue"
+      },
+      {
+        "num": "02",
+        "title": "The Deep Field's Scale of Wonder",
+        "body": "JWST's first deep field image covered a patch of sky equivalent in angular size to a grain of sand held at arm's length from your face, yet within that tiny sliver of darkness it captured thousands of galaxies — some appearing as they were just a few hundred million years after the Big Bang. The image revealed gravitational lensing in vivid detail, showing background galaxies warped and multiplied into arcs and rings by the immense gravity of a foreground galaxy cluster called SMACS 0723.",
+        "color": "purple"
+      },
+      {
+        "num": "03",
+        "title": "Mapping the Large-Scale Web",
+        "body": "JWST observations have contributed to mapping the cosmic web — the vast filamentary structure of dark matter and gas along which galaxies cluster and clump across billions of light-years. By identifying galaxy groups and protoclusters at extreme distances, JWST is helping scientists trace how this large-scale scaffolding assembled over cosmic time, testing whether the standard model of cosmology accurately predicts the distribution of matter across the universe.",
+        "color": "coral"
+      },
+      {
+        "num": "04",
+        "title": "Star Birth in Unprecedented Detail",
+        "body": "JWST captured the Carina Nebula's 'Cosmic Cliffs' in infrared light, revealing hundreds of previously hidden young stars embedded in pillars of gas and dust that are entirely invisible to optical telescopes. These images allow astronomers to study the early stages of stellar formation with a precision that was simply impossible before, counting newborn stars and measuring the jets of material they eject as they ignite — a process that shapes the chemical evolution of entire galaxies over billions of years.",
+        "color": "green"
+      }
+    ],
+    "quotes": [
+      {
+        "text": "We are going back almost to the beginning of time, to within the first few hundred million years after the Big Bang. That's what this telescope was designed to do, and it is doing it.",
+        "attribution": "— John Mather, JWST Senior Project Scientist and Nobel Laureate in Physics"
+      },
+      {
+        "text": "The images are more beautiful than I ever imagined they would be. We are seeing things we have never seen before, and we are seeing them in ways we could not have predicted.",
+        "attribution": "— Jane Rigby, JWST Operations Project Scientist, NASA Goddard"
+      }
+    ],
+    "faq": [
+      {
+        "q": "what has the James Webb telescope discovered so far?",
+        "a": "JWST has identified ancient galaxies that appear far too large and mature to have formed so early after the Big Bang, challenging existing models of galaxy formation. It has also detected specific molecules including water vapour, carbon dioxide, methane, and sulfur dioxide in the atmospheres of exoplanets, produced the sharpest infrared images of Jupiter ever captured, and revealed thousands of previously unknown galaxies in its deep field observations."
+      },
+      {
+        "q": "how far back in time can the James Webb telescope see?",
+        "a": "JWST can detect light from galaxies that existed as little as 300 to 400 million years after the Big Bang, which occurred approximately 13.8 billion years ago. This means it is observing light that has been travelling toward us for more than 13 billion years, offering a window into a universe that looked almost nothing like the one we inhabit today."
+      },
+      {
+        "q": "why does James Webb use infrared instead of visible light?",
+        "a": "The universe's expansion causes light from the most distant — and therefore oldest — galaxies to be stretched into longer wavelengths, shifting visible light into the infrared part of the spectrum by the time it reaches us. Infrared light also passes through dust clouds that block visible light, allowing JWST to see into star-forming regions and galactic cores that would otherwise remain hidden."
+      },
+      {
+        "q": "how cold does the James Webb telescope have to be?",
+        "a": "JWST's main infrared detectors must be cooled to approximately minus 233 degrees Celsius — just 40 degrees above absolute zero — to prevent the telescope's own heat from creating a noise signal that drowns out the faint infrared light from distant objects. The five-layer sunshield achieves most of this cooling passively, while a dedicated cryocooler brings the Mid-Infrared Instrument's detectors down to an even colder minus 266 degrees Celsius."
+      },
+      {
+        "q": "will James Webb replace the Hubble telescope?",
+        "a": "JWST does not replace Hubble so much as extend far beyond it in specific capabilities: Hubble observes primarily in visible and ultraviolet light, while JWST operates in infrared, meaning they see fundamentally different things and remain complementary tools. Hubble continues to operate and produce valuable science, and astronomers often use data from both telescopes together to build a more complete picture of the objects they study."
+      }
+    ],
+    "footer": "From a folded mirror inside a rocket fairing to the light of the universe's first galaxies landing on its detectors, JWST stands as proof that human ingenuity, when given enough time and care, can reach all the way back to the beginning of time itself."
+  },
+  "stubCount": 0
+}
