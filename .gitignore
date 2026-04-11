@@ -5,3 +5,4 @@ logs/
 playwright-report/
 test-results/
 *.log
+# generated/ is intentionally NOT gitignored — committed sites deploy via GitHub Pages

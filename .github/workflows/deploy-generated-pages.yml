@@ -1,12 +1,10 @@
-name: Deploy Generated Folder to GitHub Pages
+name: Deploy Generated Sites to GitHub Pages
 
 on:
   push:
     branches:
       - main
     paths:
-      - "index.html"
-      - "src/**"
       - "generated/**"
       - ".github/workflows/deploy-generated-pages.yml"
   workflow_dispatch:
@@ -34,10 +32,10 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload site root
+      - name: Upload all generated sites
         uses: actions/upload-pages-artifact@v3
         with:
-          path: generated/the-similiarites-of-llms-and-quantum-mechanics
+          path: generated
 
       - name: Deploy
         id: deployment

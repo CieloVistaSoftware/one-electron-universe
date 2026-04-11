@@ -5,8 +5,7 @@
   "description": "CieloVista AI Website Generator — generates content-rich sites via Claude or OpenAI and saves each to generated/{slug}/index.html",
   "main": "server.js",
   "scripts": {
-    "prestart": "node check-env.js",
-    "start": "node server.js",
+    "start": "start.cmd",
     "dev": "node --watch server.js",
     "test": "npx playwright test"
   },

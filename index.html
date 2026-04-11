@@ -4,421 +4,794 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CieloVista Website Generator</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='50,5 61,35 95,35 68,57 79,90 50,70 21,90 32,57 5,35 39,35' fill='%233b82f6'/></svg>">
 <style>
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  :root{--bg:#0d0f14;--bg2:#13161e;--bg3:#1a1e2a;--border:#2a2e3d;--text:#d4d6e0;--muted:#6b7080;--blue:#4a9eff;--purple:#8b7cf8;--coral:#f07a5a;--amber:#e8a730;--teal:#3ecfa8}
-  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;line-height:1.7;min-height:100vh}
-
-  header{text-align:center;padding:56px 24px 40px;background:radial-gradient(ellipse at 50% 0%,rgba(139,124,248,.12) 0%,transparent 70%);border-bottom:1px solid var(--border)}
-  .kicker{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--purple);margin-bottom:14px}
-  header h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;background:linear-gradient(135deg,var(--blue) 0%,var(--purple) 50%,var(--coral) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:12px}
-  header p{max-width:560px;margin:0 auto;color:var(--muted);font-size:.95rem}
-
-  main{max-width:720px;margin:0 auto;padding:40px 24px 80px}
-
-  .card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:20px}
-  .card h2{font-size:.82rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px}
-
-  .field{margin-bottom:16px}
-  .field label{display:block;font-size:.82rem;font-weight:600;color:var(--muted);margin-bottom:6px;letter-spacing:.04em}
-  .field input,.field textarea,.field select{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px 14px;font-size:.93rem;font-family:inherit;transition:border-color .2s;outline:none}
-  .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--purple)}
-  .field textarea{resize:vertical;min-height:75px}
-
-  .style-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-  .style-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 6px;cursor:pointer;text-align:center;font-size:.79rem;color:var(--muted);transition:border-color .2s,background .2s}
-  .style-btn:hover{border-color:var(--purple);color:var(--text)}
-  .style-btn.active{border-color:var(--purple);background:rgba(139,124,248,.12);color:var(--purple);font-weight:600}
-  .style-btn .ic{font-size:1.1rem;display:block;margin-bottom:3px}
-
-  .prov-tabs{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px}
-  .prov-tab{flex:1;padding:9px;text-align:center;cursor:pointer;font-size:.82rem;color:var(--muted);border:none;background:transparent;font-family:inherit;transition:background .2s,color .2s}
-  .prov-tab:not(:last-child){border-right:1px solid var(--border)}
-  .prov-tab.active{background:rgba(139,124,248,.15);color:var(--purple);font-weight:600}
-  .prov-tab:hover:not(.active){background:var(--bg3);color:var(--text)}
-
-  .key-row{display:flex;gap:8px;align-items:flex-end}
-  .key-row .field{flex:1;margin-bottom:0}
-  .vis-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:10px 12px;cursor:pointer;font-size:.82rem;white-space:nowrap;transition:color .2s}
-  .vis-btn:hover{color:var(--text);border-color:var(--purple)}
-
-  .kpanel{display:none}.kpanel.show{display:block}
-
-  .sec-tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
-  .sec-tag{display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:.8rem;color:var(--muted);transition:border-color .2s,color .2s;user-select:none}
-  .sec-tag:has(input:checked){border-color:var(--purple);color:var(--text)}
-  .sec-tag input{display:none}
-
-  .prov-note{font-size:.78rem;color:var(--muted);margin-top:8px;padding:7px 11px;background:var(--bg3);border-radius:6px;border-left:2px solid var(--purple)}
-
-  .gen-btn{width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:1rem;font-weight:700;cursor:pointer;transition:opacity .2s,transform .1s;margin-top:4px}
-  .gen-btn:hover{opacity:.9}.gen-btn:active{transform:scale(.99)}.gen-btn:disabled{opacity:.45;cursor:not-allowed}
-
-  #status{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
-  #status.show{display:block}
-  .shdr{display:flex;align-items:center;gap:10px;margin-bottom:7px}
-  .spinner{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .stext{font-size:.9rem;font-weight:600}
-  .sdetail{font-size:.8rem;color:var(--muted)}
-  .pbar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:10px}
-  .pfill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));border-radius:2px;transition:width .4s ease}
-
-  #result{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px}
-  #result.show{display:block}
-  #result h3{font-size:.95rem;font-weight:700;margin-bottom:6px;color:var(--teal)}
-  .saved-path{font-size:.8rem;color:var(--muted);margin-bottom:14px;word-break:break-all}
-  .saved-path a{color:var(--blue);text-decoration:none}
-  .saved-path a:hover{text-decoration:underline}
-  .rbtns{display:flex;gap:9px;flex-wrap:wrap}
-  .btn-open{background:var(--teal);color:#000;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:700;transition:opacity .2s;text-decoration:none;display:inline-block}
-  .btn-open:hover{opacity:.88}
-  .btn-prev{background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:10px 16px;border-radius:8px;cursor:pointer;font-size:.88rem;transition:border-color .2s}
-  .btn-prev:hover{border-color:var(--purple)}
-  .btn-new{background:transparent;color:var(--muted);border:1px solid var(--border);padding:10px 16px;border-radius:8px;cursor:pointer;font-size:.88rem;transition:color .2s}
-  .btn-new:hover{color:var(--text)}
-
-  /* generated sites list */
-  #sites-section{margin-top:8px}
-  #sites-section h2{font-size:.82rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px}
-  #sites-list{display:flex;flex-direction:column;gap:8px}
-  .site-row{display:flex;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;transition:border-color .2s}
-  .site-row:hover{border-color:var(--purple)}
-  .site-slug{font-size:.9rem;font-weight:600;flex:1;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .site-meta{font-size:.75rem;color:var(--muted);flex-shrink:0}
-  .site-open{font-size:.8rem;color:var(--blue);text-decoration:none;flex-shrink:0}
-  .site-open:hover{text-decoration:underline}
-  .empty-sites{font-size:.85rem;color:var(--muted);padding:12px 0}
-
-  #preview-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.88);flex-direction:column}
-  #preview-modal.show{display:flex}
-  .pbar-top{background:var(--bg2);border-bottom:1px solid var(--border);padding:9px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
-  .pbar-top span{font-size:.83rem;color:var(--muted);flex:1}
-  .pclose{background:var(--bg3);border:1px solid var(--border);color:var(--muted);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center}
-  .pclose:hover{color:var(--text)}
-  #pframe{flex:1;border:none;background:#fff}
-
-  details{margin-top:12px}
-  details summary{cursor:pointer;font-size:.8rem;color:var(--muted);padding:5px 0}
-  details summary:hover{color:var(--text)}
-  #log{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 13px;font-size:.76rem;font-family:monospace;color:var(--muted);line-height:1.6;margin-top:7px;white-space:pre-wrap;max-height:140px;overflow-y:auto}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0f14;--bg2:#13161e;--bg3:#1a1e2a;--border:#2a2e3d;
+  --text:#d4d6e0;--muted:#6b7080;
+  --blue:#4a9eff;--purple:#8b7cf8;--coral:#f07a5a;--amber:#e8a730;--teal:#3ecfa8;
+}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;line-height:1.7;min-height:100vh}
+header{text-align:center;padding:48px 24px 36px;background:radial-gradient(ellipse at 50% 0%,rgba(139,124,248,.12) 0%,transparent 70%);border-bottom:1px solid var(--border)}
+header .kicker{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--purple);margin-bottom:12px}
+header h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;background:linear-gradient(135deg,var(--blue) 0%,var(--purple) 50%,var(--coral) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:10px}
+header p{max-width:540px;margin:0 auto;color:var(--muted);font-size:.93rem}
+.tabs{display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:24px}
+.tab{flex:1;padding:10px;text-align:center;cursor:pointer;font-size:.86rem;font-weight:600;color:var(--muted);border:none;background:transparent;font-family:inherit;transition:background .2s,color .2s}
+.tab:not(:last-child){border-right:1px solid var(--border)}
+.tab.on{background:rgba(139,124,248,.15);color:var(--purple)}
+.tab:hover:not(.on){background:var(--bg3);color:var(--text)}
+.panel{display:none}.panel.on{display:block}
+main{max-width:700px;margin:0 auto;padding:40px 24px 80px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:20px}
+.card-title{font-size:.8rem;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:20px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:6px;letter-spacing:.04em}
+.field input,.field textarea,.field select{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:10px 13px;font-size:.92rem;font-family:inherit;outline:none;transition:border-color .2s}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--purple)}
+.field textarea{resize:vertical;min-height:72px}
+/* Layout picker (generate tab) */
+.layout-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.lbtn{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:7px 5px 9px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.75rem;color:var(--muted);transition:border-color .2s,background .2s;font-family:inherit;font-weight:400}
+.lbtn:hover{border-color:var(--purple);color:var(--text)}
+.lbtn.on{border-color:var(--purple);background:rgba(139,124,248,.12);color:var(--purple);font-weight:600}
+.lbtn svg{display:block;border-radius:3px;pointer-events:none}
+/* Sections */
+.sec-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.stag{display:flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:.8rem;color:var(--muted);user-select:none;transition:border-color .2s,color .2s}
+.stag:has(input:checked){border-color:var(--purple);color:var(--text)}
+.stag input{display:none}
+/* Provider note */
+.pnote{font-size:.77rem;color:var(--muted);padding:7px 10px;background:var(--bg3);border-radius:6px;border-left:2px solid var(--purple);margin-bottom:0}
+/* Generate button */
+.genbtn{width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:1rem;font-weight:700;cursor:pointer;margin-top:16px;transition:opacity .2s,transform .1s;font-family:inherit}
+.genbtn:hover{opacity:.9}.genbtn:active{transform:scale(.99)}.genbtn:disabled{opacity:.45;cursor:not-allowed}
+/* Status */
+#status{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px}
+#status.on{display:block}
+.spin-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.spin{width:15px;height:15px;border:2px solid var(--border);border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+#s-text{font-size:.9rem;font-weight:600}
+#s-detail{font-size:.8rem;color:var(--muted)}
+.pbar{height:3px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:10px}
+.pfill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));border-radius:2px;transition:width .4s ease}
+/* Result */
+#result{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:16px}
+#result.on{display:block}
+#result h3{font-size:.93rem;font-weight:700;margin-bottom:6px;color:var(--teal)}
+.r-badge{font-size:.74rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.r-badge span{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:2px 10px}
+.r-badge span.hi{color:var(--purple);border-color:rgba(139,124,248,.4)}
+.r-btns{display:flex;gap:8px;flex-wrap:wrap}
+.btn-dl{background:var(--teal);color:#000;border:none;padding:9px 18px;border-radius:7px;cursor:pointer;font-size:.86rem;font-weight:700;font-family:inherit;transition:opacity .2s}
+.btn-dl:hover{opacity:.88}
+.btn-prev{background:var(--bg3);color:var(--text);border:1px solid var(--border);padding:9px 14px;border-radius:7px;cursor:pointer;font-size:.86rem;font-family:inherit;transition:border-color .2s}
+.btn-prev:hover{border-color:var(--purple)}
+.btn-new{background:transparent;color:var(--muted);border:1px solid var(--border);padding:9px 14px;border-radius:7px;cursor:pointer;font-size:.86rem;font-family:inherit;transition:color .2s}
+.btn-new:hover{color:var(--text)}
+.r-meta{margin-top:12px;font-size:.76rem;color:var(--muted);border-top:1px solid var(--border);padding-top:10px}
+/* Log */
+details{margin-top:14px}
+details summary{cursor:pointer;font-size:.78rem;color:var(--muted);padding:4px 0}
+#log{background:var(--bg3);border:1px solid var(--border);border-radius:7px;padding:10px 12px;font-size:.74rem;font-family:monospace;color:var(--muted);line-height:1.6;margin-top:6px;white-space:pre-wrap;max-height:130px;overflow-y:auto}
+/* Image toggle */
+.img-toggle{display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:10px}
+.img-toggle input[type=checkbox]{width:16px;height:16px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
+.img-label{font-size:.9rem;font-weight:600;color:var(--text)}
+.img-note{font-size:.77rem;color:var(--muted);line-height:1.55;padding-left:26px}
+.img-note code{font-size:.76rem;background:var(--bg3);border:1px solid var(--border);padding:1px 5px;border-radius:3px;color:var(--teal)}
+/* Gallery */
+.g-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.g-count{font-size:.8rem;color:var(--muted)}
+.g-refresh{background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:6px 13px;border-radius:7px;cursor:pointer;font-size:.78rem;font-family:inherit;transition:color .2s,border-color .2s}
+.g-refresh:hover{color:var(--text);border-color:var(--purple)}
+.g-empty{text-align:center;padding:56px 24px;color:var(--muted);border:1px dashed var(--border);border-radius:12px}
+.g-empty strong{display:block;font-size:1rem;color:var(--text);margin-bottom:6px}
+.g-list{display:flex;flex-direction:column;gap:12px}
+.g-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:18px 22px;transition:border-color .2s}
+.g-card:hover{border-color:#3a3e52}
+.g-title{font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:7px}
+.g-meta{font-size:.74rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-bottom:12px}
+.g-pill{background:var(--bg3);border:1px solid var(--border);padding:2px 8px;border-radius:20px}
+.g-pill.hi{color:var(--purple)}
+.g-actions{display:flex;gap:7px;flex-wrap:wrap}
+.btn-view{background:var(--purple);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;font-weight:700;font-family:inherit;transition:opacity .2s}
+.btn-view:hover{opacity:.85}
+.btn-img{background:var(--bg3);color:var(--amber);border:1px solid var(--amber);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.8rem;font-weight:600;font-family:inherit}
+.btn-pub{background:var(--bg3);color:#34d399;border:1px solid #34d399;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.8rem;font-weight:600;font-family:inherit;transition:opacity .2s}
+.btn-pub:hover{opacity:.8}
+.pub-link{display:block;font-size:.76rem;color:var(--teal);margin-top:10px;word-break:break-all;text-decoration:none;opacity:.85}
+.pub-link:hover{opacity:1;text-decoration:underline}
+.btn-img-all{background:var(--bg3);color:var(--muted);border:1px solid var(--border);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.8rem;font-family:inherit;transition:border-color .2s,color .2s}
+.btn-img-all:hover{border-color:var(--amber);color:var(--amber)}
+.btn-rs{background:var(--bg3);color:var(--muted);border:1px solid var(--border);padding:6px 12px;border-radius:6px;cursor:pointer;font-size:.8rem;font-family:inherit;transition:border-color .2s,color .2s,background .2s}
+.btn-rs.open{border-color:var(--purple);color:var(--purple);background:rgba(139,124,248,.1)}
+.btn-del{background:transparent;color:var(--muted);border:1px solid var(--border);padding:6px 10px;border-radius:6px;cursor:pointer;font-size:.8rem;font-family:inherit;margin-left:auto}
+.btn-del:hover{color:#f87171;border-color:#f87171}
+/* Restyle panel */
+.rs-panel{display:none;border-top:1px solid var(--border);margin-top:14px;padding-top:16px}
+.rs-panel.open{display:block}
+.rs-label{font-size:.72rem;font-weight:700;color:var(--secondary,var(--muted));text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;margin-top:12px}
+.rs-label:first-child{margin-top:0}
+.rl-row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:4px}
+.rl-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:5px 3px 7px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:.7rem;color:var(--muted);font-family:inherit;font-weight:400;transition:border-color .2s,background .2s}
+.rl-btn:hover{border-color:var(--purple);color:var(--text)}
+.rl-btn.on{border-color:var(--purple);background:rgba(139,124,248,.12);color:var(--purple);font-weight:600}
+.rl-btn svg{display:block;border-radius:2px;pointer-events:none}
+.rs-sec-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.rs-stag{display:flex;align-items:center;gap:4px;background:var(--bg3);border:1px solid var(--border);padding:4px 9px;border-radius:6px;cursor:pointer;font-size:.78rem;color:var(--muted);user-select:none;transition:border-color .2s,color .2s}
+.rs-stag:has(input:checked){border-color:var(--purple);color:var(--text)}
+.rs-stag input{display:none}
+.rs-img{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--muted);cursor:pointer;margin-top:12px;margin-bottom:14px}
+.rs-img input{width:15px;height:15px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
+.btn-regen{background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border:none;padding:9px 20px;border-radius:7px;cursor:pointer;font-size:.86rem;font-weight:700;font-family:inherit;transition:opacity .2s}
+.btn-regen:hover{opacity:.9}.btn-regen:disabled{opacity:.45;cursor:not-allowed}
+.rs-status{font-size:.78rem;color:var(--muted);margin-top:10px;display:none}
+.rs-status.on{display:block}
+/* Preview */
+#prev-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.88);flex-direction:column}
+#prev-modal.on{display:flex}
+.prev-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:9px 14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.prev-bar span{font-size:.82rem;color:var(--muted);flex:1}
+.prev-close{background:var(--bg3);border:1px solid var(--border);color:var(--muted);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.prev-close:hover{color:var(--text)}
+#prev-frame{flex:1;border:none;background:#fff}
+@media(max-width:520px){.layout-row,.rl-row{grid-template-columns:repeat(3,1fr)}}
+/* Help button */
+.help-btn{position:absolute;top:18px;right:20px;background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:5px 13px;border-radius:20px;cursor:pointer;font-size:.8rem;font-family:inherit;transition:border-color .2s,color .2s}
+.help-btn:hover{border-color:var(--purple);color:var(--purple)}
+header{position:relative}
+/* Help modal — centered */
+.help-modal{display:none;position:fixed;inset:0;z-index:300}
+.help-modal.open{display:flex;align-items:center;justify-content:center}
+.help-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.65)}
+.help-box{position:relative;z-index:1;width:min(600px,92vw);max-height:82vh;background:var(--bg2);border:1px solid var(--border);border-radius:16px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.6)}
+.help-bar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border);font-size:.85rem;font-weight:700;flex-shrink:0}
+.help-release{font-size:.72rem;color:var(--purple);background:rgba(139,124,248,.12);border:1px solid rgba(139,124,248,.3);padding:2px 8px;border-radius:10px;font-weight:600}
+.help-body{overflow-y:auto;padding:24px 22px 48px;flex:1}
+.help-body h2{font-size:.82rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--purple);margin:24px 0 10px;border-bottom:1px solid var(--border);padding-bottom:6px}
+.help-body h2:first-child{margin-top:0}
+.help-body p{font-size:.86rem;color:var(--text);line-height:1.65;margin-bottom:10px}
+.help-body ul{font-size:.86rem;color:var(--text);line-height:1.65;padding-left:18px;margin-bottom:10px}
+.help-body li{margin-bottom:5px}
+.help-body code{font-size:.8rem;background:var(--bg3);border:1px solid var(--border);padding:1px 5px;border-radius:3px;color:var(--teal)}
+.help-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-bottom:12px}
+.help-table th{text-align:left;padding:6px 10px;background:var(--bg3);color:var(--muted);font-weight:700;border-bottom:1px solid var(--border)}
+.help-table td{padding:7px 10px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top}
+.help-table tr:last-child td{border-bottom:none}
 </style>
 </head>
 <body>
 
-<div id="preview-modal">
-  <div class="pbar-top">
-    <span id="plabel">Preview</span>
-    <button class="btn-open" id="p-save-btn" style="padding:7px 12px;font-size:.8rem;display:none" onclick="saveFromPreview()">✦ Generate &amp; Save Website</button>
-    <button class="pclose" onclick="closePrev()">×</button>
+<div id="prev-modal">
+  <div class="prev-bar">
+    <span id="prev-label">Preview</span>
+    <button class="prev-close" type="button" onclick="closePrev()">×</button>
   </div>
-  <iframe id="pframe" sandbox="allow-scripts allow-same-origin"></iframe>
+  <iframe id="prev-frame" sandbox="allow-scripts allow-same-origin"></iframe>
 </div>
 
 <header>
   <div class="kicker">CieloVista Software · wb-starter design system</div>
   <h1>AI Website Generator</h1>
-  <p>Enter any subject — AI generates real content and saves it to <code style="background:rgba(255,255,255,.08);padding:1px 6px;border-radius:4px">generated/{slug}/index.html</code></p>
+  <p>Enter any subject — Claude writes the content and builds a production-quality HTML site.</p>
+  <button class="help-btn" type="button" onclick="toggleHelp()">? Help</button>
 </header>
 
+<div id="help-modal" class="help-modal">
+  <div class="help-backdrop" onclick="toggleHelp()"></div>
+  <div class="help-box">
+    <div class="help-bar">
+      <span>Help Guide</span>
+      <span class="help-release" id="help-release" style="display:none"></span>
+      <button type="button" class="prev-close" onclick="toggleHelp()">×</button>
+    </div>
+    <div class="help-body">
+      <h2>What Is This?</h2>
+      <p>The CieloVista Website Generator creates complete, production-quality single-file HTML websites from a plain-English subject. Type a topic, configure a few options, and within 2–3 minutes you have a fully designed, self-contained <code>.html</code> file.</p>
+
+      <h2>Requirements</h2>
+      <p>Set these as Windows environment variables (Start → "environment variables" → User variables → New), then restart the server:</p>
+      <table class="help-table">
+        <tr><th>Variable</th><th>Purpose</th><th>Required?</th></tr>
+        <tr><td><code>CLAUDE</code></td><td>Anthropic Claude — writes all content</td><td>Yes</td></tr>
+        <tr><td><code>falai</code></td><td>fal.ai FLUX — generates images</td><td>Optional</td></tr>
+        <tr><td><code>OPENAI</code></td><td>OpenAI — fallback content provider</td><td>Optional</td></tr>
+      </table>
+
+      <h2>Sections</h2>
+      <table class="help-table">
+        <tr><th>Section</th><th>What it generates</th></tr>
+        <tr><td>Overview</td><td>4 substantive intro paragraphs</td></tr>
+        <tr><td>Key Concepts</td><td>6 named concepts in 2 rows of 3, each with a real-world example</td></tr>
+        <tr><td>Timeline</td><td>6 accurate chronological milestones</td></tr>
+        <tr><td>Detail Cards</td><td>Minimum 6 deep-dive cards (always in rows of 3)</td></tr>
+        <tr><td>Quote</td><td>1–2 attributed quotes</td></tr>
+        <tr><td>FAQ</td><td>5 questions phrased as real Google searches</td></tr>
+      </table>
+
+      <h2>Images</h2>
+      <p>Requires the <code>falai</code> environment variable. When enabled, Claude writes grounded image prompts after generating content — a hero image plus one per card. All images embed as base64 in the HTML so the file is fully self-contained.</p>
+
+      <h2>Layouts</h2>
+      <table class="help-table">
+        <tr><th>Layout</th><th>Best for</th></tr>
+        <tr><td>Classic</td><td>Any subject — centered editorial stack</td></tr>
+        <tr><td>Magazine</td><td>Culture, arts, detailed articles</td></tr>
+        <tr><td>Landing</td><td>Products, software, campaigns</td></tr>
+        <tr><td>Academic</td><td>History, science, research</td></tr>
+        <tr><td>Showcase</td><td>Nature, design, photography, space</td></tr>
+      </table>
+
+      <h2>My Sites — Restyle</h2>
+      <p>Each gallery card has a <strong>⚙ Restyle</strong> button. Expand it to pick a new layout, toggle sections, and change the images setting, then click <strong>↺ Regenerate</strong> to rebuild the site with Claude auto-selecting the visual style.</p>
+
+      <h2>Tips</h2>
+      <ul>
+        <li>Be specific with your subject — more detail = better content.</li>
+        <li>Use the Context field to steer the angle Claude takes.</li>
+        <li>Include Timeline for historical subjects — it anchors accuracy.</li>
+        <li>Style is always Auto — Claude picks the best fit for your subject.</li>
+      </ul>
+
+      <h2>Troubleshooting</h2>
+      <p><strong>Generation fails:</strong> Server logs at <code>logs/ai-trace.log</code>. Most timeouts are API rate limits — wait a minute and retry.</p>
+      <p><strong>Images not appearing:</strong> Check <code>falai</code> env var is set and the server was restarted after setting it.</p>
+      <p><strong>Generic content:</strong> Add more detail to the Context field, or try a more specific subject.</p>
+    </div>
+  </div>
+</div>
+
 <main>
+  <div class="tabs">
+    <button class="tab on" id="tab-gen" type="button" onclick="switchTab('gen')">✦ Generate</button>
+    <button class="tab" id="tab-gallery" type="button" onclick="switchTab('gallery')">🗂 My Sites</button>
+  </div>
 
-  <!-- Form -->
-  <form class="card" id="mainform" onsubmit="event.preventDefault(); generate();">
-    <h2>Website content</h2>
+  <!-- ── Generate tab ── -->
+  <div class="panel on" id="panel-gen">
+    <div class="card">
+      <div class="card-title">Website content</div>
 
-    <div class="field">
-      <label>Subject / Topic</label>
-      <input type="text" id="subject" name="subject" placeholder="e.g. The One Electron Universe, Roman History, Rust Programming…" autocomplete="off" value="THE SIMILIARITES OF LLMS AND QUANTUM MECHANICS">
-    </div>
+      <div class="field">
+        <label>Subject / Topic</label>
+        <input type="text" id="subject" value="The James Webb Space Telescope" autocomplete="off">
+      </div>
 
-    <div class="field">
-      <label>Context or angle (optional)</label>
-      <textarea id="desc" name="desc" placeholder="Focus on Feynman's path integrals and the parallels with AI probability…">USING PROVED QUANTUM MECHANICS PROBLEMS THIS SITE WILL GENERATE A FANTASTIC LOOKING WEBSISTE</textarea>
-    </div>
+      <div class="field">
+        <label>Context or angle (optional)</label>
+        <textarea id="desc">Focus on the engineering breakthroughs that made JWST possible, its first deep field images, and what it has revealed about the early universe, exoplanet atmospheres, and the large-scale structure of spacetime.</textarea>
+      </div>
 
-    <div class="field">
-      <label>Target audience</label>
-      <select id="audience" name="audience">
-        <option value="general">General audience</option>
-        <option value="technical">Technical / expert</option>
-        <option value="students">Students / beginners</option>
-        <option value="business">Business / professional</option>
-      </select>
-    </div>
+      <div class="field">
+        <label>Target audience</label>
+        <select id="audience">
+          <option value="general">General audience</option>
+          <option value="technical">Technical / expert</option>
+          <option value="students">Students / beginners</option>
+          <option value="business">Business / professional</option>
+        </select>
+      </div>
 
-    <div class="field">
-      <label>Visual style</label>
-      <div class="style-grid">
-        <button class="style-btn active" data-style="dark-tech" type="button"><span class="ic">🌌</span>Dark &amp; Tech</button>
-        <button class="style-btn" data-style="light-clean" type="button"><span class="ic">☀️</span>Light Clean</button>
-        <button class="style-btn" data-style="editorial" type="button"><span class="ic">📰</span>Editorial</button>
-        <button class="style-btn" data-style="interactive" type="button"><span class="ic">⚡</span>Interactive</button>
-        <button class="style-btn" data-style="academic" type="button"><span class="ic">🎓</span>Academic</button>
-        <button class="style-btn" data-style="minimal" type="button"><span class="ic">◻️</span>Minimal</button>
+      <div class="field">
+        <label>Layout</label>
+        <div class="layout-row" id="gen-layout-row">
+          <button class="lbtn on" data-layout="classic" type="button" onclick="selectLayout(this)"><svg viewBox="0 0 80 56" width="80" height="56" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="56" fill="#0d0f14"/><rect x="12" y="3" width="56" height="5" rx="2" fill="#2e3347"/><rect x="4" y="10" width="72" height="9" rx="1" fill="#1e2130"/><rect x="4" y="21" width="22" height="6" rx="1" fill="#2e3347"/><rect x="29" y="21" width="22" height="6" rx="1" fill="#2e3347"/><rect x="54" y="21" width="22" height="6" rx="1" fill="#8b7cf8" opacity=".5"/><rect x="4" y="30" width="34" height="10" rx="1" fill="#1e2130"/><rect x="42" y="30" width="34" height="10" rx="1" fill="#1e2130"/><rect x="4" y="43" width="34" height="10" rx="1" fill="#1e2130"/><rect x="42" y="43" width="34" height="10" rx="1" fill="#1e2130"/></svg>Classic</button>
+          <button class="lbtn" data-layout="magazine" type="button" onclick="selectLayout(this)"><svg viewBox="0 0 80 56" width="80" height="56" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="56" fill="#0d0f14"/><rect x="4" y="3" width="33" height="7" rx="1" fill="#2e3347"/><rect x="42" y="3" width="34" height="7" rx="1" fill="#1e2130"/><rect x="4" y="12" width="72" height="7" rx="1" fill="#1e2130"/><rect x="4" y="21" width="33" height="6" rx="1" fill="#2e3347"/><rect x="42" y="21" width="34" height="6" rx="1" fill="#2e3347"/><rect x="4" y="29" width="15" height="4" rx="2" fill="#8b7cf8" opacity=".5"/><rect x="21" y="29" width="15" height="4" rx="2" fill="#2e3347"/><rect x="38" y="29" width="15" height="4" rx="2" fill="#2e3347"/><rect x="55" y="29" width="21" height="4" rx="2" fill="#2e3347"/><rect x="4" y="35" width="72" height="9" rx="1" fill="#1e2130"/><rect x="4" y="46" width="34" height="8" rx="1" fill="#1e2130"/><rect x="42" y="46" width="34" height="8" rx="1" fill="#1e2130"/></svg>Magazine</button>
+          <button class="lbtn" data-layout="landing" type="button" onclick="selectLayout(this)"><svg viewBox="0 0 80 56" width="80" height="56" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="56" fill="#0d0f14"/><rect x="8" y="2" width="64" height="10" rx="2" fill="#2e3347"/><rect x="0" y="14" width="80" height="11" fill="#1e2130"/><rect x="2" y="27" width="11" height="4" rx="2" fill="#8b7cf8" opacity=".5"/><rect x="15" y="27" width="11" height="4" rx="2" fill="#2e3347"/><rect x="28" y="27" width="11" height="4" rx="2" fill="#2e3347"/><rect x="41" y="27" width="11" height="4" rx="2" fill="#2e3347"/><rect x="54" y="27" width="24" height="4" rx="2" fill="#2e3347"/><rect x="2" y="33" width="34" height="10" rx="1" fill="#1e2130"/><rect x="40" y="33" width="38" height="10" rx="1" fill="#2e3347"/><rect x="2" y="45" width="38" height="10" rx="1" fill="#2e3347"/><rect x="44" y="45" width="34" height="10" rx="1" fill="#1e2130"/></svg>Landing</button>
+          <button class="lbtn" data-layout="academic" type="button" onclick="selectLayout(this)"><svg viewBox="0 0 80 56" width="80" height="56" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="56" fill="#0d0f14"/><rect x="4" y="2" width="72" height="5" rx="1" fill="#2e3347"/><rect x="4" y="9" width="13" height="45" rx="1" fill="#1e2130"/><circle cx="10" cy="14" r="2" fill="#8b7cf8" opacity=".7"/><circle cx="10" cy="23" r="2" fill="#2e3347"/><circle cx="10" cy="32" r="2" fill="#2e3347"/><circle cx="10" cy="41" r="2" fill="#2e3347"/><rect x="20" y="9" width="56" height="5" rx="1" fill="#2e3347"/><rect x="20" y="16" width="56" height="5" rx="1" fill="#2e3347"/><rect x="20" y="23" width="44" height="5" rx="1" fill="#2e3347"/><rect x="20" y="31" width="56" height="4" rx="1" fill="#1e2130"/><rect x="20" y="37" width="56" height="4" rx="1" fill="#1e2130"/><rect x="20" y="44" width="13" height="7" rx="1" fill="#1e2130"/><rect x="36" y="44" width="40" height="7" rx="1" fill="#2e3347"/></svg>Academic</button>
+          <button class="lbtn" data-layout="showcase" type="button" onclick="selectLayout(this)"><svg viewBox="0 0 80 56" width="80" height="56" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="56" fill="#0d0f14"/><rect x="0" y="0" width="80" height="5" fill="#1e2130"/><rect x="2" y="7" width="36" height="14" rx="1" fill="#2e3347"/><rect x="2" y="23" width="36" height="10" rx="1" fill="#1e2130"/><rect x="2" y="35" width="36" height="13" rx="1" fill="#2e3347"/><rect x="42" y="7" width="36" height="10" rx="1" fill="#8b7cf8" opacity=".35"/><rect x="42" y="19" width="36" height="14" rx="1" fill="#1e2130"/><rect x="42" y="35" width="36" height="13" rx="1" fill="#1e2130"/></svg>Showcase</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Sections</label>
+        <div class="sec-row">
+          <label class="stag"><input type="checkbox" value="overview" checked> Overview</label>
+          <label class="stag"><input type="checkbox" value="concepts" checked> Concepts</label>
+          <label class="stag"><input type="checkbox" value="timeline"> Timeline</label>
+          <label class="stag"><input type="checkbox" value="cards" checked> Detail Cards</label>
+          <label class="stag"><input type="checkbox" value="quote"> Quote</label>
+          <label class="stag"><input type="checkbox" value="faq"> FAQ</label>
+        </div>
       </div>
     </div>
 
-    <div class="field">
-      <label>Sections</label>
-      <div class="sec-tags">
-        <label class="sec-tag"><input type="checkbox" name="sections" value="overview" checked> Overview</label>
-        <label class="sec-tag"><input type="checkbox" name="sections" value="concepts" checked> Key Concepts</label>
-        <label class="sec-tag"><input type="checkbox" name="sections" value="timeline"> Timeline</label>
-        <label class="sec-tag"><input type="checkbox" name="sections" value="cards" checked> Detail Cards</label>
-        <label class="sec-tag"><input type="checkbox" name="sections" value="quote"> Quote</label>
-        <label class="sec-tag"><input type="checkbox" name="sections" value="faq"> FAQ</label>
+    <div class="card">
+      <div class="card-title">Images</div>
+      <label class="img-toggle">
+        <input type="checkbox" id="gen-images" checked>
+        <span class="img-label">Generate AI images with fal.ai FLUX</span>
+      </label>
+      <div class="img-note">Claude writes image prompts grounded in the page content. Images embed as base64 — fully self-contained file. Requires <code>falai</code> env var or VS Code setting.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">AI provider</div>
+      <div class="pnote">Claude · Anthropic API</div>
+      <button class="genbtn" id="genbtn" type="button" onclick="generate()">✦ Generate Website</button>
+    </div>
+
+    <div id="status">
+      <div class="spin-row"><div class="spin"></div><div id="s-text">Generating…</div></div>
+      <div id="s-detail"></div>
+      <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
+    </div>
+
+    <div id="result">
+      <h3>✅ Website ready</h3>
+      <div class="r-badge" id="r-badge"></div>
+      <div class="r-btns">
+        <button class="btn-dl" id="btn-dl" type="button">⬇ Download HTML</button>
+        <button class="btn-prev" type="button" onclick="openPrev()">👁 Preview</button>
+        <button class="btn-new" type="button" onclick="resetForm()">＋ New website</button>
       </div>
+      <div class="r-meta" id="r-meta"></div>
     </div>
-    <button class="gen-btn" id="genbtn" type="submit">👁 Preview Website</button>
-  </form>
 
-  <!-- Provider -->
-  <div class="card">
-    <h2>AI provider</h2>
+    <details>
+      <summary>Session log</summary>
+      <div id="log">No activity yet.</div>
+    </details>
+  </div>
 
-    <div class="prov-tabs">
-      <button class="prov-tab active" data-p="auto"   onclick="setProv('auto')">Auto (Claude → OpenAI)</button>
-      <button class="prov-tab"        data-p="claude" onclick="setProv('claude')">Claude only</button>
-      <button class="prov-tab"        data-p="openai" onclick="setProv('openai')">OpenAI only</button>
+  <!-- ── Gallery tab ── -->
+  <div class="panel" id="panel-gallery">
+    <div class="g-toolbar">
+      <span class="g-count" id="g-count">Loading…</span>
+      <button class="g-refresh" type="button" onclick="loadGallery()">↻ Refresh</button>
     </div>
-    <div class="prov-note" id="pnote">Auto tries Claude first. Switches to OpenAI automatically if credits are exhausted.</div>
-
-
-    <!-- API key input fields removed as per user request -->
-
-    <!-- Duplicate generate button removed as per user request -->
+    <div id="g-content"><div class="g-empty"><strong>Loading…</strong></div></div>
   </div>
-
-  <!-- Status -->
-  <div id="status">
-    <div class="shdr"><div class="spinner"></div><div class="stext" id="stxt">Generating…</div></div>
-    <div class="sdetail" id="sdet"></div>
-    <div class="pbar"><div class="pfill" id="pfill" style="width:0%"></div></div>
-  </div>
-
-  <!-- Result -->
-  <div id="result">
-    <h3>✅ Saved</h3>
-    <div class="saved-path" id="saved-path"></div>
-    <div class="rbtns">
-      <a class="btn-open" id="btn-open" href="#" target="_blank">↗ Open in browser</a>
-      <button class="btn-prev" id="btn-preview-tab" onclick="openSavedTab()" disabled>↗ Preview in new tab</button>
-      <button class="btn-prev" onclick="openPrev()">👁 Quick preview</button>
-      <button class="btn-new" onclick="resetForm()">＋ New website</button>
-    </div>
-  </div>
-
-  <!-- Generated sites list -->
-  <div id="sites-section">
-    <h2>Generated sites</h2>
-    <div id="sites-list"><div class="empty-sites">No sites yet — generate one above.</div></div>
-  </div>
-
-  <div class="card" id="tools-section">
-    <h2>CieloVista tools</h2>
-    <div class="rbtns">
-      <button class="btn-prev" type="button" onclick="copyLastCommandToCopilot()">📋 Copy last command to Copilot Chat</button>
-    </div>
-    <div class="prov-note" id="tools-note" style="margin-top:10px">Reads your latest shell command from terminal history and copies a Copilot-ready prompt.</div>
-  </div>
-
-  <details>
-    <summary>Session log</summary>
-    <div id="log">No activity yet.</div>
-  </details>
-
 </main>
 
 <script src="src/generator.js"></script>
 <script>
-  // Style picker
-  document.querySelectorAll('.style-btn').forEach(b =>
-    b.addEventListener('click', () => {
-      document.querySelectorAll('.style-btn').forEach(x => x.classList.remove('active'));
-      b.classList.add('active');
-    })
+var _html  = '';
+var _sites = {};
+
+function toggleHelp() {
+  var modal = document.getElementById('help-modal');
+  modal.classList.toggle('open');
+  if (modal.classList.contains('open')) {
+    fetch('/release').then(function(r){ return r.ok ? r.json() : null; }).then(function(v) {
+      var el = document.getElementById('help-release');
+      if (v && v.release) { el.textContent = 'r' + v.release; el.style.display = ''; }
+    }).catch(function(){});
+  }
+}
+
+// ── Layout SVGs (shared between generate + restyle panels) ─────────────────
+var LAYOUT_SVGS = {
+  classic:  '<svg viewBox="0 0 64 44" width="64" height="44" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="44" fill="#0d0f14"/><rect x="9" y="2" width="46" height="4" rx="1" fill="#2e3347"/><rect x="3" y="8" width="58" height="7" rx="1" fill="#1e2130"/><rect x="3" y="17" width="17" height="5" rx="1" fill="#2e3347"/><rect x="23" y="17" width="17" height="5" rx="1" fill="#2e3347"/><rect x="43" y="17" width="18" height="5" rx="1" fill="#8b7cf8" opacity=".5"/><rect x="3" y="24" width="27" height="8" rx="1" fill="#1e2130"/><rect x="34" y="24" width="27" height="8" rx="1" fill="#1e2130"/><rect x="3" y="34" width="27" height="8" rx="1" fill="#1e2130"/><rect x="34" y="34" width="27" height="8" rx="1" fill="#1e2130"/></svg>',
+  magazine: '<svg viewBox="0 0 64 44" width="64" height="44" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="44" fill="#0d0f14"/><rect x="3" y="2" width="26" height="6" rx="1" fill="#2e3347"/><rect x="34" y="2" width="27" height="6" rx="1" fill="#1e2130"/><rect x="3" y="10" width="58" height="5" rx="1" fill="#1e2130"/><rect x="3" y="17" width="26" height="5" rx="1" fill="#2e3347"/><rect x="34" y="17" width="27" height="5" rx="1" fill="#2e3347"/><rect x="3" y="24" width="12" height="3" rx="1" fill="#8b7cf8" opacity=".5"/><rect x="17" y="24" width="12" height="3" rx="1" fill="#2e3347"/><rect x="31" y="24" width="12" height="3" rx="1" fill="#2e3347"/><rect x="45" y="24" width="16" height="3" rx="1" fill="#2e3347"/><rect x="3" y="29" width="58" height="7" rx="1" fill="#1e2130"/><rect x="3" y="38" width="27" height="5" rx="1" fill="#1e2130"/><rect x="34" y="38" width="27" height="5" rx="1" fill="#1e2130"/></svg>',
+  landing:  '<svg viewBox="0 0 64 44" width="64" height="44" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="44" fill="#0d0f14"/><rect x="6" y="2" width="52" height="8" rx="1" fill="#2e3347"/><rect x="0" y="12" width="64" height="8" fill="#1e2130"/><rect x="2" y="22" width="9" height="3" rx="1" fill="#8b7cf8" opacity=".5"/><rect x="13" y="22" width="9" height="3" rx="1" fill="#2e3347"/><rect x="24" y="22" width="9" height="3" rx="1" fill="#2e3347"/><rect x="35" y="22" width="9" height="3" rx="1" fill="#2e3347"/><rect x="46" y="22" width="16" height="3" rx="1" fill="#2e3347"/><rect x="2" y="27" width="27" height="8" rx="1" fill="#1e2130"/><rect x="33" y="27" width="29" height="8" rx="1" fill="#2e3347"/><rect x="2" y="37" width="29" height="6" rx="1" fill="#2e3347"/><rect x="35" y="37" width="27" height="6" rx="1" fill="#1e2130"/></svg>',
+  academic: '<svg viewBox="0 0 64 44" width="64" height="44" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="44" fill="#0d0f14"/><rect x="3" y="2" width="58" height="4" rx="1" fill="#2e3347"/><rect x="3" y="8" width="11" height="34" rx="1" fill="#1e2130"/><circle cx="8" cy="13" r="2" fill="#8b7cf8" opacity=".7"/><circle cx="8" cy="21" r="2" fill="#2e3347"/><circle cx="8" cy="29" r="2" fill="#2e3347"/><circle cx="8" cy="37" r="2" fill="#2e3347"/><rect x="17" y="8" width="44" height="4" rx="1" fill="#2e3347"/><rect x="17" y="14" width="44" height="4" rx="1" fill="#2e3347"/><rect x="17" y="20" width="36" height="4" rx="1" fill="#2e3347"/><rect x="17" y="27" width="44" height="3" rx="1" fill="#1e2130"/><rect x="17" y="32" width="44" height="3" rx="1" fill="#1e2130"/><rect x="17" y="38" width="11" height="5" rx="1" fill="#1e2130"/><rect x="30" y="38" width="31" height="5" rx="1" fill="#2e3347"/></svg>',
+  showcase: '<svg viewBox="0 0 64 44" width="64" height="44" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="44" fill="#0d0f14"/><rect x="0" y="0" width="64" height="4" fill="#1e2130"/><rect x="2" y="6" width="28" height="11" rx="1" fill="#2e3347"/><rect x="2" y="19" width="28" height="8" rx="1" fill="#1e2130"/><rect x="2" y="29" width="28" height="13" rx="1" fill="#2e3347"/><rect x="34" y="6" width="28" height="8" rx="1" fill="#8b7cf8" opacity=".35"/><rect x="34" y="16" width="28" height="11" rx="1" fill="#1e2130"/><rect x="34" y="29" width="28" height="13" rx="1" fill="#1e2130"/></svg>'
+};
+
+var LAYOUT_NAMES = {classic:'Classic',magazine:'Magazine',landing:'Landing',academic:'Academic',showcase:'Showcase'};
+var ALL_SECS     = [{v:'overview',l:'Overview'},{v:'concepts',l:'Concepts'},{v:'timeline',l:'Timeline'},{v:'cards',l:'Detail Cards'},{v:'quote',l:'Quote'},{v:'faq',l:'FAQ'}];
+
+// ── Generate tab ────────────────────────────────────────────────────────────
+
+function selectLayout(btn) {
+  btn.closest('.layout-row, .rl-row').querySelectorAll('.lbtn, .rl-btn').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+}
+
+function setProgress(pct, text, detail) {
+  document.getElementById('pfill').style.width = pct + '%';
+  if (text   != null) document.getElementById('s-text').textContent   = text;
+  if (detail != null) document.getElementById('s-detail').textContent = detail;
+}
+
+function log(msg) {
+  var el = document.getElementById('log');
+  el.textContent += '[' + new Date().toLocaleTimeString() + '] ' + msg + '\n';
+  el.scrollTop = el.scrollHeight;
+}
+
+async function generate() {
+  var subject = document.getElementById('subject').value.trim();
+  if (!subject) { alert('Please enter a subject.'); return; }
+
+  var desc      = document.getElementById('desc').value.trim();
+  var audience  = document.getElementById('audience').value;
+  var layout    = document.querySelector('#gen-layout-row .lbtn.on').dataset.layout;
+  var sections  = Array.from(document.querySelectorAll('.sec-row input:checked')).map(function(i){ return i.value; });
+  var genImages = document.getElementById('gen-images').checked;
+
+  document.getElementById('genbtn').disabled = true;
+  document.getElementById('result').classList.remove('on');
+  document.getElementById('status').classList.add('on');
+  setProgress(5, 'Starting…', 'Connecting to Claude');
+  log('subject="' + subject + '" layout=' + layout + ' images=' + genImages);
+
+  try {
+    var result = await window.generateWebsite({
+      subject: subject, desc: desc, audience: audience,
+      style: 'auto', layout: layout, sections: sections,
+      provider: 'claude', openaiModel: 'gpt-4o-mini',
+      generateImages: genImages, generateCardImages: genImages,
+      onStatus: function(text, detail, pct) {
+        setProgress(pct, text, detail);
+        log(text + (detail ? ' — ' + detail : ''));
+      }
+    });
+
+    _html = result.html || result;
+    log('Done — ' + (typeof _html === 'string' ? _html.length.toLocaleString() : '?') + ' chars');
+
+    setTimeout(function() {
+      document.getElementById('status').classList.remove('on');
+      document.getElementById('result').classList.add('on');
+
+      var badge = document.getElementById('r-badge');
+      badge.innerHTML = '';
+      function pill(text, hi) { var s = document.createElement('span'); s.textContent = text; if (hi) s.className='hi'; badge.appendChild(s); }
+      pill('✨ ' + (result.resolvedStyle||'auto'), true);
+      pill(result.resolvedLayout||layout, true);
+      if (result.autoKicker) pill(result.autoKicker);
+      pill(audience);
+      if (genImages) pill('🖼 images');
+
+      document.getElementById('r-meta').textContent =
+        '"' + subject + '" · ' + sections.join(', ') + ' · ' +
+        (typeof _html === 'string' ? (_html.length/1024).toFixed(1) : '?') + ' KB';
+
+      var slug = subject.replace(/\s+/g,'_').replace(/[^a-z0-9_]/gi,'').toLowerCase();
+      var blob = new Blob([_html], {type:'text/html'});
+      var url  = URL.createObjectURL(blob);
+      document.getElementById('btn-dl').onclick = function() {
+        var a = document.createElement('a'); a.href=url; a.download=slug+'.html'; a.click();
+      };
+      document.getElementById('prev-label').textContent = subject;
+    }, 300);
+
+  } catch (err) {
+    log('ERROR: ' + err.message);
+    document.getElementById('status').classList.remove('on');
+    alert('Generation failed:\n\n' + err.message);
+  } finally {
+    document.getElementById('genbtn').disabled = false;
+  }
+}
+
+function openPrev() {
+  if (!_html) return;
+  document.getElementById('prev-frame').srcdoc = _html;
+  document.getElementById('prev-modal').classList.add('on');
+}
+function closePrev() { document.getElementById('prev-modal').classList.remove('on'); }
+
+function resetForm() {
+  _html = '';
+  document.getElementById('result').classList.remove('on');
+  document.getElementById('subject').value = '';
+  document.getElementById('desc').value = '';
+  document.getElementById('subject').focus();
+}
+
+// ── Tab switching ────────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(function(b){ b.classList.remove('on'); });
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('on'); });
+  document.getElementById('tab-' + name).classList.add('on');
+  document.getElementById('panel-' + name).classList.add('on');
+  if (name === 'gallery') loadGallery();
+}
+
+// ── Gallery ──────────────────────────────────────────────────────────────────
+var SLABELS = {'dark-tech':'🌌 Dark Tech','light-clean':'☀️ Light Clean','editorial':'📰 Editorial','interactive':'⚡ Interactive','academic':'🎓 Academic','minimal':'◻️ Minimal'};
+var LLABELS = {classic:'▤ Classic',magazine:'▥ Magazine',landing:'▦ Landing',academic:'▧ Academic',showcase:'▨ Showcase'};
+
+function fmtDate(s) { try { return new Date(s).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}); } catch(e){ return ''; } }
+function fmtSize(b) { if (!b) return ''; return b > 900000 ? (b/1048576).toFixed(1)+' MB' : Math.round(b/1024)+' KB'; }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+async function loadGallery() {
+  var el = document.getElementById('g-content');
+  var ce = document.getElementById('g-count');
+  el.innerHTML = '<div class="g-empty"><strong>Loading…</strong></div>';
+  ce.textContent = 'Loading…';
+  try {
+    var sites = await window.listWebsites();
+    _sites = {};
+    sites.forEach(function(s){ _sites[s.slug] = s; });
+    ce.textContent = sites.length === 0 ? 'No sites yet' : sites.length + ' site' + (sites.length===1?'':'s');
+    if (!sites.length) { el.innerHTML = '<div class="g-empty"><strong>No sites generated yet</strong>Switch to Generate to create your first site.</div>'; return; }
+    el.innerHTML = '<div class="g-list" id="g-list"></div>';
+    sites.forEach(function(site){ document.getElementById('g-list').appendChild(buildGCard(site)); });
+  } catch(err) {
+    el.innerHTML = '<div class="g-empty"><strong>Could not load sites</strong>' + esc(err.message) + '</div>';
+    ce.textContent = 'Error';
+  }
+}
+
+function buildGCard(site) {
+  var meta       = site.meta || {};
+  var content    = meta.content || {};
+  var title      = content.title || meta.subject || site.slug;
+  var curLayout  = meta.layout   || 'classic';
+  var curSecs    = meta.sections || ['overview','concepts','cards'];
+  var curImages  = meta.generateImages === true;
+  var hasStubs   = meta.stubCount > 0;
+
+  // Build restyle layout buttons
+  var rlBtns = Object.keys(LAYOUT_SVGS).map(function(id) {
+    return '<button class="rl-btn' + (id===curLayout?' on':'') + '" data-layout="' + id + '" type="button" onclick="selRL(this)">' +
+      LAYOUT_SVGS[id] + LAYOUT_NAMES[id] + '</button>';
+  }).join('');
+
+  // Build restyle section tags
+  var rsTags = ALL_SECS.map(function(s) {
+    var chk = curSecs.indexOf(s.v) >= 0;
+    return '<label class="rs-stag"><input type="checkbox" value="' + s.v + '"' + (chk?' checked':'') + '> ' + s.l + '</label>';
+  }).join('');
+
+  var card = document.createElement('div');
+  card.className = 'g-card';
+  card.dataset.slug = site.slug;
+  card.innerHTML =
+    '<div class="g-title">' + esc(title) + '</div>'
+    + '<div class="g-meta">'
+    + '<span class="g-pill hi">' + esc(LLABELS[curLayout]||curLayout) + '</span>'
+    + '<span class="g-pill">' + esc(SLABELS[meta.style||'dark-tech']||meta.style||'') + (meta.autoStyle?' ✨':'') + '</span>'
+    + (meta.autoKicker ? '<span class="g-pill">' + esc(meta.autoKicker) + '</span>' : '')
+    + (fmtDate(site.created) ? '<span class="g-pill">' + fmtDate(site.created) + '</span>' : '')
+    + (site.size ? '<span class="g-pill">' + fmtSize(site.size) + '</span>' : '')
+    + (curImages ? '<span class="g-pill" style="color:var(--amber)">with images</span>' : '')
+    + '</div>'
+    + '<div class="g-actions">'
+    + '<button class="btn-view" type="button" onclick="window.open(\'' + esc(site.url) + '\',\'_blank\',\'noopener\')">👁 View</button>'
+    + '<button class="btn-pub" type="button" onclick="publishSite(\'' + esc(site.slug) + '\',this)">🚀 Publish</button>'
+    + (hasStubs ? '<button class="btn-img" type="button" onclick="addImg(\'' + esc(site.slug) + '\',this)">Fix Missing</button>' : '')
+    + '<button class="btn-img-all" type="button" onclick="regenAllImages(\'' + esc(site.slug) + '\',this)">↺ All Images</button>'
+    + '<button class="btn-rs" type="button" id="rsb-' + esc(site.slug) + '" onclick="toggleRS(\'' + esc(site.slug) + '\')">⚙ Restyle</button>'
+    + '<button class="btn-del" type="button" onclick="delSite(\'' + esc(site.slug) + '\',this)">Delete</button>'
+    + '</div>'
+    + (meta.publishedUrl ? '<a class="pub-link" href="' + esc(meta.publishedUrl) + '" target="_blank" rel="noopener">🌐 ' + esc(meta.publishedUrl) + '</a>' : '')
+    + '<div class="rs-panel" id="rsp-' + esc(site.slug) + '">'
+    + '<div class="rs-label">Layout</div>'
+    + '<div class="rl-row">' + rlBtns + '</div>'
+    + '<div class="rs-label">Sections</div>'
+    + '<div class="rs-sec-row">' + rsTags + '</div>'
+    + '<label class="rs-img"><input type="checkbox" id="rsimg-' + esc(site.slug) + '"' + (curImages?' checked':'') + '> Generate AI images</label>'
+    + '<button class="btn-regen" type="button" onclick="regenSite(\'' + esc(site.slug) + '\',this)">↺ Regenerate</button>'
+    + '<div class="rs-status" id="rsst-' + esc(site.slug) + '"></div>'
+    + '</div>';
+
+  return card;
+}
+
+function toggleRS(slug) {
+  var panel = document.getElementById('rsp-' + slug);
+  var btn   = document.getElementById('rsb-' + slug);
+  var isOpen = panel.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+  btn.textContent = isOpen ? '⚙ Close' : '⚙ Restyle';
+}
+
+function selRL(btn) {
+  btn.closest('.rl-row').querySelectorAll('.rl-btn').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+}
+
+async function regenSite(slug, btn) {
+  var site = _sites[slug];
+  if (!site || !site.meta) { alert('Site metadata not found — try refreshing.'); return; }
+
+  var panel    = document.getElementById('rsp-' + slug);
+  var rlOn     = panel.querySelector('.rl-btn.on');
+  var layout   = rlOn ? rlOn.dataset.layout : (site.meta.layout || 'classic');
+  var sections = Array.from(panel.querySelectorAll('.rs-stag input:checked')).map(function(i){ return i.value; });
+  var genImages = panel.querySelector('#rsimg-' + slug).checked;
+
+  if (!sections.length) { alert('Pick at least one section.'); return; }
+
+  var statusEl = document.getElementById('rsst-' + slug);
+  btn.disabled = true;
+  btn.textContent = '⏳ Starting…';
+  statusEl.textContent = '';
+  statusEl.classList.add('on');
+
+  try {
+    await window.generateWebsite({
+      subject: site.meta.subject || '',
+      desc:    site.meta.desc    || '',
+      audience: site.meta.audience || 'general',
+      style:   'auto',
+      layout:  layout,
+      sections: sections,
+      provider: 'claude',
+      openaiModel: 'gpt-4o-mini',
+      generateImages:     genImages,
+      generateCardImages: genImages,
+      onStatus: function(text, detail, pct) {
+        btn.textContent = '⏳ ' + text.slice(0, 22);
+        statusEl.textContent = detail || text;
+      }
+    });
+
+    btn.textContent = '✅ Done';
+    statusEl.textContent = 'Regenerated with ' + layout + ' layout.';
+
+    // Reload cache so _fixMissingImages can find the new site
+    var freshSites = await window.listWebsites();
+    freshSites.forEach(function(s){ _sites[s.slug] = s; });
+
+    // Auto-fix any images that failed during generation
+    try {
+      var fixed = await _fixMissingImages(slug, function(text){ statusEl.textContent = text; });
+      if (fixed > 0) statusEl.textContent = 'Done — fixed ' + fixed + ' missing image' + (fixed===1?'':'s') + '.';
+    } catch(imgErr) {
+      console.warn('[regenSite] image fix failed:', imgErr.message);
+      statusEl.textContent = 'Done (some images may be missing — use Fix Missing).';
+    }
+
+    setTimeout(function() { loadGallery(); }, 900);
+
+  } catch(err) {
+    alert('Regeneration failed:\n\n' + err.message);
+    btn.disabled = false;
+    btn.textContent = '↺ Regenerate';
+    statusEl.textContent = 'Error: ' + err.message;
+  }
+}
+
+async function delSite(slug, btn) {
+  if (!confirm('Delete "' + slug + '"? Cannot be undone.')) return;
+  btn.disabled = true; btn.textContent = 'Deleting…';
+  try {
+    var res = await fetch('/delete/' + encodeURIComponent(slug), {method:'DELETE'});
+    if (!res.ok) throw new Error((await res.json().catch(function(){return{};})).error||'Delete failed');
+    btn.closest('.g-card').remove();
+    var rem = document.querySelectorAll('.g-card').length;
+    document.getElementById('g-count').textContent = rem ? rem + ' site' + (rem===1?'':'s') : 'No sites yet';
+    if (!rem) document.getElementById('g-content').innerHTML = '<div class="g-empty"><strong>No sites generated yet</strong>Switch to Generate to create your first site.</div>';
+  } catch(err) { alert('Delete failed: ' + err.message); btn.disabled=false; btn.textContent='Delete'; }
+}
+
+async function _fixMissingImages(slug, onProgress) {
+  var site = _sites[slug];
+  if (!site) {
+    var freshSites = await window.listWebsites();
+    freshSites.forEach(function(s){ _sites[s.slug] = s; });
+    site = _sites[slug];
+  }
+  if (!site || !site.meta) throw new Error('Metadata not found for ' + slug);
+
+  var r = await fetch(site.url);
+  var currentHtml = await r.text();
+  var cards = (site.meta.content && site.meta.content.cards) || [];
+
+  function cardStub(numStr, wrapClass) {
+    var idx = parseInt(numStr || '1', 10) - 1;
+    var card = cards[idx] || {};
+    var title  = (card.title || ('Card ' + numStr)).replace(/"/g, '&quot;');
+    var prompt = ('Photographic image illustrating: ' + (card.title||'Card') + '. ' + (card.body||'').slice(0, 100)).replace(/"/g, '&quot;');
+    var imgCls = wrapClass.indexOf('masonry') >= 0 ? 'masonry-card-img shimmer'
+               : wrapClass.indexOf('row')     >= 0 ? 'card-row-img shimmer'
+               : 'card-img shimmer';
+    return '<img data-gen-prompt="' + prompt + '" data-gen-alt="' + title + '" src="" alt="' + title + '" class="' + imgCls + '" onerror="this.style.display=\'none\'">';
+  }
+
+  var workingHtml = currentHtml;
+
+  // --- Convert masonry / academic stub divs ---
+  // Structure: <div class="...-img-stub shimmer"></div> ... <div class="...-num">NN</div>
+  workingHtml = workingHtml.replace(
+    /<div class="([^"]*-img-stub shimmer)"><\/div>([\s\S]{1,500}?<div class="[^"]*(?:mc-num|card-num|card-row-num)[^"]*">(\d{2})<\/div>)/g,
+    function(match, stubClass, after, numStr) {
+      return cardStub(numStr, stubClass) + after;
+    }
   );
 
-  const PNOTES = {
-    auto:   'Auto tries Claude first. Switches to OpenAI automatically if credits are exhausted.',
-    claude: 'Claude only — will fail if credits are exhausted.',
-    openai: 'OpenAI only — GPT-4o or GPT-4o-mini (same family as Copilot).',
-  };
-
-  function setProv(p) {
-    document.querySelectorAll('.prov-tab').forEach(t => t.classList.toggle('active', t.dataset.p === p));
-    document.getElementById('pnote').textContent = PNOTES[p];
-  }
-
-  function toggleVis(id, btn) {
-    const el = document.getElementById(id);
-    el.type = el.type === 'password' ? 'text' : 'password';
-    btn.textContent = el.type === 'password' ? 'Show' : 'Hide';
-  }
-
-  function setProgress(pct, text, detail) {
-    document.getElementById('pfill').style.width = pct + '%';
-    if (text   != null) document.getElementById('stxt').textContent = text;
-    if (detail != null) document.getElementById('sdet').textContent = detail;
-  }
-
-  function log(msg) {
-    const el = document.getElementById('log');
-    el.textContent += `[${new Date().toLocaleTimeString()}] ${msg}\n`;
-    el.scrollTop = el.scrollHeight;
-  }
-
-  let _html = '';
-  let _savedUrl = '';
-  let _savedName = '';
-  let _pendingSaved = null;
-  let _pendingSubject = '';
-
-  function showSavedResult(saved, subject) {
-    document.getElementById('result').classList.add('show');
-    document.getElementById('saved-path').innerHTML =
-      `Saved to <a href="${saved.url}" target="_blank">${saved.path}</a>`;
-    document.getElementById('btn-open').href = saved.url;
-    _savedUrl = saved.url;
-    _savedName = saved.slug || subject;
-    const previewTabBtn = document.getElementById('btn-preview-tab');
-    previewTabBtn.disabled = false;
-    previewTabBtn.textContent = `↗ Preview ${_savedName} in new tab`;
-    document.getElementById('plabel').textContent = subject;
-  }
-
-  async function generate() {
-    const subject = document.getElementById('subject').value.trim();
-    if (!subject) { alert('Enter a subject.'); return; }
-
-    const prov      = document.querySelector('.prov-tab.active').dataset.p;
-    const desc      = document.getElementById('desc').value.trim();
-    const audience  = document.getElementById('audience').value;
-    const style     = document.querySelector('.style-btn.active').dataset.style;
-    const sections  = [...document.querySelectorAll('.sec-tags input:checked')].map(i => i.value);
-    const oaiModel  = document.getElementById('oai-model') ? document.getElementById('oai-model').value : 'gpt-4o-mini';
-
-    document.getElementById('genbtn').disabled = true;
-    document.getElementById('result').classList.remove('show');
-    document.getElementById('status').classList.add('show');
-    setProgress(5, 'Starting…', 'Connecting to AI');
-    log(`subject="${subject}" provider=${prov} style=${style}`);
-
-    try {
-      const { html, saved } = await generateWebsite({
-        subject, desc, audience, style, sections,
-        provider: prov, openaiModel: oaiModel,
-        onStatus: (text, detail, pct) => {
-          setProgress(pct, text, detail);
-          log(`${text}${detail ? ' — ' + detail : ''}`);
-        },
-      });
-
-      _html = html;
-      log(`Saved → ${saved.path}`);
-      _pendingSaved = saved;
-      _pendingSubject = subject;
-
-      setTimeout(() => {
-        document.getElementById('status').classList.remove('show');
-        document.getElementById('result').classList.remove('show');
-        document.getElementById('plabel').textContent = subject;
-        document.getElementById('pframe').srcdoc = _html;
-        document.getElementById('preview-modal').classList.add('show');
-        document.getElementById('p-save-btn').style.display = 'inline-block';
-      }, 300);
-
-    } catch (err) {
-      log(`ERROR: ${err.message}`);
-      document.getElementById('status').classList.remove('show');
-      alert(`Generation failed:\n\n${err.message}`);
-    } finally {
-      document.getElementById('genbtn').disabled = false;
+  // --- Convert landing alt-card stub divs (wrapped in alt-card-media) ---
+  // Structure: <div class="alt-card-media"><div class="...-img-stub shimmer"></div></div> ... <div class="alt-card-num">NN</div>
+  workingHtml = workingHtml.replace(
+    /<div class="alt-card-media"><div class="[^"]*-img-stub shimmer"><\/div><\/div>([\s\S]{1,500}?<div class="[^"]*alt-card-num[^"]*">(\d{2})<\/div>)/g,
+    function(match, after, numStr) {
+      var idx = parseInt(numStr || '1', 10) - 1;
+      var card = cards[idx] || {};
+      var title  = (card.title || ('Card ' + numStr)).replace(/"/g, '&quot;');
+      var prompt = ('Photographic image illustrating: ' + (card.title||'Card') + '. ' + (card.body||'').slice(0, 100)).replace(/"/g, '&quot;');
+      return '<div class="alt-card-media"><img data-gen-prompt="' + prompt + '" data-gen-alt="' + title + '" src="" alt="' + title + '" class="alt-card-img shimmer" onerror="this.style.display=\'none\'"></div>' + after;
     }
-  }
+  );
 
-  function openPrev() {
-    if (!_html) return;
-    document.getElementById('pframe').srcdoc = _html;
-    document.getElementById('preview-modal').classList.add('show');
-  }
+  // Count ALL remaining data-gen-prompt stubs (original img stubs + converted div stubs)
+  var totalStubs = (workingHtml.match(/data-gen-prompt="/g) || []).length;
+  if (totalStubs === 0) return 0;
 
-  function openSavedTab() {
-    if (!_savedUrl) return;
-    window.open(_savedUrl, '_blank', 'noopener');
-  }
+  if (onProgress) onProgress('Fixing ' + totalStubs + ' missing image' + (totalStubs === 1 ? '' : 's') + '…');
 
-  function saveFromPreview() {
-    if (!_pendingSaved) return;
-    showSavedResult(_pendingSaved, _pendingSubject);
-    document.getElementById('preview-modal').classList.remove('show');
-    loadSites();
-  }
+  var filled = await window.injectImages(workingHtml, {
+    quality: site.meta.imageQuality || 'standard',
+    onProgress: onProgress ? function(text) { onProgress(text); } : null
+  });
 
-  function closePrev() { document.getElementById('preview-modal').classList.remove('show'); }
+  var saveRes = await fetch('/save', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ subject: site.meta.subject, html: filled,
+      meta: Object.assign({}, site.meta, { generateImages: true }) })
+  });
+  var saved = await saveRes.json().catch(function() { return {}; });
+  if (!saveRes.ok || !saved.ok) throw new Error(saved.error || 'Save failed');
+  return totalStubs;
+}
 
-  function resetForm() {
-    _html = '';
-    _savedUrl = '';
-    _savedName = '';
-    _pendingSaved = null;
-    _pendingSubject = '';
-    document.getElementById('result').classList.remove('show');
-    document.getElementById('subject').value = '';
-    document.getElementById('desc').value = '';
-    document.getElementById('p-save-btn').style.display = 'none';
-    const previewTabBtn = document.getElementById('btn-preview-tab');
-    previewTabBtn.disabled = true;
-    previewTabBtn.textContent = '↗ Preview in new tab';
-    document.getElementById('subject').focus();
-  }
+async function addImg(slug, btn) {
+  var site = _sites[slug];
+  if (!site || !site.meta) { alert('Metadata not found — try refreshing.'); return; }
 
-  async function copyLastCommandToCopilot() {
-    const noteEl = document.getElementById('tools-note');
-    noteEl.textContent = 'Reading last command from terminal history...';
-
-    try {
-      const res = await fetch('/tools/last-command');
-      const data = await res.json();
-      if (!data.ok || !data.command) {
-        noteEl.textContent = 'Could not find a recent terminal command.';
-        return;
-      }
-
-      const copilotPrompt =
-        'Please help me with this terminal command and explain any errors:\n\n' +
-        data.command;
-
-      await navigator.clipboard.writeText(copilotPrompt);
-      noteEl.textContent = `Copied to clipboard: ${data.command}`;
-      log(`Copied last terminal command for Copilot: ${data.command}`);
-    } catch (err) {
-      noteEl.textContent = `Copy failed: ${err.message}`;
+  // Quick pre-check: count stubs before disabling the button
+  try {
+    var r = await fetch(site.url);
+    var html = await r.text();
+    var imgStubs = (html.match(/data-gen-prompt="/g) || []).length;
+    var divStubs = (html.match(/-img-stub shimmer/g) || []).length;
+    var stubCount = imgStubs + divStubs;
+    if (stubCount === 0) {
+      btn.textContent = '✅ No missing images';
+      setTimeout(function(){ btn.textContent = 'Fix Missing'; }, 2000);
+      return;
     }
-  }
+    btn.disabled = true;
+    btn.textContent = '⏳ ' + stubCount + ' missing…';
+  } catch(err) { alert('Could not read saved site: ' + err.message); return; }
 
-  async function loadSites() {
-    try {
-      const sites = await listWebsites();
-      const el    = document.getElementById('sites-list');
-      if (!sites.length) {
-        el.innerHTML = '<div class="empty-sites">No sites yet — generate one above.</div>';
-        return;
-      }
-      el.innerHTML = sites.map(s => `
-        <div class="site-row">
-          <span class="site-slug">${s.slug}</span>
-          <span class="site-meta">${s.size ? (s.size/1024).toFixed(1)+' KB' : ''}</span>
-          <a class="site-open" href="${s.url}" target="_blank">Open ↗</a>
-        </div>`).join('');
-    } catch {
-      // server might not be running yet
-    }
+  try {
+    await _fixMissingImages(slug, function(text){ btn.textContent = '⏳ ' + text.slice(0,22); });
+    btn.textContent = '✅ Done';
+    setTimeout(loadGallery, 1000);
+  } catch(err) {
+    alert('Image fix failed:\n' + err.message);
+    btn.disabled = false;
+    btn.textContent = 'Fix Missing';
   }
+}
 
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePrev(); });
-  loadSites();
+document.addEventListener('keydown', function(e){ if (e.key==='Escape'){ closePrev(); document.getElementById('help-modal').classList.remove('open'); } });
+
+async function publishSite(slug, btn) {
+  var site = _sites[slug];
+  if (!site || !site.meta) { alert('Metadata not found — try refreshing.'); return; }
+  btn.disabled = true;
+  btn.textContent = '⏳ Publishing…';
+  try {
+    var res = await fetch('/publish/' + encodeURIComponent(slug), { method: 'POST' });
+    var data = await res.json().catch(function(){ return {}; });
+    if (!res.ok) throw new Error(data.error || 'Publish failed (HTTP ' + res.status + ')');
+    btn.textContent = data.alreadyPublished ? '✅ Already live' : '✅ Published!';
+    btn.disabled = false;
+    setTimeout(loadGallery, 600); // reload so pub-link appears from fresh meta
+  } catch(err) {
+    alert('Publish failed:\n\n' + err.message);
+    btn.disabled = false;
+    btn.textContent = '🚀 Publish';
+  }
+}
+
+async function regenAllImages(slug, btn) {
+  var site = _sites[slug];
+  if (!site || !site.meta) { alert('Metadata not found — try refreshing.'); return; }
+  if (!confirm('Regenerate ALL images for "' + (site.meta.subject||slug) + '"?\n\nThis replaces every image including ones that already loaded correctly.')) return;
+  btn.disabled = true;
+  btn.textContent = '⏳ Starting…';
+  try {
+    await window.addImagesToSite(site.meta, function(text) { btn.textContent = '⏳ ' + text.slice(0,22); });
+    btn.textContent = '✅ Done';
+    setTimeout(loadGallery, 1000);
+  } catch(err) {
+    alert('Image regeneration failed:\n' + err.message);
+    btn.disabled = false;
+    btn.textContent = '↺ All Images';
+  }
+}
 </script>
 </body>
 </html>
