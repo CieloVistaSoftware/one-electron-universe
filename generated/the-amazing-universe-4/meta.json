@@ -1,0 +1,195 @@
+{
+  "subject": "The amazing universe",
+  "desc": "what images has jwst provided us that are spectacular",
+  "audience": "general",
+  "style": "dark-tech",
+  "layout": "showcase",
+  "autoStyle": true,
+  "autoKicker": "James Webb Space Telescope",
+  "sections": [
+    "overview",
+    "concepts",
+    "cards"
+  ],
+  "generateImages": true,
+  "imageQuality": "standard",
+  "generateCardImages": false,
+  "content": {
+    "title": "Windows on the Cosmos: The Most Spectacular Images from the James Webb Space Telescope",
+    "tagline": "One telescope changed everything we thought we knew about the universe.",
+    "introduction": "When the first full-colour images from the James Webb Space Telescope were released in July 2022, scientists wept. That reaction was not hyperbole — it was the natural response to seeing the universe rendered in a clarity and depth that no human instrument had ever achieved before. Webb, a collaboration between NASA, the European Space Agency, and the Canadian Space Agency, had spent decades in development and survived a launch that held the collective breath of the global scientific community. What it sent back exceeded even the most optimistic expectations: ancient galaxies glowing in infrared light, stellar nurseries carved into impossible shapes by radiation and gravity, and the atmospheric fingerprints of worlds beyond our solar system.\n\nThe telescope operates primarily in infrared light, which is invisible to the human eye but carries information that optical telescopes like Hubble simply cannot collect. Infrared light can pass through the vast clouds of gas and dust that obscure many of the universe's most dramatic events. This means Webb can peer inside the dense pillars of nebulae where stars are being born, revealing the infant suns hidden within. The false-colour images produced by scientists — where different infrared wavelengths are mapped to visible colours — are not artistic inventions but precise translations of real physical data, each hue representing a different chemical or thermal signature in space.\n\nWhat makes Webb's images so arresting is not just their resolution or their beauty, but what they contain scientifically. The deep field image released in July 2022 showed a patch of sky roughly the size of a grain of sand held at arm's length, and yet it was packed with thousands of fully formed galaxies, some of which existed when the universe was less than a billion years old. Gravitational lensing — the bending of light by massive galaxy clusters — stretched and magnified background galaxies into glowing arcs, giving astronomers natural cosmic magnifying glasses. Every smear and arc of light in that single image represented an entire galaxy containing billions of stars.\n\nBeyond deep space, Webb has transformed our understanding of objects much closer to home. It has captured Neptune's rings in a detail not seen since Voyager 2 flew past in 1989, revealed the chemistry of Jupiter's storms and auroras in extraordinary colour, and detected carbon dioxide in the atmosphere of an exoplanet for the first time in history. Each new image is not simply a pretty picture — it is a data-rich document that researchers will spend years, sometimes decades, extracting meaning from. The universe has always been this extraordinary; Webb has simply given us the eyes to finally see it.",
+    "concepts": [
+      {
+        "id": "c1",
+        "title": "Infrared Imaging",
+        "body": "Unlike visible light, infrared radiation can travel through thick clouds of cosmic dust and gas. In Webb's image of the Carina Nebula, infrared light pierced through the towering dust columns to reveal dozens of previously hidden young stars that had never been seen before — stars that would have appeared as blank dark regions in any visible-light photograph.",
+        "color": "blue"
+      },
+      {
+        "id": "c2",
+        "title": "Gravitational Lensing",
+        "body": "Massive galaxy clusters warp the fabric of spacetime so severely that light from galaxies behind them bends around them, producing stretched arcs and multiple copies of the same distant object. In Webb's first deep field image of galaxy cluster SMACS 0723, background galaxies are visibly distorted into long curved streaks, acting as a natural magnifier that lets astronomers study galaxies billions of light-years further away than the lens itself.",
+        "color": "purple"
+      },
+      {
+        "id": "c3",
+        "title": "Stellar Nurseries",
+        "body": "Stellar nurseries are dense regions of gas and dust where gravity pulls material together until the pressure and heat ignite nuclear fusion, creating new stars. Webb's image of the Pillars of Creation in the Eagle Nebula showed these towering structures in breathtaking detail — with jets of material streaming from newly forming protostars visible as bright red streaks punching through the pillar tips.",
+        "color": "coral"
+      },
+      {
+        "id": "c4",
+        "title": "Exoplanet Atmospheres",
+        "body": "When a planet passes in front of its star, some starlight filters through the planet's atmosphere and carries chemical signatures that Webb's instruments can decode. In 2022, Webb observed the hot gas giant WASP-39b and detected carbon dioxide, sulphur dioxide, water vapour, and sodium — the most detailed chemical inventory ever taken of an alien world's atmosphere in a single observation.",
+        "color": "amber"
+      },
+      {
+        "id": "c5",
+        "title": "Galaxy Evolution",
+        "body": "By capturing light that has been travelling for over 13 billion years, Webb allows astronomers to see galaxies as they existed in the early universe and compare them to modern structures. The galaxy JADES-GS-z14-0, confirmed in 2024 as one of the most distant galaxies ever observed, was already surprisingly large and bright for a galaxy that formed only 290 million years after the Big Bang, challenging models of how quickly galaxies can grow.",
+        "color": "teal"
+      },
+      {
+        "id": "c6",
+        "title": "False-Colour Translation",
+        "body": "Because infrared light is invisible to human eyes, scientists assign visible colours to different infrared wavelengths to create images we can interpret. In Webb's images of the Tarantula Nebula, blue regions represent hot ionised gas, orange regions mark cooler dust, and red areas highlight molecular hydrogen — so the colours are not decorative but are a direct map of temperature and chemistry across the nebula.",
+        "color": "blue"
+      }
+    ],
+    "timeline": [
+      {
+        "year": "1996",
+        "title": "Webb Concept Proposed",
+        "body": "The telescope originally known as the Next Generation Space Telescope was formally proposed as Hubble's successor, with a design focused on infrared observation of the early universe."
+      },
+      {
+        "year": "2002",
+        "title": "Renamed for James Webb",
+        "body": "NASA renamed the telescope after James E. Webb, the agency's administrator during the critical Apollo era, recognising his role in building NASA into a world-class scientific institution."
+      },
+      {
+        "year": "2021",
+        "title": "Launch on Christmas Day",
+        "body": "Webb launched on 25 December 2021 aboard an Ariane 5 rocket from Kourou, French Guiana, beginning a month-long journey to its orbital position 1.5 million kilometres from Earth."
+      },
+      {
+        "year": "2022",
+        "title": "First Full-Colour Images Released",
+        "body": "On 12 July 2022, NASA released the first package of full-colour scientific images, including the deep field view of SMACS 0723 and the Carina Nebula's stellar nurseries, stunning the world."
+      },
+      {
+        "year": "2022",
+        "title": "First Exoplanet Atmosphere Chemistry",
+        "body": "Webb's observations of WASP-39b produced the most detailed exoplanet atmospheric spectrum ever recorded, detecting carbon dioxide for the first time and opening a new chapter in planetary science."
+      },
+      {
+        "year": "2023",
+        "title": "Cosmic Cliffs and Beyond",
+        "body": "Webb continued delivering landmark images throughout 2023, including refined views of the Pillars of Creation and the first close-up infrared portrait of Uranus showing its rings and seasonal cap."
+      },
+      {
+        "year": "2024",
+        "title": "Most Distant Galaxy Confirmed",
+        "body": "Astronomers confirmed JADES-GS-z14-0 as one of the earliest known galaxies, its light having travelled 13.5 billion years to reach Webb, pushing the boundaries of what the telescope can detect."
+      }
+    ],
+    "cards": [
+      {
+        "num": "01",
+        "title": "The Pillars of Creation — Revisited",
+        "body": "Webb's 2022 image of the Pillars of Creation in the Eagle Nebula did not just update Hubble's iconic 1995 photograph — it fundamentally changed it. The infrared view dissolved the dark, imposing columns into semi-transparent structures backlit by young stars, with dozens of newly forming protostars visible as reddish blobs along the pillar edges that had been completely invisible before.",
+        "color": "blue"
+      },
+      {
+        "num": "02",
+        "title": "Neptune's Rings Return",
+        "body": "Before Webb, the last clear view of Neptune's ring system came from Voyager 2's flyby in 1989. Webb's 2022 near-infrared image restored them in extraordinary clarity, showing all four of the planet's main rings and several fainter dust bands simultaneously. The image also captured Neptune's large moon Triton outshining the planet itself, glowing brilliantly because its nitrogen-ice surface reflects sunlight with unusual efficiency.",
+        "color": "purple"
+      },
+      {
+        "num": "03",
+        "title": "Jupiter in a New Light",
+        "body": "Webb turned its mirror on Jupiter in 2022 and produced a composite image that revealed auroras at both poles, a swirling haze over the equatorial region, and the Great Red Spot glowing white-bright against the surrounding cloud bands. The image combined multiple infrared filters, and what appears as glowing brightness actually represents reflected sunlight from high-altitude hazes — detail invisible to any ground-based telescope.",
+        "color": "coral"
+      },
+      {
+        "num": "04",
+        "title": "Stephan's Quintet — A Galaxy Pile-Up",
+        "body": "Stephan's Quintet is a compact group of five galaxies in the constellation Pegasus, four of which are engaged in a slow gravitational collision. Webb's image of the group is the telescope's largest to date, stitched together from around 1,000 separate image files and covering an area equivalent to about one-fifth of the Moon's diameter as seen from Earth. It showed shock waves rippling through intergalactic gas where one galaxy is plunging through the group at 800 kilometres per second.",
+        "color": "green"
+      },
+      {
+        "num": "05",
+        "title": "The Southern Ring Nebula's Hidden Secret",
+        "body": "The Southern Ring Nebula is the glowing shell of gas expelled by a dying star. Hubble had photographed it before, but Webb's infrared view revealed for the first time that the dimmer of the nebula's two central stars — long assumed to be unremarkable — is actually a dusty, irregular body actively shedding material and shaping the surrounding gas cloud. A star that looked plain in visible light turned out to be central to the entire structure.",
+        "color": "blue"
+      },
+      {
+        "num": "06",
+        "title": "Cartwheel Galaxy — Ripples Across Time",
+        "body": "The Cartwheel Galaxy, about 500 million light-years away, was formed when a smaller galaxy punched directly through a larger one, sending ripples of star formation outward like a stone dropped in water. Webb's image distinguished two distinct rings — a bright inner ring of hot young stars and a clumpy outer ring — and resolved individual star-forming regions in sharper detail than ever before, giving astronomers a live case study in how violent collisions reshape galaxies.",
+        "color": "purple"
+      },
+      {
+        "num": "07",
+        "title": "Tarantula Nebula's Star Factory",
+        "body": "The Tarantula Nebula in the Large Magellanic Cloud is the most active star-forming region in our cosmic neighbourhood, and Webb imaged it in October 2022 with extraordinary results. The image revealed thousands of never-before-seen young stars in the dense central cluster, along with background galaxies visible through gaps in the nebula's gas — a reminder that Webb is always simultaneously looking at multiple scales of the universe at once.",
+        "color": "coral"
+      },
+      {
+        "num": "08",
+        "title": "The Deep Field's Hidden Depth",
+        "body": "The Webb deep field of galaxy cluster SMACS 0723 covers a region of sky so small that you could block it with a poppy seed held at arm's length, yet the image contains thousands of individual galaxies. Some of the faintest reddish smears in the image are among the most distant objects ever photographed, their light stretched into the infrared by the expansion of the universe itself — a process called cosmological redshift that Webb is uniquely built to capture.",
+        "color": "green"
+      },
+      {
+        "num": "09",
+        "title": "Reading Atmospheric Chemistry Like a Barcode",
+        "body": "When Webb studies an exoplanet's atmosphere, it produces a spectrum — a graph of light at different wavelengths — that looks like a barcode. Different molecules absorb light at specific wavelengths, leaving dark gaps in the spectrum. For WASP-39b, the spectrum showed unmistakable gaps corresponding to carbon dioxide, water, and sulphur dioxide, with the sulphur dioxide being particularly significant because it is produced by photochemical reactions driven by the host star's light — a process detected for the first time outside our solar system.",
+        "color": "blue"
+      }
+    ],
+    "quotes": [
+      {
+        "text": "Webb is so powerful it can see the heat signature of a bumblebee at the distance of the Moon.",
+        "attribution": "— NASA Webb Mission Team, describing the telescope's sensitivity during public outreach"
+      },
+      {
+        "text": "We're back with a really good view of the early universe. These images are going to be transformational.",
+        "attribution": "— Dr. Jane Rigby, Webb Operations Project Scientist, NASA, July 2022"
+      },
+      {
+        "text": "Every dot of light in this image is a galaxy. Every galaxy contains hundreds of billions of stars.",
+        "attribution": "— Dr. Amber Straughn, NASA Astrophysicist, commenting on the Webb deep field image, July 2022"
+      }
+    ],
+    "faq": [
+      {
+        "q": "What is the most famous image from the James Webb Space Telescope?",
+        "a": "The first deep field image released on 11 July 2022 is arguably the most celebrated. It shows galaxy cluster SMACS 0723 and contains thousands of galaxies, some of which formed less than a billion years after the Big Bang. The image was selected by US President Biden for an advance preview, making it the first official Webb science image seen by the public."
+      },
+      {
+        "q": "How is Webb different from Hubble?",
+        "a": "The two telescopes observe the universe in fundamentally different kinds of light. Hubble works primarily in visible and ultraviolet light, while Webb specialises in infrared, which allows it to see through dust clouds and detect the light of the most ancient, distant galaxies whose light has been stretched into the infrared by cosmic expansion. Webb's mirror is also about seven times larger in collecting area, making it dramatically more sensitive."
+      },
+      {
+        "q": "Are the colours in Webb images real?",
+        "a": "The colours are real data but not what your eye would see in space. Because Webb captures infrared light that is invisible to humans, scientists translate different infrared wavelengths into visible colours — red, green, and blue — to create images we can perceive and interpret. Each colour represents a specific physical property, such as temperature, chemical composition, or distance, so the images are scientifically accurate translations rather than artistic inventions."
+      },
+      {
+        "q": "Has Webb found any Earth-like planets?",
+        "a": "Webb has not yet confirmed an Earth-like planet with conditions suitable for life, but it has made enormous progress in studying exoplanet atmospheres. It detected carbon dioxide, water, and other molecules in the atmosphere of the gas giant WASP-39b in 2022, and ongoing programmes are targeting smaller rocky planets in habitable zones. The TRAPPIST-1 system, which contains several Earth-sized planets, is one of Webb's primary long-term targets."
+      },
+      {
+        "q": "How far back in time can Webb see?",
+        "a": "Webb can detect light from galaxies that formed as early as 200 to 300 million years after the Big Bang, meaning it can effectively look back over 13.5 billion years. The confirmed galaxy JADES-GS-z14-0, announced in 2024, is one of the most distant ever observed, its light having left it when the universe was barely 2 percent of its current age. Each of Webb's deep observations is, in a very literal sense, a time machine."
+      },
+      {
+        "q": "Where is the James Webb Space Telescope located?",
+        "a": "Webb orbits the Sun at a point called the second Lagrange point, or L2, which sits approximately 1.5 million kilometres from Earth in the direction away from the Sun. At this location, the gravitational pulls of the Earth and Sun combine to keep the telescope moving in sync with Earth as it orbits. This position also means Webb can keep its large sunshield permanently facing the Sun, Earth, and Moon simultaneously, keeping its instruments at the extremely cold temperatures required for infrared observation."
+      }
+    ],
+    "footer": "The universe has been extraordinary for 13.8 billion years — Webb has simply handed us the invitation to finally look."
+  },
+  "stubCount": 9
+}
