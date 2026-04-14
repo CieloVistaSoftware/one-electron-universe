@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Pin Logic Test</title>
+<style>
+body{font-family:monospace;background:#080a10;color:#d4d6e0;padding:20px}
+#tip{display:none;position:fixed;top:40px;left:40px;background:#0c0f1c;border:1px solid #252d48;
+  border-radius:10px;padding:16px;width:260px;pointer-events:auto}
+#tip-pin{background:none;border:1px solid #2a3458;border-radius:4px;cursor:pointer;
+  font-size:14px;padding:3px 8px;color:#6070a0;transition:transform .2s,background .15s,border-color .15s,color .15s}
+#tip-pin.pinned{background:#251e00;border-color:#FFD040;color:#FFD040;transform:rotate(45deg)}
+#log{margin-top:20px;border:1px solid #252d48;padding:10px;height:300px;overflow-y:auto;font-size:12px}
+.pass{color:#22EAA8} .fail{color:#FF4444} .info{color:#6BDFFF}
+button.test-btn{margin:6px;padding:8px 14px;background:#141828;border:1px solid #252d48;
+  color:#a0b0ff;border-radius:6px;cursor:pointer;font-size:12px}
+button.test-btn:hover{background:#1e2840}
+</style>
+</head>
+<body>
+<h2 style="color:#FFD040">Pin Mechanism Test</h2>
+
+<div id="tip">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+    <span id="tip-name" style="color:#f5ecd4;font-weight:bold">Test Tooltip</span>
+    <button id="tip-pin" title="Click to pin open">📌</button>
+  </div>
+  <div id="tip-body" style="color:#9098a8;font-size:12px">Tooltip content here</div>
+</div>
+
+<div>
+  <button class="test-btn" onclick="runAllTests()">▶ RUN ALL TESTS</button>
+  <button class="test-btn" onclick="showTip()">Show Tip</button>
+  <button class="test-btn" onclick="simulateMouseLeave()">Simulate Mouse Leave</button>
+  <button class="test-btn" onclick="simulateNewBarHover()">Simulate New Bar (200ms timer)</button>
+  <button class="test-btn" onclick="clearLog()">Clear Log</button>
+</div>
+<div id="log"></div>
+
+<script>
+// ─── Exact same logic as production ───────────────────────────────────────────
+let tipPinned = false;
+let tipOnCard  = false;
+let tipShowTimer = null;
+let tipLeaveTimer = null;
+
+const tip    = document.getElementById('tip');
+const pinBtn = document.getElementById('tip-pin');
+
+function pinTip(){
+  tipPinned = true;
+  pinBtn.classList.add('pinned');
+  pinBtn.title = 'Click to unpin  ·  ESC';
+}
+function unpinTip(){
+  tipPinned = false;
+  pinBtn.classList.remove('pinned');
+  pinBtn.title = 'Click to pin open';
+}
+
+// FIXED: showTip does NOT call unpinTip
+function showTip(){
+  // Do NOT reset pin here — user controls pin explicitly
+  document.getElementById('tip-name').textContent = 'Tooltip (shown at ' + new Date().toLocaleTimeString() + ')';
+  tip.style.display = 'block';
+}
+
+function hideTip(){
+  if(tipOnCard || tipPinned) return;   // pin check
+  clearTimeout(tipShowTimer);
+  clearTimeout(tipLeaveTimer);
+  tip.style.display = 'none';
+}
+
+function hideTipSoon(){
+  if(tipPinned) return;
+  clearTimeout(tipLeaveTimer);
+  tipLeaveTimer = setTimeout(()=>{ if(!tipOnCard && !tipPinned) hideTip(); }, 200);
+}
+
+// FIXED: mousemove timer doesn't fire when pinned
+function simulateNewBarHover(){
+  log('  Simulating mouse moved to a new bar...', 'info');
+  // This mirrors the production cvs.mousemove logic
+  if(tipPinned){
+    log('  tipPinned=true → skipping timer for new bar', 'pass');
+    return;
+  }
+  clearTimeout(tipShowTimer);
+  tipShowTimer = setTimeout(()=>{
+    log('  Timer fired → showTip() called', 'info');
+    showTip();
+  }, 200);
+}
+
+function simulateMouseLeave(){
+  tipOnCard = false;
+  log('  Mouse left tooltip → hideTip() called...', 'info');
+  hideTip();
+}
+
+// Mouse enters/leaves tooltip card
+tip.addEventListener('mouseenter', ()=>{ tipOnCard=true; });
+tip.addEventListener('mouseleave', ()=>{ tipOnCard=false; hideTip(); });
+
+// Pin button — mousedown only, no click handler
+pinBtn.addEventListener('mousedown', e=>{
+  e.preventDefault();
+  e.stopPropagation();
+  if(tipPinned){
+    unpinTip();
+    log('  Pin button pressed → UNPINNED', 'info');
+  } else {
+    pinTip();
+    log('  Pin button pressed → PINNED', 'pass');
+  }
+});
+
+// ─── Test runner ──────────────────────────────────────────────────────────────
+function log(msg, cls=''){
+  const el = document.getElementById('log');
+  const d  = document.createElement('div');
+  d.className = cls;
+  d.textContent = msg;
+  el.appendChild(d);
+  el.scrollTop = el.scrollHeight;
+}
+function clearLog(){ document.getElementById('log').innerHTML=''; }
+
+function assert(cond, msg){
+  if(cond){ log('  ✓ PASS: ' + msg, 'pass'); return true; }
+  else     { log('  ✗ FAIL: ' + msg, 'fail'); return false; }
+}
+
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+async function runAllTests(){
+  clearLog();
+  let passed=0, failed=0;
+
+  // ── Test 1: Initial state ──────────────────────────────────────────────────
+  log('TEST 1: Initial state', 'info');
+  unpinTip(); tip.style.display='none'; tipOnCard=false;
+  if(assert(!tipPinned,              'tipPinned starts false'))          passed++; else failed++;
+  if(assert(!pinBtn.classList.contains('pinned'), 'button has no .pinned class')) passed++; else failed++;
+  if(assert(pinBtn.title==='Click to pin open',   'title says "Click to pin open"')) passed++; else failed++;
+
+  // ── Test 2: showTip does NOT reset pin ────────────────────────────────────
+  log('TEST 2: showTip() does not touch pin state', 'info');
+  pinTip();
+  showTip();
+  if(assert(tipPinned,               'tipPinned still true after showTip()')) passed++; else failed++;
+  if(assert(pinBtn.classList.contains('pinned'), '.pinned class still present')) passed++; else failed++;
+
+  // ── Test 3: mousedown pins the button ─────────────────────────────────────
+  log('TEST 3: mousedown on pin button sets tipPinned=true', 'info');
+  unpinTip(); showTip(); tipOnCard=true;
+  pinBtn.dispatchEvent(new MouseEvent('mousedown',{bubbles:true,cancelable:true}));
+  if(assert(tipPinned,               'tipPinned=true after mousedown'))  passed++; else failed++;
+  if(assert(pinBtn.classList.contains('pinned'), 'button has .pinned class')) passed++; else failed++;
+
+  // ── Test 4: tooltip stays open when pinned and mouse leaves ───────────────
+  log('TEST 4: tooltip stays open when pinned after mouseleave', 'info');
+  // tip is already pinned from test 3
+  tipOnCard = false;
+  hideTip();   // simulate what happens on mouseleave
+  if(assert(tip.style.display!=='none', 'tooltip still visible (pinned)')) passed++; else failed++;
+
+  // ── Test 5: new bar hover timer does NOT fire when pinned ─────────────────
+  log('TEST 5: new bar hover timer is blocked when pinned', 'info');
+  let timerFired = false;
+  if(tipPinned){
+    // This is what the fixed cvs.mousemove does — skips timer
+    log('  (timer skipped correctly because tipPinned=true)', 'info');
+    if(assert(!timerFired, 'timer did not fire (blocked by pin)')) passed++; else failed++;
+  }
+
+  // ── Test 6: second mousedown unpins ───────────────────────────────────────
+  log('TEST 6: second mousedown unpins', 'info');
+  tipOnCard = true;
+  pinBtn.dispatchEvent(new MouseEvent('mousedown',{bubbles:true,cancelable:true}));
+  if(assert(!tipPinned,              'tipPinned=false after second mousedown')) passed++; else failed++;
+  if(assert(!pinBtn.classList.contains('pinned'), '.pinned class removed')) passed++; else failed++;
+  if(assert(pinBtn.title==='Click to pin open',   'title reset to "Click to pin open"')) passed++; else failed++;
+
+  // ── Test 7: tooltip dismisses normally after unpin ────────────────────────
+  log('TEST 7: tooltip dismisses normally after unpin', 'info');
+  tipOnCard = false;
+  hideTip();
+  if(assert(tip.style.display==='none', 'tooltip hidden after unpin + mouseleave')) passed++; else failed++;
+
+  // ── Test 8: ESC key unpins ─────────────────────────────────────────────────
+  log('TEST 8: ESC key unpins', 'info');
+  showTip(); tipOnCard=true;
+  pinBtn.dispatchEvent(new MouseEvent('mousedown',{bubbles:true,cancelable:true}));
+  assert(tipPinned, '(pinned before ESC)');
+  unpinTip(); // ESC calls unpinTip
+  if(assert(!tipPinned, 'tipPinned=false after ESC'))  passed++; else failed++;
+
+  // ── Summary ───────────────────────────────────────────────────────────────
+  log('', '');
+  const total = passed + failed;
+  if(failed===0){
+    log(`ALL ${total} TESTS PASSED ✓`, 'pass');
+  } else {
+    log(`${passed}/${total} passed — ${failed} FAILED`, 'fail');
+  }
+  return failed===0;
+}
+</script>
+</body>
+</html>

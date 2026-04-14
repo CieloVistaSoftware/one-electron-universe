@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Family Tree of Jesus — Abraham to the Brothers</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#080a10;color:#d4d6e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:60px;overflow-x:hidden}
+header{text-align:center;padding:44px 24px 28px;border-bottom:1px solid #141828}
+.kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#e8a030;margin-bottom:10px}
+header h1{font-size:clamp(1.4rem,3vw,2.3rem);font-weight:700;color:#f5ecd4;margin-bottom:8px}
+.subtitle{color:#9fa8c8;font-size:.95rem;max-width:760px;margin:0 auto 6px;line-height:1.5}
+.intro-note{color:#6f7898;font-size:.8rem;max-width:760px;margin:0 auto;line-height:1.6}
+main{padding:0 16px}
+.legend{display:flex;flex-wrap:wrap;gap:9px;margin:14px auto 6px;max-width:1100px;font-size:11px;color:#505568}
+.legend span{display:flex;align-items:center;gap:5px}
+.sw{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.pan-bar{display:flex;align-items:center;gap:10px;margin:6px auto 8px;max-width:1100px}
+.pan-hint{font-size:11px;color:#303648;flex:1}
+.pan-btn{background:#141828;border:1px solid #252d48;color:#5060a0;padding:5px 16px;border-radius:6px;cursor:pointer;font-size:18px;line-height:1;transition:background .15s,color .15s;user-select:none}
+.zoom-wrap{display:flex;align-items:center;gap:5px;background:#101523;border:1px solid #252d48;border-radius:8px;padding:3px 6px;white-space:nowrap}
+.zoom-btn{background:#141828;border:1px solid #2a3458;color:#8ea8ff;padding:3px 9px;border-radius:5px;cursor:pointer;font-size:13px;line-height:1.2;transition:background .15s,color .15s,border-color .15s}
+.zoom-btn:hover{background:#1a2239;color:#c8d6ff;border-color:#4a63aa}
+.zoom-val{font-size:11px;color:#93a2ca;min-width:44px;text-align:center;font-variant-numeric:tabular-nums}
+.tour-btn{background:#141828;border:1px solid #252d48;color:#22EAA8;padding:5px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;letter-spacing:.06em;transition:background .15s,color .15s,border-color .15s;user-select:none;white-space:nowrap}
+.tour-btn:hover{background:#0a1a14;border-color:#22EAA8}
+.tour-btn.active{background:#003C28;border-color:#22EAA8;color:#90FFD8}
+#tour-nav{display:none;align-items:center;gap:8px;margin:4px auto 0;max-width:1100px}
+#tour-nav.visible{display:flex}
+.tnav{background:#141828;border:1px solid #252d48;color:#5060a0;padding:4px 14px;border-radius:6px;cursor:pointer;font-size:13px;transition:background .15s,color .15s}
+.tnav:hover{background:#1c2238;color:#FFD040}
+#tour-counter{font-size:11px;color:#404868;flex:1;text-align:center}
+.chart-outer{max-width:100%;overflow-x:auto;overflow-y:visible;position:relative;cursor:grab;border-radius:8px;border:1px solid #141828;scrollbar-width:thin;scrollbar-color:#252d48 #080a10}
+.chart-outer:active{cursor:grabbing}
+.chart-outer::-webkit-scrollbar{height:6px}
+.chart-outer::-webkit-scrollbar-track{background:#080a10}
+.chart-outer::-webkit-scrollbar-thumb{background:#252d48;border-radius:3px}
+canvas{display:block}
+#tip{display:none;position:fixed;background:#0c0f1c;border:1px solid #252d48;border-radius:10px;padding:13px 16px;font-size:12px;max-width:340px;z-index:999;line-height:1.65;pointer-events:auto;user-select:none}
+.pinned-card{position:fixed;background:#0c0f1c;border:2px solid #FFD040;border-radius:10px;padding:13px 16px;font-size:12px;max-width:340px;z-index:1000;line-height:1.65;pointer-events:auto;user-select:none;cursor:move}
+.pinned-card-close{position:absolute;top:6px;right:6px;background:none;border:none;color:#6070a0;font-size:14px;cursor:pointer;line-height:1;padding:2px 5px;border-radius:3px}
+.pinned-card-close:hover{color:#ff6060;background:#1e0a0a}
+#tip-name{font-weight:700;color:#f5ecd4;font-size:14px;margin-bottom:2px}
+#tip-era{font-size:10px;color:#7080a8;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+#tip-rel{font-size:11px;margin-bottom:7px}
+.tip-divider{border:none;border-top:1px solid #1e2438;margin:7px 0}
+#tip-heb{font-size:15px;color:#d4c090;margin-bottom:2px;font-family:'Arial Unicode MS',Arial,sans-serif}
+#tip-pro{font-size:11px;color:#6070a0;margin-bottom:2px}
+#tip-mng{font-size:11px;color:#a0a8b8;font-style:italic;margin-bottom:7px}
+#tip-dates{color:#607088;font-size:11px;margin-bottom:5px}
+#tip-note{color:#9098a8;font-size:11px;margin-bottom:7px;line-height:1.7}
+a.nl{color:#6BDFFF;text-decoration:none;border-bottom:1px solid rgba(107,223,255,.4);cursor:pointer}
+a.nl:hover{color:#a0eeff;border-bottom-color:#a0eeff}
+a.nc{color:#78E8A0;text-decoration:none;border-bottom:1px solid rgba(120,232,160,.4);cursor:pointer}
+a.nc:hover{color:#a8f0c0;border-bottom-color:#a8f0c0}
+span.np{color:#FFD080;border-bottom:1px dotted rgba(255,208,128,.5);cursor:pointer}
+span.np:hover{color:#ffe0a0;border-bottom-color:#ffe0a0}
+#tip-ref{font-size:10px;color:#404868;margin-bottom:4px}
+#tip-ref-label{font-size:9px;color:#303850;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+#tip-links{display:flex;flex-wrap:wrap;gap:5px}
+#tip-tour-hint{display:none;margin-top:10px;padding-top:8px;border-top:1px solid #1e2438;font-size:10px;color:#404868;text-align:center;letter-spacing:.04em}
+#tip-link-legend{margin-top:9px;padding-top:7px;border-top:1px solid #1a2030;font-size:9px;color:#303850;display:flex;gap:10px;flex-wrap:wrap}
+.tll{display:flex;align-items:center;gap:3px;white-space:nowrap}
+.tll-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+a.tl{display:inline-block;background:#141828;border:1px solid #2a3458;color:#6898ff;border-radius:5px;padding:3px 10px;font-size:10px;text-decoration:none;white-space:nowrap;transition:background .15s,color .15s}
+a.tl:hover{background:#1e2840;color:#a0c0ff}
+#tip-close{background:none;border:1px solid #2a3458;border-radius:4px;cursor:pointer;font-size:12px;padding:2px 6px;color:#6070a0;transition:all .15s;flex-shrink:0;line-height:1.4}
+#tip-close:hover{background:#1e0a0a;color:#ff6060;border-color:#ff6060}
+#tip-hover{display:none;position:fixed;background:#0c0f1c;border:1px solid #404868;border-radius:10px;padding:13px 16px;font-size:12px;max-width:340px;z-index:1000;line-height:1.65;pointer-events:auto;box-shadow:0 0 0 1px #6070a0}
+@keyframes tip-wiggle{0%{transform:translateX(0)}15%{transform:translateX(-6px)}30%{transform:translateX(6px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}100%{transform:translateX(0)}}
+.tip-wiggle{animation:tip-wiggle .45s ease}
+footer{text-align:center;margin-top:36px;padding:18px;border-top:1px solid #141828;font-size:.75rem;color:#282e40}
+</style>
+</head>
+<body>
+<header>
+  <div class="kicker">CieloVista · Biblical Genealogy · Matthew 1:1–17</div>
+  <h1>The Family Tree of Jesus Christ</h1>
+  <p class="subtitle">From Adam to the brothers of Jesus (Matthew 1:1–17)</p>
+  <p class="intro-note">Interactive genealogy · Click any bar or name to open · Drag to pan · Use +/- or Ctrl + wheel to zoom</p>
+</header>
+<main>
+  <div class="legend" id="legend-el"></div>
+  <div class="pan-bar">
+    <button class="pan-btn" id="pan-left">&#8592;</button>
+    <span class="pan-hint">Adam far left &nbsp;·&nbsp; Jesus near right &nbsp;·&nbsp; Drag or arrow keys to pan &nbsp;·&nbsp; Ctrl + wheel / pinch to zoom</span>
+    <div class="zoom-wrap" aria-label="Zoom controls">
+      <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
+      <span class="zoom-val" id="zoom-val">100%</span>
+      <button class="zoom-btn" id="zoom-in" title="Zoom in">+</button>
+      <button class="zoom-btn" id="zoom-reset" title="Reset zoom">Reset</button>
+    </div>
+    <button class="tour-btn" id="tour-btn">&#9654; Tour</button>
+    <button class="tour-btn" id="open-all-btn">&#9660; Open All</button>
+    <button class="pan-btn" id="pan-right">&#8594;</button>
+  </div>
+  <div id="tour-nav">
+    <button class="tnav" id="tour-prev">&#8592; Prev</button>
+    <span id="tour-counter"></span>
+    <button class="tnav" id="tour-next">Next &#8594;</button>
+    <button class="tnav" id="tour-stop">&#9632; Stop</button>
+  </div>
+  <div class="chart-outer" id="chart-outer"><canvas id="tlc"></canvas></div>
+</main>
+<div id="tip">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:2px">
+    <div id="tip-name" style="flex:1"></div>
+    <button id="tip-close" title="Close">✕</button>
+  </div>
+  <div id="tip-era"></div>
+  <div id="tip-rel"></div>
+  <hr class="tip-divider">
+  <div id="tip-heb"></div>
+  <div id="tip-pro"></div>
+  <div id="tip-mng"></div>
+  <hr class="tip-divider">
+  <div id="tip-dates"></div>
+  <div id="tip-note"></div>
+  <div id="tip-ref-label">Scripture</div>
+  <div id="tip-ref"></div>
+  <div id="tip-links"></div>
+  <div id="tip-link-legend">
+    <span class="tll"><span class="tll-dot" style="background:#FFD080"></span>Person</span>
+    <span class="tll"><span class="tll-dot" style="background:#6BDFFF"></span>Location 🗺</span>
+    <span class="tll"><span class="tll-dot" style="background:#78E8A0"></span>Concept / Event</span>
+  </div>
+  <div id="tip-tour-hint"></div>
+</div>
+<div id="tip-hover">
+  <div id="th-name" style="font-weight:700;color:#f5ecd4;font-size:14px;margin-bottom:2px"></div>
+  <div id="th-era" style="font-size:10px;color:#303850;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px"></div>
+  <div id="th-rel" style="font-size:11px;margin-bottom:7px"></div>
+  <hr class="tip-divider">
+  <div id="th-heb" style="font-size:15px;color:#d4c090;margin-bottom:2px;font-family:'Arial Unicode MS',Arial,sans-serif"></div>
+  <div id="th-pro" style="font-size:11px;color:#6070a0;margin-bottom:2px"></div>
+  <div id="th-mng" style="font-size:11px;color:#a0a8b8;font-style:italic;margin-bottom:7px"></div>
+  <hr class="tip-divider">
+  <div id="th-dates" style="color:#607088;font-size:11px;margin-bottom:5px"></div>
+  <div id="th-note" style="color:#9098a8;font-size:11px;margin-bottom:7px;line-height:1.7"></div>
+</div>
+<footer><p>CieloVista AI &nbsp;&middot;&nbsp; Family Layout &nbsp;&middot;&nbsp; wb-starter design system 2026</p></footer>
+<script>
+(function(){
+const C={
+  pf:   {f:'#062a35',s:'#4fd8ee',t:'#d7f7ff',label:'Pre-flood patriarch',sw:'#4fd8ee'},
+  sfl:  {f:'#342300',s:'#f8bb62',t:'#fff0c7',label:'Ancestor of Abraham',sw:'#f8bb62'},
+  anc:  {f:'#6f1a0e',s:'#ff8a6a',t:'#ffe0d3',label:'Patriarch (male line)',sw:'#ff8a6a'},
+  ancw: {f:'#65103f',s:'#ff78c9',t:'#ffe1f3',label:'Woman named in genealogy',sw:'#ff78c9'},
+  jud:  {f:'#5a3700',s:'#ffc14d',t:'#fff1cc',label:'Judah / Judges era',sw:'#ffc14d'},
+  king: {f:'#0a2460',s:'#71b6ff',t:'#d8ecff',label:'King of Judah',sw:'#71b6ff'},
+  post: {f:'#30125f',s:'#c79aff',t:'#f1e5ff',label:'Post-exile ancestor',sw:'#c79aff'},
+  gpm:  {f:'#5c143c',s:'#ff95cb',t:'#ffe5f4',label:'Maternal grandparent',sw:'#ff95cb'},
+  par:  {f:'#043259',s:'#56d8ff',t:'#ddf6ff',label:'Parent',sw:'#56d8ff'},
+  ext:  {f:'#32125d',s:'#d6a7ff',t:'#f2e8ff',label:'Extended family',sw:'#d6a7ff'},
+  jes:  {f:'#573700',s:'#ffe066',t:'#fff9d6',label:'Jesus',sw:'#ffe066'},
+  sib:  {f:'#044533',s:'#54f3ba',t:'#dcffee',label:'Brother of Jesus',sw:'#54f3ba'},
+};
+const LEGEND_ORDER=['pf','sfl','anc','ancw','jud','king','post','par','jes','sib','ext','gpm'];
+function bg(ref){return'https://www.biblegateway.com/passage/?search='+encodeURIComponent(ref)+'&version=NIV';}
+function wp(name){return'https://en.wikipedia.org/wiki/'+name.replace(/\s+/g,'_');}
+
+const people=[
+// ── PRE-FLOOD PATRIARCHS ──────────────────────────────────────────────────────
+{n:'Adam',g:'pf',era:'Pre-flood patriarchs',rel:'First man · Father of all humanity',b:-4004,d:-3074,
+ heb:'אָדָם',pro:'ah-DAM',mng:'"Man" or "Earth" — from adamah, ground',
+ note:'Formed by God from the dust of the ground; given the breath of life. Placed in the Garden of Eden to tend it; given Eve as companion. Fell at the serpent\'s temptation: "For dust you are, and to dust you shall return" (Genesis 3:19). Became forefather of all humanity. The New Testament calls Jesus the "last Adam" who reverses Adam\'s curse (1 Corinthians 15:45). Lived 930 years.',
+ ref:'Genesis 1:26–28; 2:7–25; 3:1–24; 5:1–5; Romans 5:12; 1 Corinthians 15:45',
+ links:[['📖 Genesis 2:7',bg('Genesis 2:7')],['📖 Genesis 3',bg('Genesis 3:1')],['🔍 Wikipedia',wp('Adam')]]},
+{n:'Seth',g:'pf',era:'Pre-flood patriarchs',rel:'Son of Adam · Ancestor of Noah',b:-3874,d:-2962,
+ heb:'שֵׁת',pro:'SHET',mng:'"Appointed" or "Granted" — Eve said God had appointed another child',
+ note:'Third son of Adam and Eve, born after Cain murdered Abel. Eve named him: "God has granted me another child in place of Abel" (Genesis 4:25). His line leads directly to Noah and then to Jesus. Luke\'s genealogy traces Jesus\'s ancestry all the way through Seth to Adam, calling Adam "the son of God" (Luke 3:38). Lived 912 years.',
+ ref:'Genesis 4:25–26; 5:3–8; Luke 3:38',
+ links:[['📖 Genesis 4:25',bg('Genesis 4:25')],['📖 Luke 3:38',bg('Luke 3:38')],['🔍 Wikipedia',wp('Seth')]]},
+{n:'Enosh',g:'pf',era:'Pre-flood patriarchs',rel:'Son of Seth · In his days men called on the LORD',b:-3769,d:-2864,
+ heb:'אֱנוֹשׁ',pro:'e-NOSH',mng:'"Mortal man" or "Frail humanity"',
+ note:'Son of Seth; grandson of Adam. A pivotal moment in history is attached to his birth: "At that time people began to call on the name of the LORD" (Genesis 4:26) — the beginning of organized public worship of God. Lived 905 years. Luke\'s genealogy includes Enosh as an ancestor of Jesus (Luke 3:38).',
+ ref:'Genesis 4:26; 5:6–11; Luke 3:38',
+ links:[['📖 Genesis 4:26',bg('Genesis 4:26')],['📖 Luke 3:38',bg('Luke 3:38')],['🔍 Wikipedia',wp('Enosh')]]},
+{n:'Kenan',g:'pf',era:'Pre-flood patriarchs',rel:'Son of Enosh',b:-3679,d:-2769,
+ heb:'קֵינָן',pro:'KAY-nan',mng:'"Possession" or "Spearsmith"',
+ note:'Son of Enosh; great-grandson of Adam. Also spelled Cainan in older translations (Luke 3:37 uses Cainan). Scripture records only his age and lineage — one of the quietly faithful in the pre-flood line. Lived 910 years. Part of the unbroken chain of faith from Adam to Noah and ultimately to Jesus Christ.',
+ ref:'Genesis 5:9–14; Luke 3:37',
+ links:[['📖 Genesis 5:9',bg('Genesis 5:9')],['📖 Luke 3:37',bg('Luke 3:37')],['🔍 Wikipedia',wp('Kenan (Bible)')]]},
+{n:'Mahalalel',g:'pf',era:'Pre-flood patriarchs',rel:'Son of Kenan',b:-3609,d:-2714,
+ heb:'מַהֲלַלְאֵל',pro:'ma-ha-lal-EL',mng:'"Praise of God" or "The Shining God"',
+ note:'Son of Kenan; one of the most beautifully named figures in the genealogy. His name — "Praise of God" — is a theological declaration embedded in the lineage: even in these ancient generations, God was worthy of praise. Lived 895 years. Ancestor of both Noah and Jesus. Luke 3:37 includes him in the line of Christ.',
+ ref:'Genesis 5:12–17; Luke 3:37',
+ links:[['📖 Genesis 5:12',bg('Genesis 5:12')],['📖 Luke 3:37',bg('Luke 3:37')],['🔍 Wikipedia',wp('Mahalaleel')]]},
+{n:'Jared',g:'pf',era:'Pre-flood patriarchs',rel:'Son of Mahalalel · Father of Enoch',b:-3544,d:-2582,
+ heb:'יֶרֶד',pro:'YEH-red',mng:'"Descent" or "He who descends"',
+ note:'Son of Mahalalel; father of the remarkable Enoch. Lived 962 years — the second-longest human lifespan in scripture, surpassed only by Methuselah (969). His name "descent" may prefigure the spiritual decline that would eventually lead to the flood — yet his own son Enoch walked so closely with God that he never died.',
+ ref:'Genesis 5:15–20; Luke 3:37',
+ links:[['📖 Genesis 5:15',bg('Genesis 5:15')],['📖 Luke 3:37',bg('Luke 3:37')],['🔍 Wikipedia',wp('Jared (biblical figure)')]]},
+{n:'Enoch',g:'pf',era:'Pre-flood patriarchs',rel:'Son of Jared · Walked with God · Never died',b:-3382,d:-3017,
+ heb:'חֲנוֹךְ',pro:'kha-NOKH',mng:'"Dedicated" or "Initiated"',
+ note:'Son of Jared; great-grandfather of Noah. The most extraordinary figure in the pre-flood line: "Enoch walked faithfully with God; then he was no more, because God took him away" (Genesis 5:24). He did not die — God translated him alive to heaven at age 365. Hebrews 11:5 says "he was commended as one who pleased God." He and Elijah are the only two people in all of scripture who never tasted death. Jude 1:14 quotes his prophecy about the Lord\'s coming judgment.',
+ ref:'Genesis 5:21–24; Hebrews 11:5; Jude 1:14–15',
+ links:[['📖 Genesis 5:24',bg('Genesis 5:24')],['📖 Hebrews 11:5',bg('Hebrews 11:5')],['🔍 Wikipedia',wp('Enoch (ancestor of Noah)')]]},
+{n:'Methuselah',g:'pf',era:'Pre-flood patriarchs',rel:'Son of Enoch · Oldest person ever recorded',b:-3317,d:-2348,
+ heb:'מְתוּשֶׁלַח',pro:'me-too-SHE-lakh',mng:'"His death shall bring" or "Man of the javelin"',
+ note:'Son of Enoch; grandfather of Noah. Lived 969 years — the longest human lifespan in all of scripture and all of recorded history. Many scholars note that the year of his death coincides exactly with the year of the flood — as if God delayed judgment for as long as Methuselah lived. His very name may encode this prophecy: "when he dies, it shall be sent." He died in the year the flood came.',
+ ref:'Genesis 5:21–27',
+ links:[['📖 Genesis 5:21',bg('Genesis 5:21')],['📖 Genesis 5:27',bg('Genesis 5:27')],['🔍 Wikipedia',wp('Methuselah')]]},
+{n:'Lamech',g:'pf',era:'Pre-flood patriarchs',rel:'Son of Methuselah · Father of Noah',b:-3130,d:-2353,
+ heb:'לֶמֶךְ',pro:'LEH-mekh',mng:'Uncertain — possibly "powerful" or "the despairing one"',
+ note:'Son of Methuselah; father of Noah. Named his son Noah with a prophecy: "He will comfort us in the labor and painful toil of our hands caused by the ground the LORD has cursed" (Genesis 5:29) — a Messianic foreshadowing pointing to the one who would undo the curse. Lived 777 years; died five years before the flood. Not to be confused with Lamech son of Cain (Genesis 4:18).',
+ ref:'Genesis 5:25–31',
+ links:[['📖 Genesis 5:25',bg('Genesis 5:25')],['📖 Genesis 5:29',bg('Genesis 5:29')],['🔍 Wikipedia',wp('Lamech (father of Noah)')]]},
+{n:'Noah',g:'pf',era:'Pre-flood patriarchs',rel:'Son of Lamech · Builder of the Ark · Flood survivor',b:-2948,d:-1998,
+ heb:'נֹחַ',pro:'NO-akh',mng:'"Rest" or "Comfort"',
+ note:'"Noah was a righteous man, blameless among the people of his time; Noah walked faithfully with God" (Genesis 6:9). God chose him to build the Ark and preserve humanity, all land animals, and the covenant promises through the global flood (~2348 BC). After the flood, God established the Noahic covenant with a rainbow as its sign: "Never again will all life be destroyed by the waters of a flood" (Genesis 9:11). Father of Shem, Ham, and Japheth. Lived 950 years.',
+ ref:'Genesis 6:9; 7:1–24; 9:1–17; Hebrews 11:7',
+ links:[['📖 Genesis 6:9',bg('Genesis 6:9')],['📖 Genesis 9:11',bg('Genesis 9:11')],['🔍 Wikipedia',wp('Noah')]]},
+// ── ANCESTORS OF ABRAHAM ──────────────────────────────────────────────────────
+{n:'Shem',g:'sfl',era:'Ancestors of Abraham',rel:'Son of Noah · Father of Semitic peoples',b:-2448,d:-1848,
+ heb:'שֵׁם',pro:'SHEM',mng:'"Name" or "Renown"',
+ note:'Eldest son of Noah; one of eight flood survivors. Noah prophesied: "Blessed be the LORD, the God of Shem!" (Genesis 9:26). From Shem descend all the Semitic peoples — Hebrews, Assyrians, Arameans, and Arabs. The word "Semitic" is derived from his name. He lived 600 years, outlasting Abraham by several decades — a living bridge between the pre-flood world and the age of the patriarchs.',
+ ref:'Genesis 9:26; 10:1; 11:10–26',
+ links:[['📖 Genesis 9:26',bg('Genesis 9:26')],['📖 Genesis 11:10',bg('Genesis 11:10')],['🔍 Wikipedia',wp('Shem')]]},
+{n:'Arphaxad',g:'sfl',era:'Ancestors of Abraham',rel:'Son of Shem · First ancestor born after the Flood',b:-2346,d:-1908,
+ heb:'אַרְפַּכְשַׁד',pro:'ar-FAKH-shad',mng:'Possibly "boundary of Chaldea" or "healer-releaser"',
+ note:'Son of Shem; born two years after the flood (~2346 BC) — the first ancestor in the line of Christ born into the post-flood world. Through his line comes Eber, from whom the "Hebrews" (Ivrim) take their name. Lived 438 years. Luke 3:36 includes him in the direct line from Noah to Jesus.',
+ ref:'Genesis 10:22; 11:10–13; Luke 3:36',
+ links:[['📖 Genesis 11:10',bg('Genesis 11:10')],['📖 Luke 3:36',bg('Luke 3:36')],['🔍 Wikipedia',wp('Arphaxad')]]},
+{n:'Shelah',g:'sfl',era:'Ancestors of Abraham',rel:'Son of Arphaxad',b:-2311,d:-1878,
+ heb:'שֶׁלַח',pro:'SHE-lakh',mng:'"Sending forth" or "Missile"',
+ note:'Son of Arphaxad; father of Eber. Also spelled Sala or Salah. Part of the post-flood chain bridging Noah\'s world and Abraham\'s. The world was repopulating and the nations forming across the earth during his long lifetime. Lived 433 years. Luke 3:35 includes him in the ancestry of Jesus.',
+ ref:'Genesis 10:24; 11:12–15; Luke 3:35',
+ links:[['📖 Genesis 11:12',bg('Genesis 11:12')],['📖 Luke 3:35',bg('Luke 3:35')],['🔍 Wikipedia',wp('Shelah (son of Arphaxad)')]]},
+{n:'Eber',g:'sfl',era:'Ancestors of Abraham',rel:'Son of Shelah · Namesake of the Hebrews',b:-2281,d:-1817,
+ heb:'עֵבֶר',pro:'EH-ver',mng:'"The one who crossed over" or "Beyond the river"',
+ note:'Son of Shelah; from him comes the name "Hebrew" (Ivri — "one who crossed over"). When Abraham is first called "the Hebrew" (Genesis 14:13), he is identified as a descendant of Eber. Eber named his son Peleg "division," commemorating the scattering of nations at Babel during his own lifetime. Lived 464 years — outliving Abraham by some decades, making him a living connection across the ages.',
+ ref:'Genesis 10:21; 11:14–17; Genesis 14:13',
+ links:[['📖 Genesis 10:21',bg('Genesis 10:21')],['📖 Genesis 11:14',bg('Genesis 11:14')],['🔍 Wikipedia',wp('Eber')]]},
+{n:'Peleg',g:'sfl',era:'Ancestors of Abraham',rel:'Son of Eber · The earth was divided in his days',b:-2247,d:-2008,
+ heb:'פֶּלֶג',pro:'PEH-leg',mng:'"Division" or "Water channel"',
+ note:'Son of Eber. The most famous verse about him: "In his time the earth was divided" (Genesis 10:25). This is traditionally interpreted as the Tower of Babel — when God confused the languages and scattered humanity across the globe. His name Peleg ("division") permanently commemorates this world-shaping judgment. Lived 239 years.',
+ ref:'Genesis 10:25; 11:16–19; Luke 3:35',
+ links:[['📖 Genesis 10:25',bg('Genesis 10:25')],['📖 Genesis 11:16',bg('Genesis 11:16')],['🔍 Wikipedia',wp('Peleg')]]},
+{n:'Reu',g:'sfl',era:'Ancestors of Abraham',rel:'Son of Peleg',b:-2217,d:-1978,
+ heb:'רְעוּ',pro:'re-OO',mng:'"Friend" or "Shepherd"',
+ note:'Son of Peleg; lived in the generation after the scattering at Babel as the nations spread across the earth. Scripture records only his age and lineage — yet each of these faithful ancestors kept the covenant line intact through centuries of world history. Lived 239 years. Luke 3:35 includes Reu as an ancestor of Jesus.',
+ ref:'Genesis 11:18–21; Luke 3:35',
+ links:[['📖 Genesis 11:18',bg('Genesis 11:18')],['📖 Luke 3:35',bg('Luke 3:35')],['🔍 Wikipedia',wp('Reu')]]},
+{n:'Serug',g:'sfl',era:'Ancestors of Abraham',rel:'Son of Reu · Great-grandfather of Abraham',b:-2185,d:-1955,
+ heb:'שְׂרוּג',pro:'se-ROOG',mng:'"Branch" or "Tendril"',
+ note:'Son of Reu; great-grandfather of Abraham. According to the Book of Jubilees, Serug\'s generation saw the first return to idol worship among the post-flood peoples — a spiritual decline Joshua 24:2 confirms when it records that Abraham\'s ancestors "worshipped other gods." This is the darkness that God\'s call of Abraham was designed to break. Lived 230 years.',
+ ref:'Genesis 11:20–23; Luke 3:35; Joshua 24:2',
+ links:[['📖 Genesis 11:20',bg('Genesis 11:20')],['📖 Joshua 24:2',bg('Joshua 24:2')],['🔍 Wikipedia',wp('Serug')]]},
+{n:'Nahor',g:'sfl',era:'Ancestors of Abraham',rel:'Son of Serug · Grandfather of Abraham',b:-2155,d:-2007,
+ heb:'נָחוֹר',pro:'na-KHOR',mng:'"Snorting" or "Breathing hard"',
+ note:'Son of Serug; father of Terah; grandfather of Abraham. Not to be confused with Nahor, Abraham\'s brother, who shared the same name — a common biblical pattern of naming children after grandparents. Lived 148 years, notably shorter than his ancestors, as lifespans continue their post-flood decline. Luke 3:34 includes Nahor in the line of Jesus.',
+ ref:'Genesis 11:22–25; Luke 3:34',
+ links:[['📖 Genesis 11:22',bg('Genesis 11:22')],['📖 Luke 3:34',bg('Luke 3:34')],['🔍 Wikipedia',wp('Nahor, son of Serug')]]},
+{n:'Terah',g:'sfl',era:'Ancestors of Abraham',rel:'Son of Nahor · Father of Abraham · Died in Haran',b:-2126,d:-1921,
+ heb:'תֶּרַח',pro:'TEH-rakh',mng:'"Wild goat" or possibly "Wanderer"',
+ note:'Son of Nahor; father of Abraham, Nahor, and Haran. Joshua 24:2 reveals Terah "worshipped other gods." Yet God began the redemptive movement through him: Terah set out from Ur of the Chaldeans toward Canaan, taking Abraham, Lot, and Sarai — but stopped and settled in Haran, where he died at 205. God would later call Abraham to complete what Terah had started. Died in Haran, never reaching Canaan.',
+ ref:'Genesis 11:24–32; Joshua 24:2; Acts 7:2–4',
+ links:[['📖 Genesis 11:24',bg('Genesis 11:24')],['📖 Acts 7:2',bg('Acts 7:2')],['🔍 Wikipedia',wp('Terah')]]},
+// ── PATRIARCHS ──────────────────────────────────────────────────────────────
+{n:'Abraham',g:'anc',era:'Patriarchs',rel:'Great patriarch / Father of nations',b:-2166,d:-1991,
+ heb:'אַבְרָהָם',pro:'Av-ra-HAM',mng:'"Father of many nations"',
+ note:'Born Abram in Ur; called by God to Canaan; received the covenant of circumcision; fathered Isaac miraculously at age 100; tested on Mount Moriah (Genesis 22). Jesus called him "your father Abraham" (John 8:56).',
+ ref:'Genesis 12:1–4; 17:5; Matthew 1:1–2',
+ links:[['📖 Genesis 12',bg('Genesis 12')],['📖 Genesis 22',bg('Genesis 22')],['🔍 Wikipedia',wp('Abraham')]]},
+{n:'Sarah',g:'ancw',era:'Patriarchs',rel:'Wife of Abraham · Mother of Isaac',b:-2156,d:-2029,
+ heb:'שָׂרָה',pro:'Sa-RAH',mng:'"Princess" or "Noblewoman"',
+ note:'Born Sarai; renamed Sarah by God. Laughed at the promise of a son, then believed and conceived Isaac at 90. Died at 127 — the only woman in scripture whose exact age at death is recorded. Buried in Machpelah.',
+ ref:'Genesis 17:15; 21:1–3; 23:1–2',
+ links:[['📖 Genesis 17',bg('Genesis 17')],['📖 Genesis 23',bg('Genesis 23')],['🔍 Wikipedia',wp('Sarah')]]},
+{n:'Isaac',g:'anc',era:'Patriarchs',rel:'Son of Abraham · Son of promise',b:-2066,d:-1886,
+ heb:'יִצְחָק',pro:'Yits-KHAK',mng:'"He laughs" or "He will laugh"',
+ note:'Son of promise born when Abraham was 100. Bound on Mount Moriah — a foreshadowing of Christ. Married Rebekah; father of Jacob and Esau. Lived 180 years, the longest-lived of the three great patriarchs.',
+ ref:'Genesis 21:3; 22:1–18; 35:28',
+ links:[['📖 Genesis 22',bg('Genesis 22')],['📖 Genesis 26',bg('Genesis 26')],['🔍 Wikipedia',wp('Isaac')]]},
+{n:'Rebekah',g:'ancw',era:'Patriarchs',rel:'Wife of Isaac · Mother of Jacob',b:-2026,d:-1900,
+ heb:'רִבְקָה',pro:'Riv-KAH',mng:'"To tie firmly" or "Captivating"',
+ note:'Chosen by Abraham\'s servant as wife for Isaac. Received the prophetic word: "the elder shall serve the younger." Mother of Jacob and Esau. Her favoritism for Jacob shaped the destiny of Israel\'s 12 tribes. Buried in Machpelah.',
+ ref:'Genesis 24:67; 25:21–26; 27:1–17',
+ links:[['📖 Genesis 24',bg('Genesis 24')],['📖 Genesis 25',bg('Genesis 25:21')],['🔍 Wikipedia',wp('Rebekah')]]},
+{n:'Jacob',g:'anc',era:'Patriarchs',rel:'Son of Isaac · Father of 12 tribes',b:-2006,d:-1859,
+ heb:'יַעֲקֹב',pro:'Ya-a-KOV',mng:'"He grasps the heel" or "Supplanter"',
+ note:'Bought Esau\'s birthright; received Isaac\'s blessing by deception; wrestled with God at Peniel and was renamed Israel ("he who strives with God"). Father of the 12 sons who became the 12 tribes. Lived 147 years; died in Egypt.',
+ ref:'Genesis 25:26; 32:28; 49:33; Matthew 1:2',
+ links:[['📖 Genesis 32',bg('Genesis 32:22')],['📖 Genesis 49',bg('Genesis 49')],['🔍 Wikipedia',wp('Jacob in the Bible')]]},
+{n:'Leah',g:'ancw',era:'Patriarchs',rel:'First wife of Jacob · Mother of Judah',b:-1980,d:-1862,
+ heb:'לֵאָה',pro:'Lay-AH',mng:'"Weary" (possibly "wild cow")',
+ note:'Older daughter of Laban; given to Jacob by deception. Though unloved, God opened her womb first. Named Judah ("praise") in gratitude to God. Mother of 6 sons including Judah, Levi, and Reuben — and daughter Dinah. Buried in Machpelah.',
+ ref:'Genesis 29:16–35; 30:17–21; 49:31',
+ links:[['📖 Genesis 29',bg('Genesis 29:16')],['📖 Genesis 30',bg('Genesis 30:17')],['🔍 Wikipedia',wp('Leah')]]},
+// ── TRIBE OF JUDAH ───────────────────────────────────────────────────────────
+{n:'Judah',g:'jud',era:'Tribe of Judah',rel:'4th son of Jacob · Ancestor of kings',b:-1985,d:-1855,
+ heb:'יְהוּדָה',pro:'Ye-hoo-DAH',mng:'"Praise" or "Let him be praised"',
+ note:'Fourth son of Jacob and Leah. His brothers chose him as spokesman (Genesis 44:18). Jacob\'s blessing declared: "The scepter shall not depart from Judah, nor the ruler\'s staff from between his feet, until Shiloh comes" — pointing directly to the Messiah (Genesis 49:10).',
+ ref:'Genesis 29:35; 49:8–12; Matthew 1:3',
+ links:[['📖 Genesis 49:8',bg('Genesis 49:8')],['📖 Matthew 1:3',bg('Matthew 1:3')],['🔍 Wikipedia',wp('Judah (biblical person)')]]},
+{n:'Tamar',g:'ancw',era:'Tribe of Judah',rel:'Daughter-in-law of Judah · Mother of Perez',b:-1965,d:-1900,
+ heb:'תָּמָר',pro:'Ta-MAR',mng:'"Palm tree" or "Date palm"',
+ note:'Widowed twice among Judah\'s sons. When Judah withheld his third son, she disguised herself as a prostitute and conceived twins Perez and Zerah by Judah. Judah declared: "She is more righteous than I." One of four women Matthew names in the genealogy of Jesus.',
+ ref:'Genesis 38; Matthew 1:3',
+ links:[['📖 Genesis 38',bg('Genesis 38')],['📖 Matthew 1:3',bg('Matthew 1:3')],['🔍 Wikipedia',wp('Tamar (Genesis)')]]},
+{n:'Perez',g:'jud',era:'Tribe of Judah',rel:'Son of Judah & Tamar · Twin',b:-1960,d:-1830,
+ heb:'פֶּרֶץ',pro:'PEH-rets',mng:'"Breach" or "Breaking through"',
+ note:'Named Perez because he broke through ahead of twin Zerah who had put his hand out first. His line through Hezron, Ram, and Amminadab leads directly to David and Jesus. The Bethlehemites blessed Boaz by invoking Perez (Ruth 4:12).',
+ ref:'Genesis 38:29; Ruth 4:12; Matthew 1:3',
+ links:[['📖 Genesis 38:27',bg('Genesis 38:27')],['📖 Ruth 4:12',bg('Ruth 4:12')],['🔍 Wikipedia',wp('Perez (son of Judah)')]]},
+{n:'Hezron',g:'jud',era:'Tribe of Judah',rel:'Son of Perez · Went to Egypt',b:-1935,d:-1800,
+ heb:'חֶצְרוֹן',pro:'KHETS-ron',mng:'"Enclosed courtyard" or "Settlement"',
+ note:'Son of Perez; one of those who went to Egypt with Jacob when the family settled in Goshen (Genesis 46:12). Head of the Hezronite clan in Judah (Numbers 26:21). Ancestor in the direct line to David listed in both Matthew 1 and Ruth 4.',
+ ref:'Genesis 46:12; Numbers 26:21; Ruth 4:18; Matthew 1:3',
+ links:[['📖 Genesis 46:12',bg('Genesis 46:12')],['📖 Ruth 4:18',bg('Ruth 4:18')],['🔍 Wikipedia',wp('Hezron')]]},
+{n:'Ram',g:'jud',era:'Tribe of Judah',rel:'Son of Hezron · Direct ancestor of David',b:-1905,d:-1770,
+ heb:'רָם',pro:'rahm',mng:'"High" or "Exalted"',
+ note:'Son of Hezron; also called Aram in Luke\'s genealogy (Luke 3:33). His son Amminadab connected the royal lineage to the priestly line through marriage to Aaron\'s family. Specifically listed in the genealogy of King David in both Ruth 4:19 and Matthew 1:3–4.',
+ ref:'Ruth 4:19; 1 Chronicles 2:9–10; Matthew 1:3',
+ links:[['📖 Ruth 4:19',bg('Ruth 4:19')],['📖 1 Chronicles 2:9',bg('1 Chronicles 2:9')],['🔍 Wikipedia',wp('Ram (ancestor of David)')]]},
+{n:'Amminadab',g:'jud',era:'Tribe of Judah',rel:'Son of Ram · Father-in-law of Aaron',b:-1875,d:-1740,
+ heb:'עַמִּינָדָב',pro:'Am-mi-na-DAV',mng:'"My people are noble" or "My kinsman is generous"',
+ note:'Son of Ram; his daughter Elisheba married Aaron the first High Priest (Exodus 6:23), linking the royal and priestly lines of Israel. Father of Nahshon, who became the prince of Judah during the Exodus. His name occurs in all four genealogies (Genesis, Ruth, Matthew, Luke).',
+ ref:'Exodus 6:23; Numbers 1:7; Ruth 4:20; Matthew 1:4',
+ links:[['📖 Exodus 6:23',bg('Exodus 6:23')],['📖 Numbers 1:7',bg('Numbers 1:7')],['🔍 Wikipedia',wp('Amminadab')]]},
+{n:'Nahshon',g:'jud',era:'Tribe of Judah',rel:'Son of Amminadab · Prince of Judah',b:-1450,d:-1405,
+ heb:'נַחְשׁוֹן',pro:'Nakh-SHON',mng:'"Serpent" or "Enchanter"',
+ note:'Prince and commander of the tribe of Judah during the Exodus (Numbers 1:7; 2:3). Led Judah\'s census of 74,600 men. Brother-in-law of Aaron. Tradition says he was the first to step into the Red Sea, prompting it to part. The father of Salmon who married Rahab.',
+ ref:'Numbers 1:7; 2:3; 10:14; Ruth 4:20; Matthew 1:4',
+ links:[['📖 Numbers 1:7',bg('Numbers 1:7')],['📖 Numbers 2:3',bg('Numbers 2:3')],['🔍 Wikipedia',wp('Nahshon')]]},
+{n:'Salmon',g:'jud',era:'Conquest era',rel:'Son of Nahshon · Husband of Rahab',b:-1425,d:-1355,
+ heb:'שַׂלְמוֹן',pro:'Sal-MON',mng:'"Garment" or "Clothing"',
+ note:'Son of Nahshon; an Israelite who married Rahab the Canaanite of Jericho after the conquest (~1406 BC). Their union — an Israelite warrior and a foreign woman of faith — foreshadows the inclusive reach of God\'s grace through the Messiah\'s line. Father of Boaz.',
+ ref:'Ruth 4:21; 1 Chronicles 2:11; Matthew 1:5',
+ links:[['📖 Ruth 4:21',bg('Ruth 4:21')],['📖 Matthew 1:5',bg('Matthew 1:5')],['🔍 Wikipedia',wp('Salmon (biblical figure)')]]},
+{n:'Rahab',g:'ancw',era:'Conquest era',rel:'Wife of Salmon · Spies\' protector',b:-1420,d:-1350,
+ heb:'רָחָב',pro:'Ra-KHAV',mng:'"Wide" or "Broad" or "Proud"',
+ note:'Canaanite innkeeper of Jericho who hid Joshua\'s two spies, believing the LORD was God of heaven and earth (Joshua 2:11). Saved her family by hanging a scarlet cord — a symbol of blood sacrifice. Married Salmon and entered Israel\'s history permanently. One of four women Matthew names in Jesus\'s genealogy.',
+ ref:'Joshua 2; 6:22–25; Hebrews 11:31; Matthew 1:5',
+ links:[['📖 Joshua 2',bg('Joshua 2')],['📖 Hebrews 11:31',bg('Hebrews 11:31')],['🔍 Wikipedia',wp('Rahab')]]},
+// ── JUDGES / RUTH ────────────────────────────────────────────────────────────
+{n:'Boaz',g:'jud',era:'Judges era',rel:'Son of Salmon & Rahab · Kinsman-redeemer',b:-1200,d:-1140,
+ heb:'בֹּעַז',pro:'Bo-AZ',mng:'"In him is strength" or "Swiftness"',
+ note:'"A man of standing" (Ruth 2:1); a wealthy landowner of Bethlehem who showed exceptional kindness to Ruth. Acting as kinsman-redeemer, he married Ruth, securing her inheritance and lineage. His generosity and integrity make him one of the finest characters in scripture. Great-grandfather of David.',
+ ref:'Ruth 2–4; Matthew 1:5',
+ links:[['📖 Ruth 2',bg('Ruth 2')],['📖 Ruth 4',bg('Ruth 4')],['🔍 Wikipedia',wp('Boaz')]]},
+{n:'Ruth',g:'ancw',era:'Judges era',rel:'Moabite wife of Boaz · Grandmother of Jesse',b:-1200,d:-1140,
+ heb:'רוּת',pro:'root',mng:'"Friend" or "Companion" or "Refreshed"',
+ note:'Moabite widow who chose Naomi\'s God over returning to her homeland: "Where you go I will go, and where you stay I will stay. Your God will be my God" (Ruth 1:16). Her faithfulness brought her into the lineage of David and ultimately of Jesus. One of four women Matthew names in the genealogy.',
+ ref:'Ruth 1:16–17; 4:13–17; Matthew 1:5',
+ links:[['📖 Ruth 1:16',bg('Ruth 1:16')],['📖 Ruth 4',bg('Ruth 4:13')],['🔍 Wikipedia',wp('Ruth (Bible)')]]},
+{n:'Obed',g:'jud',era:'Judges era',rel:'Son of Boaz & Ruth · Grandfather of David',b:-1150,d:-1070,
+ heb:'עֹבֵד',pro:'O-VED',mng:'"Servant" or "Worshipper of God"',
+ note:'Son of Boaz and Ruth. At his birth, the women of Bethlehem said to Naomi, "A son has been born to Naomi!" — recognizing the restoration of her family line. His name means "servant," a fitting title for one whose line would produce the shepherd-king David and ultimately the Servant of the Lord, Jesus.',
+ ref:'Ruth 4:13–22; 1 Chronicles 2:12; Matthew 1:5',
+ links:[['📖 Ruth 4:13',bg('Ruth 4:13')],['📖 1 Chronicles 2:12',bg('1 Chronicles 2:12')],['🔍 Wikipedia',wp('Obed (biblical figure)')]]},
+{n:'Jesse',g:'jud',era:'United Kingdom',rel:'Son of Obed · Father of David',b:-1110,d:-1020,
+ heb:'יִשַׁי',pro:'Yee-SHAI',mng:'"Gift" or "God exists" or "Wealthy"',
+ note:'A Bethlehemite of the tribe of Judah. God told Samuel to go to Jesse of Bethlehem, for "I have chosen one of his sons to be king." Jesse presented seven sons; David, the youngest shepherd, was anointed. Isaiah prophesied the Messiah would come from "the stump of Jesse" (Isaiah 11:1).',
+ ref:'1 Samuel 16:1–13; Isaiah 11:1; Matthew 1:6',
+ links:[['📖 1 Samuel 16',bg('1 Samuel 16:1')],['📖 Isaiah 11:1',bg('Isaiah 11:1')],['🔍 Wikipedia',wp('Jesse (biblical figure)')]]},
+// ── KINGS ────────────────────────────────────────────────────────────────────
+{n:'David',g:'king',era:'United Kingdom',rel:'Son of Jesse · Greatest King of Israel',b:-1040,d:-970,
+ heb:'דָּוִד',pro:'Da-VEED',mng:'"Beloved"',
+ note:'"A man after God\'s own heart" (Acts 13:22). Anointed king by Samuel; killed Goliath; established Jerusalem; wrote much of the Psalms. God\'s covenant: "Your house and your kingdom will endure forever before me; your throne will be established forever" (2 Samuel 7:16). Jesus is called "Son of David" 17 times in the NT.',
+ ref:'1 Samuel 16:13; 2 Samuel 7:16; Psalm 23; Matthew 1:6',
+ links:[['📖 2 Samuel 7',bg('2 Samuel 7:16')],['📖 Psalm 23',bg('Psalm 23')],['🔍 Wikipedia',wp('David')]]},
+{n:'Bathsheba',g:'ancw',era:'United Kingdom',rel:'Mother of Solomon · Wife of Uriah',b:-1015,d:-960,
+ heb:'בַּת-שֶׁבַע',pro:'Bat-SHE-va',mng:'"Daughter of an oath" or "Daughter of seven"',
+ note:'Wife of Uriah the Hittite, taken by David in his great sin. Nathan the prophet confronted David: "You are the man!" Though the first child died, Solomon was born from this union and became the wisest king. Matthew deliberately calls her "wife of Uriah" — not Bathsheba — pointing to David\'s failure alongside God\'s grace.',
+ ref:'2 Samuel 11–12; 1 Kings 1:28–30; Matthew 1:6',
+ links:[['📖 2 Samuel 11',bg('2 Samuel 11')],['📖 2 Samuel 12',bg('2 Samuel 12:1')],['🔍 Wikipedia',wp('Bathsheba')]]},
+{n:'Solomon',g:'king',era:'United Kingdom',rel:'Son of David · Builder of the Temple',b:-990,d:-930,
+ heb:'שְׁלֹמֹה',pro:'Shlo-MOH',mng:'"Peace" or "Peaceful" (from shalom)',
+ note:'Asked God for wisdom above wealth or power. God gave him "a wise and discerning heart, so that there will never have been anyone like you, nor will there ever be" (1 Kings 3:12). Built the First Temple in Jerusalem. Wrote Proverbs, Ecclesiastes, and Song of Songs. His apostasy in old age divided the kingdom.',
+ ref:'1 Kings 3:5–14; 6:1–38; 11:1–13; Matthew 1:7',
+ links:[['📖 1 Kings 3',bg('1 Kings 3:5')],['📖 1 Kings 6',bg('1 Kings 6:1')],['🔍 Wikipedia',wp('Solomon')]]},
+{n:'Rehoboam',g:'king',era:'Divided Kingdom',rel:'Son of Solomon · King of Judah',b:-975,d:-913,
+ heb:'רְחַבְעָם',pro:'Re-khav-AM',mng:'"He who enlarges the people"',
+ note:'Rejected the counsel of elders and imposed heavier burdens than Solomon: "My father used whips; I will use scorpions." This caused the 10 northern tribes to break away under Jeroboam. Rehoboam retained only Judah and Benjamin. The kingdom was split and never reunited. He reigned 17 years in Jerusalem.',
+ ref:'1 Kings 12:1–24; 2 Chronicles 12; Matthew 1:7',
+ links:[['📖 1 Kings 12',bg('1 Kings 12:1')],['📖 2 Chronicles 12',bg('2 Chronicles 12')],['🔍 Wikipedia',wp('Rehoboam')]]},
+{n:'Abijah',g:'king',era:'Divided Kingdom',rel:'Son of Rehoboam · King of Judah',b:-955,d:-911,
+ heb:'אֲבִיָּה',pro:'A-vee-YAH',mng:'"My father is Yahweh" or "God is my father"',
+ note:'Defeated Jeroboam\'s army of 800,000 with only 400,000 men by crying out to the LORD in battle. Jeroboam lost 500,000 men that day (2 Chronicles 13:17). Declared: "The LORD is our God, and we have not forsaken him." Ruled 3 years; succeeded by his righteous son Asa.',
+ ref:'2 Chronicles 13:1–22; 1 Kings 15:1–8; Matthew 1:7',
+ links:[['📖 2 Chronicles 13',bg('2 Chronicles 13')],['📖 1 Kings 15:1',bg('1 Kings 15:1')],['🔍 Wikipedia',wp('Abijah of Judah')]]},
+{n:'Asa',g:'king',era:'Divided Kingdom',rel:'Son of Abijah · Good King of Judah',b:-935,d:-869,
+ heb:'אָסָא',pro:'A-SAH',mng:'"Healer" or "Myrtle tree"',
+ note:'One of Judah\'s best kings; reigned 41 years. Removed the male shrine prostitutes, idols, and even deposed his own grandmother Maacah for idol worship. Trusted God against Zerah the Cushite\'s one-million-man army and won completely (2 Chronicles 14:11–12). Failed late in life by trusting Syria over God.',
+ ref:'1 Kings 15:11–15; 2 Chronicles 14:1–15; Matthew 1:8',
+ links:[['📖 2 Chronicles 14',bg('2 Chronicles 14:1')],['📖 1 Kings 15:11',bg('1 Kings 15:11')],['🔍 Wikipedia',wp('Asa of Judah')]]},
+{n:'Jehoshaphat',g:'king',era:'Divided Kingdom',rel:'Son of Asa · Good King of Judah',b:-908,d:-849,
+ heb:'יְהוֹשָׁפָט',pro:'Ye-ho-sha-FAT',mng:'"Yahweh has judged" or "The LORD is judge"',
+ note:'Sent teachers throughout Judah to teach the Law. Faced a vast coalition army; appointed singers to go before the army singing God\'s praises — "Give thanks to the LORD, for his love endures forever." The enemy destroyed itself (2 Chronicles 20:22). Reigned 25 years. Valley of Jehoshaphat awaits end-times judgment (Joel 3:2).',
+ ref:'2 Chronicles 20:1–30; 1 Kings 22:41–43; Matthew 1:8',
+ links:[['📖 2 Chronicles 20',bg('2 Chronicles 20:1')],['📖 Joel 3:2',bg('Joel 3:2')],['🔍 Wikipedia',wp('Jehoshaphat of Judah')]]},
+{n:'Joram',g:'king',era:'Divided Kingdom',rel:'Son of Jehoshaphat · Wicked King',b:-888,d:-841,
+ heb:'יוֹרָם',pro:'Yo-RAM',mng:'"Yahweh is exalted" or "The LORD is high"',
+ note:'Married Athaliah, daughter of Ahab and Jezebel, bringing Baal worship to Judah. Killed all his brothers at the start of his reign. Elijah sent a letter prophesying his intestinal death — fulfilled exactly. Matthew skips three kings after him (Ahaziah, Joash, Amaziah), likely to maintain the 14-generation structure.',
+ ref:'2 Kings 8:16–24; 2 Chronicles 21; Matthew 1:8',
+ links:[['📖 2 Kings 8:16',bg('2 Kings 8:16')],['📖 2 Chronicles 21',bg('2 Chronicles 21')],['🔍 Wikipedia',wp('Jehoram of Judah')]]},
+{n:'Uzziah',g:'king',era:'Divided Kingdom',rel:'Son of Amaziah · Powerful King',b:-810,d:-740,
+ heb:'עֻזִּיָּה',pro:'Uz-zee-YAH',mng:'"My strength is Yahweh" or "The LORD is my strength"',
+ note:'Also called Azariah; reigned 52 years. Rebuilt Judah\'s military and fortifications; became very powerful. Then pride led him to burn incense in the Temple — a priestly role — and God struck him with leprosy on his forehead. He lived as a leper until death. "In the year that King Uzziah died, I saw the Lord" (Isaiah 6:1).',
+ ref:'2 Chronicles 26:1–21; Isaiah 6:1; Matthew 1:9',
+ links:[['📖 2 Chronicles 26',bg('2 Chronicles 26:1')],['📖 Isaiah 6:1',bg('Isaiah 6:1')],['🔍 Wikipedia',wp('Uzziah')]]},
+{n:'Jotham',g:'king',era:'Divided Kingdom',rel:'Son of Uzziah · Good King',b:-780,d:-732,
+ heb:'יוֹתָם',pro:'Yo-TAM',mng:'"Yahweh is perfect" or "The LORD is upright"',
+ note:'"Jotham grew powerful because he walked steadfastly before the LORD his God" (2 Chronicles 27:6). Built the Upper Gate of the Temple and undertook major construction projects. Reigned 16 years. Contemporary of prophets Isaiah, Hosea, and Micah, all of whom ministered during his reign. Did not enter the Temple as his father had.',
+ ref:'2 Kings 15:32–38; 2 Chronicles 27; Matthew 1:9',
+ links:[['📖 2 Chronicles 27',bg('2 Chronicles 27')],['📖 2 Kings 15:32',bg('2 Kings 15:32')],['🔍 Wikipedia',wp('Jotham of Judah')]]},
+{n:'Ahaz',g:'king',era:'Divided Kingdom',rel:'Son of Jotham · Wicked King',b:-760,d:-716,
+ heb:'אָחָז',pro:'A-KHAZ',mng:'"He has grasped" or "Possessor"',
+ note:'One of Judah\'s most wicked kings; sacrificed his own son to Molech (2 Kings 16:3). When threatened by Syria and Israel, refused Isaiah\'s offer of a divine sign. God gave the sign anyway: "The virgin will conceive and give birth to a son, and will call him Immanuel" (Isaiah 7:14) — the great Messianic prophecy. Shut the Temple.',
+ ref:'Isaiah 7:1–14; 2 Kings 16:1–20; Matthew 1:9',
+ links:[['📖 Isaiah 7:14',bg('Isaiah 7:14')],['📖 2 Kings 16',bg('2 Kings 16:1')],['🔍 Wikipedia',wp('Ahaz')]]},
+{n:'Hezekiah',g:'king',era:'Divided Kingdom',rel:'Son of Ahaz · Faithful King',b:-741,d:-687,
+ heb:'יְחִזְקִיָּה',pro:'Ye-khiz-kee-YAH',mng:'"Yahweh strengthens" or "The LORD is my strength"',
+ note:'"He trusted in the LORD, the God of Israel. There was no one like him among all the kings of Judah" (2 Kings 18:5). When 185,000 Assyrians camped against Jerusalem, an angel killed them overnight (2 Kings 19:35). When told he would die, he prayed and God added 15 years to his life. Reopened and cleansed the Temple.',
+ ref:'2 Kings 18–20; Isaiah 37:36; Matthew 1:10',
+ links:[['📖 2 Kings 19:35',bg('2 Kings 19:35')],['📖 2 Kings 20:1',bg('2 Kings 20:1')],['🔍 Wikipedia',wp('Hezekiah')]]},
+{n:'Manasseh',g:'king',era:'Divided Kingdom',rel:'Son of Hezekiah · Most Wicked King',b:-709,d:-642,
+ heb:'מְנַשֶּׁה',pro:'Me-na-SHEH',mng:'"Causing to forget" or "One who forgets"',
+ note:'Reigned 55 years — longest of any Judean king. Rebuilt the Asherah poles, burned his sons in the fire, practiced sorcery, and "filled Jerusalem with innocent blood from end to end" (2 Kings 21:16). Yet when taken captive to Babylon, he humbled himself before God, who restored him to Jerusalem. His repentance is one of scripture\'s most dramatic turnarounds (2 Chronicles 33).',
+ ref:'2 Kings 21:1–18; 2 Chronicles 33:1–20; Matthew 1:10',
+ links:[['📖 2 Kings 21',bg('2 Kings 21:1')],['📖 2 Chronicles 33:12',bg('2 Chronicles 33:12')],['🔍 Wikipedia',wp('Manasseh of Judah')]]},
+{n:'Amon',g:'king',era:'Divided Kingdom',rel:'Son of Manasseh · Assassinated King',b:-664,d:-640,
+ heb:'אָמוֹן',pro:'A-MON',mng:'"Faithful" or "Master builder" or "Hidden"',
+ note:'Son of Manasseh who abandoned his father\'s late repentance and fully returned to idolatry: "he did not humble himself before the LORD, as his father Manasseh had humbled himself" (2 Chronicles 33:23). Reigned only 2 years before his own servants conspired and assassinated him in his palace. Succeeded by the great reformer Josiah.',
+ ref:'2 Kings 21:18–26; 2 Chronicles 33:21–25; Matthew 1:10',
+ links:[['📖 2 Kings 21:18',bg('2 Kings 21:18')],['📖 2 Chronicles 33:21',bg('2 Chronicles 33:21')],['🔍 Wikipedia',wp('Amon of Judah')]]},
+{n:'Josiah',g:'king',era:'Divided Kingdom',rel:'Son of Amon · Greatest Reformer',b:-648,d:-609,
+ heb:'יֹאשִׁיָּה',pro:'Yo-shee-YAH',mng:'"Yahweh heals" or "Yahweh supports"',
+ note:'Became king at 8 years old. At 26 found the lost Book of the Law; tore his robes in repentance. Destroyed every altar to Baal, Asherah, Molech, and foreign gods throughout Judah. "Neither before nor after Josiah was there a king like him who turned to the LORD as he did — with all his heart and with all his soul and with all his strength" (2 Kings 23:25). Died at Megiddo fighting Pharaoh Necho.',
+ ref:'2 Kings 22:1–2; 23:24–25; 2 Chronicles 34; Matthew 1:11',
+ links:[['📖 2 Kings 22',bg('2 Kings 22:1')],['📖 2 Kings 23:25',bg('2 Kings 23:25')],['🔍 Wikipedia',wp('Josiah')]]},
+{n:'Jeconiah',g:'king',era:'Exile',rel:'Last king before Babylonian exile',b:-616,d:-560,
+ heb:'יְכָנְיָה',pro:'Ye-khon-YAH',mng:'"Yahweh will establish" or "The LORD will fortify"',
+ note:'Also called Jehoiachin or Coniah. Became king at 18; reigned only 3 months before Nebuchadnezzar besieged Jerusalem and deported him to Babylon in 597 BC. Jeremiah pronounced a curse: no descendant of his would sit on David\'s throne (Jeremiah 22:30). Joseph\'s legal descent from Jeconiah passed the royal title to Jesus without the curse affecting the biological line through Mary.',
+ ref:'2 Kings 24:8–17; Jeremiah 22:28–30; Matthew 1:11–12',
+ links:[['📖 2 Kings 24:8',bg('2 Kings 24:8')],['📖 Jeremiah 22:30',bg('Jeremiah 22:30')],['🔍 Wikipedia',wp('Jeconiah')]]},
+// ── POST-EXILE ───────────────────────────────────────────────────────────────
+{n:'Shealtiel',g:'post',era:'Post-exile',rel:'Son of Jeconiah · Father of Zerubbabel',b:-595,d:-530,
+ heb:'שְׁאַלְתִּיאֵל',pro:'She-al-tee-EL',mng:'"I have asked God" or "Asked of God"',
+ note:'Son of Jeconiah; father of Zerubbabel. One of the few post-exile ancestors confirmed in scripture outside of Matthew\'s genealogy — mentioned by name in Ezra 3:2, Nehemiah 12:1, and Haggai 1:1. The fact that Zerubbabel rose to prominence as governor may reflect Shealtiel\'s priestly family connections in Babylon.',
+ ref:'Ezra 3:2; Nehemiah 12:1; Haggai 1:1; Matthew 1:12',
+ links:[['📖 Haggai 1:1',bg('Haggai 1:1')],['📖 Ezra 3:2',bg('Ezra 3:2')],['🔍 Wikipedia',wp('Shealtiel')]]},
+{n:'Zerubbabel',g:'post',era:'Post-exile',rel:'Son of Shealtiel · Governor of Judah',b:-560,d:-500,
+ heb:'זְרֻבָּבֶל',pro:'Ze-roo-BA-vel',mng:'"Born in Babylon" or "Offspring of Babel"',
+ note:'Led the first return of Jews from Babylon to Jerusalem ~538 BC under King Cyrus\'s decree. Laid the foundation of the Second Temple. God called him "my signet ring" (Haggai 2:23), reversing the curse on Jeconiah. In him the Davidic line survived the exile and re-rooted in Jerusalem. He is the last ancestor common to both Matthew and Luke\'s genealogies.',
+ ref:'Ezra 3:2–3; Haggai 2:20–23; Zechariah 4:6–10; Matthew 1:12',
+ links:[['📖 Haggai 2:23',bg('Haggai 2:23')],['📖 Ezra 3:8',bg('Ezra 3:8')],['🔍 Wikipedia',wp('Zerubbabel')]]},
+{n:'Abiud',g:'post',era:'Post-exile',rel:'Son of Zerubbabel',b:-520,d:-455,
+ heb:'אֲבִיהוּד',pro:'A-vee-HOOD',mng:'"My father is majesty" or "Father of glory"',
+ note:'Son of Zerubbabel; known only from Matthew\'s genealogy (1:13). Lived during the era of Ezra\'s reforms, Nehemiah\'s rebuilding of Jerusalem\'s walls, and the ministry of the prophet Malachi — the last voice of the Old Testament. The 400 years of prophetic silence between Malachi and John the Baptist begins around this era.',
+ ref:'Matthew 1:13; Ezra 7–10 (historical context)',
+ links:[['📖 Matthew 1:13',bg('Matthew 1:13')],['📖 Ezra 7:1',bg('Ezra 7:1')],['🔍 Wikipedia',wp('Abihud')]]},
+{n:'Eliakim',g:'post',era:'Post-exile',rel:'Son of Abiud',b:-480,d:-415,
+ heb:'אֶלְיָקִים',pro:'El-ya-KEEM',mng:'"God will raise up" or "God raises"',
+ note:'Son of Abiud; known only from Matthew\'s genealogy (1:13). Lived during the Persian Empire under Xerxes and Artaxerxes — the era of Queen Esther, the book of Job\'s final composition, and the reforms of Nehemiah. His name, "God will raise up," is prophetically resonant in a lineage leading to the Resurrection.',
+ ref:'Matthew 1:13; Esther 1 (historical context)',
+ links:[['📖 Matthew 1:13',bg('Matthew 1:13')],['📖 Nehemiah 1:1',bg('Nehemiah 1:1')],['🔍 Wikipedia',wp('Eliakim, son of Abiud')]]},
+{n:'Azor',g:'post',era:'Post-exile',rel:'Son of Eliakim',b:-440,d:-375,
+ heb:'עָזוֹר',pro:'A-ZOR',mng:'"Helper" or "One who helps"',
+ note:'Son of Eliakim; known only from Matthew\'s genealogy (1:13). Lived during the era of the prophet Malachi (~430 BC) — the last canonical prophetic voice before John the Baptist, 400 years later. Malachi prophesied: "See, I will send the prophet Elijah before that great and dreadful day of the LORD comes" (Malachi 4:5) — pointing to John the Baptist.',
+ ref:'Matthew 1:13; Malachi 4:5 (historical context)',
+ links:[['📖 Matthew 1:13',bg('Matthew 1:13')],['📖 Malachi 4:5',bg('Malachi 4:5')],['🔍 Wikipedia',wp('Azor (biblical figure)')]]},
+{n:'Zadok',g:'post',era:'Post-exile',rel:'Son of Azor',b:-400,d:-335,
+ heb:'צָדוֹק',pro:'Tsa-DOK',mng:'"Righteous" or "Just"',
+ note:'Son of Azor; known only from Matthew\'s genealogy (1:14). Lived during the rise of Alexander the Great of Macedon (~336–323 BC), whose conquests spread Greek culture (Hellenism) across the Middle East, including Judea. This Hellenization would dramatically shape the world into which Jesus was born centuries later.',
+ ref:'Matthew 1:14; 1 Maccabees (historical context)',
+ links:[['📖 Matthew 1:14',bg('Matthew 1:14')],['🔍 Wikipedia',wp('Zadok')]]},
+{n:'Akim',g:'post',era:'Post-exile',rel:'Son of Zadok',b:-360,d:-295,
+ heb:'אָכִים',pro:'A-KHEEM',mng:'"He will rise up" or "God will establish"',
+ note:'Son of Zadok; known only from Matthew\'s genealogy (1:14). Lived during the violent Wars of the Diadochi — Alexander\'s generals tearing his empire apart. Judea passed between the Ptolemies (Egypt) and Seleucids (Syria). The resilience of this lineage through political chaos testifies to God\'s faithfulness to the Davidic covenant.',
+ ref:'Matthew 1:14',
+ links:[['📖 Matthew 1:14',bg('Matthew 1:14')],['🔍 Wikipedia',wp('Achim')]]},
+{n:'Elihud',g:'post',era:'Post-exile',rel:'Son of Akim',b:-320,d:-255,
+ heb:'אֱלִיהוּד',pro:'E-lee-HOOD',mng:'"My God is glory" or "God of majesty"',
+ note:'Son of Akim; known only from Matthew\'s genealogy (1:15). Lived under early Ptolemaic rule when the Hebrew scriptures were being translated into Greek — the Septuagint (LXX) — in Alexandria, Egypt (~285–246 BC). This Greek translation of the Old Testament would become the Bible of the early church and the New Testament writers.',
+ ref:'Matthew 1:15',
+ links:[['📖 Matthew 1:15',bg('Matthew 1:15')],['🔍 Wikipedia',wp('Eliud (biblical figure)')]]},
+{n:'Eleazar',g:'post',era:'Post-exile',rel:'Son of Elihud',b:-280,d:-215,
+ heb:'אֶלְעָזָר',pro:'El-a-ZAR',mng:'"God has helped" or "My God has helped"',
+ note:'Son of Elihud; known only from Matthew\'s genealogy (1:15). Lived during the reign of Antiochus III (the Great), who wrested Judea from Egypt. This era also saw the Jewish scholarly community flourishing in Alexandria, Egypt, and the beginning of the Hasmonean/Maccabean revolt brewing in the next generation.',
+ ref:'Matthew 1:15',
+ links:[['📖 Matthew 1:15',bg('Matthew 1:15')],['🔍 Wikipedia',wp('Eleazar (New Testament)')]]},
+{n:'Matthan',g:'post',era:'Post-exile',rel:'Son of Eleazar',b:-240,d:-175,
+ heb:'מַתָּן',pro:'Mat-TAN',mng:'"Gift" or "A gift from God"',
+ note:'Son of Eleazar; known only from Matthew\'s genealogy (1:15). Lived during the reign of Antiochus IV Epiphanes (175–164 BC), who desecrated the Temple by sacrificing a pig on the altar — the "abomination of desolation" — and the heroic Maccabean revolt that followed. Hanukkah commemorates the Temple rededication in 165 BC.',
+ ref:'Matthew 1:15; 1 Maccabees (historical context)',
+ links:[['📖 Matthew 1:15',bg('Matthew 1:15')],['🔍 Wikipedia',wp('Matthan')]]},
+{n:'Jacob',g:'post',era:'Post-exile',rel:"Joseph's father (Matthew's line)",b:-160,d:-25,
+ heb:'יַעֲקֹב',pro:'Ya-a-KOV',mng:'"He grasps the heel" or "Supplanter"',
+ note:'Father of Joseph the husband of Mary, according to Matthew 1:16. Luke\'s genealogy (3:23) names Heli as Joseph\'s father — the most likely explanation is that Matthew follows Joseph\'s legal paternal line while Luke follows Mary\'s biological line through her father Heli. Jacob\'s name deliberately echoes the patriarch Jacob, bookending the lineage.',
+ ref:'Matthew 1:16; Luke 3:23 (cf.)',
+ links:[['📖 Matthew 1:16',bg('Matthew 1:16')],['📖 Luke 3:23',bg('Luke 3:23')],['🔍 Wikipedia',wp('Jacob (father of Joseph of Nazareth)')]]},
+// ── IMMEDIATE FAMILY ──────────────────────────────────────────────────────────
+{n:'Joachim',g:'gpm',era:'Immediate family',rel:'Grandfather of Jesus (maternal)',b:-70,d:-15,
+ heb:'יְהוֹיָקִים',pro:'Ye-ho-ya-KEEM',mng:'"Yahweh raises up" or "The LORD will establish"',
+ note:'Father of Mary, according to the 2nd-century Protoevangelium of James — the earliest non-canonical account of Mary\'s origins. Described as a wealthy man of the tribe of Judah whose offerings were rejected at the Temple because he had no children. An angel appeared to both him and his wife Anne, promising them a child. Not mentioned in canonical scripture.',
+ ref:'Protoevangelium of James 1–5 (non-canonical)',
+ links:[['📖 Luke 3:23',bg('Luke 3:23')],['🔍 Wikipedia',wp('Joachim (father of Mary)')]]},
+{n:'Anne',g:'gpm',era:'Immediate family',rel:'Grandmother of Jesus (maternal)',b:-65,d:-10,
+ heb:'חַנָּה',pro:'Kha-NAH',mng:'"Grace" or "Favor" or "He has shown favor"',
+ note:'Mother of Mary; wife of Joachim. The Protoevangelium of James describes her grief over childlessness (echoing Hannah of 1 Samuel), an angelic announcement, and her vow to dedicate the child to God. Mary was presented at the Temple at age 3. Anne is venerated as a saint in both Catholic and Orthodox traditions, with her feast day on July 26.',
+ ref:'Protoevangelium of James 2–7 (non-canonical)',
+ links:[['🔍 Wikipedia',wp('Anne (mother of Mary)')],['📖 1 Samuel 1',bg('1 Samuel 1:1')]]},
+{n:'Zechariah',g:'ext',era:'Immediate family',rel:'Uncle by marriage · Priest of Abijah',b:-52,d:-5,
+ heb:'זְכַרְיָה',pro:'Ze-khar-YAH',mng:'"Yahweh remembers" or "The LORD has remembered"',
+ note:'Priest of the division of Abijah; described as "righteous in the sight of God" (Luke 1:6). Gabriel appeared to him in the Temple and announced that Elizabeth would bear a son, John. When Zechariah doubted, he was struck mute until John\'s birth. He prophesied the Benedictus (Luke 1:68–79): "Praise be to the Lord, the God of Israel, because he has come to redeem his people."',
+ ref:'Luke 1:5–25; 1:67–79',
+ links:[['📖 Luke 1:5',bg('Luke 1:5')],['📖 Luke 1:68',bg('Luke 1:68')],['🔍 Wikipedia',wp('Zechariah (priest)')]]},
+{n:'Elizabeth',g:'ext',era:'Immediate family',rel:'Kinswoman of Mary · Mother of John',b:-48,d:8,
+ heb:'אֱלִישֶׁבַע',pro:'E-lee-SHE-va',mng:'"My God is an oath" or "God is abundance"',
+ note:'"Both of them were righteous in the sight of God" (Luke 1:6). Barren and elderly until God opened her womb. When Mary arrived, "the baby leaped in her womb, and Elizabeth was filled with the Holy Spirit" and cried out: "Blessed are you among women, and blessed is the child you will bear!" (Luke 1:42). Her name is the Hebrew original of Elizabeth, Isabel, and Lisa.',
+ ref:'Luke 1:5–7; 1:39–45; 1:57–60',
+ links:[['📖 Luke 1:39',bg('Luke 1:39')],['📖 Luke 1:57',bg('Luke 1:57')],['🔍 Wikipedia',wp('Elizabeth (biblical figure)')]]},
+{n:'Joseph',g:'par',era:'Immediate family',rel:'Legal father of Jesus · Husband of Mary',b:-40,d:1,
+ heb:'יוֹסֵף',pro:'Yo-SEF',mng:'"He will add" or "May God add"',
+ note:'A carpenter (tektōn) of Nazareth; son of Jacob; a descendant of David. When he discovered Mary was pregnant, he planned to divorce her quietly. An angel appeared in a dream: "Joseph son of David, do not be afraid to take Mary home as your wife, because what is conceived in her is from the Holy Spirit" (Matthew 1:20). Named the child Jesus. Last mentioned when Jesus was 12 (Luke 2:42) — presumed to have died before the ministry began.',
+ ref:'Matthew 1:16–25; Luke 2:1–52',
+ links:[['📖 Matthew 1:18',bg('Matthew 1:18')],['📖 Luke 2:4',bg('Luke 2:4')],['🔍 Wikipedia',wp('Joseph (husband of Mary)')]]},
+{n:'Mary',g:'par',era:'Immediate family',rel:'Mother of Jesus · Theotokos',b:-18,d:48,
+ heb:'מִרְיָם',pro:'Meer-YAM',mng:'"Beloved" or "Sea of bitterness" (debated)',
+ note:'A virgin of Nazareth betrothed to Joseph. Gabriel announced: "You will conceive and give birth to a son, and you are to call him Jesus. He will be great and will be called the Son of the Most High" (Luke 1:31–32). Her response: "I am the Lord\'s servant. May your word to me be fulfilled" (Luke 1:38). Present at Cana (John 2), at the cross (John 19:25), and in the upper room at Pentecost (Acts 1:14).',
+ ref:'Luke 1:26–38; John 2:1–5; John 19:25; Acts 1:14',
+ links:[['📖 Luke 1:26',bg('Luke 1:26')],['📖 John 19:25',bg('John 19:25')],['🔍 Wikipedia',wp('Mary, mother of Jesus')]]},
+{n:'John the Baptist',g:'ext',era:'Immediate family',rel:'Cousin of Jesus · Forerunner',b:-6,d:29,
+ heb:'יוֹחָנָן',pro:'Yo-kha-NAN',mng:'"Yahweh is gracious" or "The LORD is gracious"',
+ note:'Son of Elizabeth and Zechariah. The angel said of him: "he will go before the Lord, in the spirit and power of Elijah" (Luke 1:17). Lived in the desert; preached repentance; baptized Jesus in the Jordan ~27 AD — the Spirit descended as a dove and the Father spoke: "This is my Son, whom I love." Jesus declared him "more than a prophet" and "the greatest born of woman" (Matthew 11:11). Beheaded by Herod Antipas at Salome\'s request.',
+ ref:'Luke 1:13–17; Mark 1:1–11; Matthew 11:11; Mark 6:14–29',
+ links:[['📖 Luke 1:13',bg('Luke 1:13')],['📖 Mark 1:4',bg('Mark 1:4')],['🔍 Wikipedia',wp('John the Baptist')]]},
+{n:'Jesus',g:'jes',era:'Immediate family',rel:'Son of God · Son of Mary · Messiah',b:-6,d:30,
+ heb:'יֵשׁוּעַ',pro:'Ye-SHOO-a',mng:'"Yahweh saves" or "The LORD is salvation"',
+ note:'"The Word became flesh and made his dwelling among us" (John 1:14). Born of the Virgin Mary in Bethlehem ~6 BC; grew up in Nazareth; baptized ~27 AD; preached the Kingdom of God for 3 years; performed countless miracles; was crucified under Pontius Pilate ~30 AD; rose bodily from the dead on the third day — witnessed by more than 500 people (1 Corinthians 15:6); ascended to heaven 40 days later. His name יֵשׁוּעַ is the same name as Joshua (Yehoshua).',
+ ref:'Matthew 1:18–25; Luke 2; John 1:14; 1 Corinthians 15:3–6',
+ links:[['📖 Luke 2',bg('Luke 2:1')],['📖 John 1:14',bg('John 1:14')],['📖 1 Cor 15',bg('1 Corinthians 15:3')],['🔍 Wikipedia',wp('Jesus')]]},
+{n:'James (the Just)',g:'sib',era:'Immediate family',rel:'Brother of Jesus · Led Jerusalem church',b:-4,d:62,
+ heb:'יַעֲקֹב',pro:'Ya-a-KOV',mng:'"He grasps the heel" or "Supplanter"',
+ note:'Brother of Jesus (not the apostle James son of Zebedee). Skeptical during Jesus\'s ministry (John 7:5) but became a believer after the resurrection — Jesus appeared to him specifically (1 Corinthians 15:7). Became the leader of the Jerusalem church and was called "the Lord\'s brother" by Paul (Galatians 1:19). Wrote the Epistle of James. Josephus records he was stoned to death by the Sanhedrin in 62 AD. Called "James the Just" for his righteousness.',
+ ref:'Matthew 13:55; Galatians 1:19; James 1:1; Acts 15:13',
+ links:[['📖 Acts 15:13',bg('Acts 15:13')],['📖 James 1:1',bg('James 1:1')],['🔍 Wikipedia',wp('James, brother of Jesus')]]},
+{n:'Joseph (Joses)',g:'sib',era:'Immediate family',rel:'Brother of Jesus',b:-3,d:null,
+ heb:'יוֹסֵף',pro:'Yo-SEF',mng:'"He will add" or "May God add"',
+ note:'Called Joses in Mark 6:3, distinguishing him from Joseph the father. Named alongside James, Simon, and Judas in both Matthew 13:55 and Mark 6:3. Mary of Clopas was called "mother of Joses" at the cross (Mark 15:47), possibly indicating she was not the same Mary as the mother of Jesus — though many scholars identify them as the same. No further record of his life exists in scripture.',
+ ref:'Matthew 13:55; Mark 6:3; Mark 15:47',
+ links:[['📖 Matthew 13:55',bg('Matthew 13:55')],['📖 Mark 6:3',bg('Mark 6:3')],['🔍 Wikipedia',wp('Joses, brother of Jesus')]]},
+{n:'Simon',g:'sib',era:'Immediate family',rel:'Brother of Jesus',b:-2,d:null,
+ heb:'שִׁמְעוֹן',pro:'Shee-MON',mng:'"He has heard" or "Hearing"',
+ note:'Brother of Jesus, named in Matthew 13:55 and Mark 6:3. Not to be confused with Simon Peter or Simon the Zealot. Eusebius records (Church History 3.11) that after James\'s death, the Jerusalem church chose Simeon the son of Clopas as their second bishop — possibly this Simon, a blood relative of Jesus. His life after the resurrection remains unrecorded in canonical scripture.',
+ ref:'Matthew 13:55; Mark 6:3; Eusebius, Church History 3.11',
+ links:[['📖 Matthew 13:55',bg('Matthew 13:55')],['📖 Mark 6:3',bg('Mark 6:3')],['🔍 Wikipedia',wp('Simon, brother of Jesus')]]},
+{n:'Judas (Jude)',g:'sib',era:'Immediate family',rel:'Brother of Jesus · Author of Jude',b:-1,d:80,
+ heb:'יְהוּדָה',pro:'Ye-hoo-DAH',mng:'"Praise" or "Let him be praised"',
+ note:'Brother of Jesus; author of the Epistle of Jude, which he opens: "Jude, a servant of Jesus Christ and a brother of James." Like James, he likely believed only after the resurrection (see John 7:5). Eusebius records that under Emperor Domitian (~96 AD), Jude\'s grandsons Zoker and James were brought before the Emperor as descendants of David, questioned about Christ\'s kingdom, found harmless, and released.',
+ ref:'Matthew 13:55; Jude 1:1; Eusebius, Church History 3.20',
+ links:[['📖 Jude 1',bg('Jude 1:1')],['📖 Matthew 13:55',bg('Matthew 13:55')],['🔍 Wikipedia',wp('Jude, brother of Jesus')]]},
+];
+
+const sections=[
+  {label:'PRE-FLOOD PATRIARCHS  ·  ~4000–2350 BC',         from:0},
+  {label:'ANCESTORS OF ABRAHAM  ·  ~2450–2100 BC',          from:10},
+  {label:'THE PATRIARCHS  ·  ~2200–1850 BC',                from:19},
+  {label:'TRIBE OF JUDAH  ·  ~2000–1350 BC',                from:25},
+  {label:'JUDGES & RUTH ERA  ·  ~1400–1000 BC',             from:34},
+  {label:'KINGS OF JUDAH  ·  ~1040–560 BC',                 from:38},
+  {label:'POST-EXILE ANCESTORS  ·  ~600–25 BC',             from:54},
+  {label:'IMMEDIATE FAMILY OF JESUS  ·  ~70 BC–80 AD',      from:65},
+];
+
+const ROW=30,GAP=5,STEP=ROW+GAP;
+const HEADER=58,LPAD=175,RPAD=50,SECTION_H=22;
+const YS=-4100,YE=130,YR=YE-YS;
+const CVS_W=5000;
+const sectionFromSet=new Set(sections.map(s=>s.from));
+
+function getRowY(idx){
+  let y=HEADER;
+  for(let i=0;i<idx;i++){if(sectionFromSet.has(i))y+=SECTION_H;y+=STEP;}
+  return y;
+}
+function totalH(){
+  let h=HEADER;
+  for(let i=0;i<people.length;i++){if(sectionFromSet.has(i))h+=SECTION_H;h+=STEP;}
+  return h+32;
+}
+function yx(yr){return LPAD+(yr-YS)*(CVS_W-LPAD-RPAD)/YR;}
+function fmtYr(y){return y===null?'?':(y<0?Math.abs(y)+' BC':(y===0?'1 AD':y+' AD'));}
+function calcAge(p){return p.d===null?null:Math.abs(p.d-p.b);}
+
+const CVS_H=totalH();
+const cvs=document.getElementById('tlc');
+const dpr=window.devicePixelRatio||1;
+cvs.width=CVS_W*dpr;cvs.height=CVS_H*dpr;
+cvs.style.width=CVS_W+'px';cvs.style.height=CVS_H+'px';
+const ctx=cvs.getContext('2d');
+ctx.scale(dpr,dpr);
+
+let zoom=1;
+const ZOOM_MIN=0.55;
+const ZOOM_MAX=2.2;
+const zoomVal=document.getElementById('zoom-val');
+
+function clamp(v,min,max){return Math.min(max,Math.max(min,v));}
+
+function applyZoom(nextZoom,anchorClientX){
+  const prev=zoom;
+  zoom=clamp(nextZoom,ZOOM_MIN,ZOOM_MAX);
+  if(Math.abs(zoom-prev)<0.0001)return;
+  const rect=outer.getBoundingClientRect();
+  const anchorViewportX=(typeof anchorClientX==='number')?clamp(anchorClientX-rect.left,0,outer.clientWidth):outer.clientWidth/2;
+  const anchorWorldX=outer.scrollLeft+anchorViewportX;
+  const ratio=zoom/prev;
+  cvs.style.width=(CVS_W*zoom)+'px';
+  cvs.style.height=(CVS_H*zoom)+'px';
+  outer.scrollLeft=anchorWorldX*ratio-anchorViewportX;
+  zoomVal.textContent=Math.round(zoom*100)+'%';
+}
+
+// Legend
+const legEl=document.getElementById('legend-el');
+LEGEND_ORDER.forEach(k=>{
+  const sp=document.createElement('span');
+  sp.innerHTML=`<span class="sw" style="background:${C[k].sw}"></span>${C[k].label}`;
+  legEl.appendChild(sp);
+});
+legEl.insertAdjacentHTML('beforeend','<span><span style="display:inline-block;width:20px;border-top:2px dashed #404860;margin-top:4px"></span>Death unrecorded</span>');
+
+let selectedIdx=-1;
+
+function rr(x,y,w,h,r){
+  if(w<1)return;r=Math.min(r,w/2,h/2);
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arcTo(x+w,y,x+w,y+r,r);
+  ctx.lineTo(x+w,y+h-r);ctx.arcTo(x+w,y+h,x+w-r,y+h,r);
+  ctx.lineTo(x+r,y+h);ctx.arcTo(x,y+h,x,y+h-r,r);
+  ctx.lineTo(x,y+r);ctx.arcTo(x,y,x+r,y,r);
+  ctx.closePath();
+}
+
+function draw(){
+  ctx.clearRect(0,0,CVS_W,CVS_H);
+  for(let yr=-4000;yr<=120;yr+=200){
+    const x=yx(yr);
+    ctx.strokeStyle='rgba(255,255,255,0.07)';ctx.lineWidth=0.5;ctx.setLineDash([]);
+    ctx.beginPath();ctx.moveTo(x,HEADER-2);ctx.lineTo(x,CVS_H-16);ctx.stroke();
+    ctx.fillStyle='#2c3450';ctx.font='10px system-ui';ctx.textAlign='center';
+    ctx.fillText(yr===0?'1 AD':(yr<0?Math.abs(yr)+' BC':yr+' AD'),x,HEADER-14);
+  }
+  for(let yr=-4000;yr<=120;yr+=100){
+    if(yr%200===0)continue;
+    ctx.strokeStyle='rgba(255,255,255,0.022)';ctx.lineWidth=0.25;ctx.setLineDash([2,6]);
+    const x=yx(yr);ctx.beginPath();ctx.moveTo(x,HEADER-2);ctx.lineTo(x,CVS_H-16);ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  ctx.strokeStyle='rgba(255,255,255,0.14)';ctx.lineWidth=0.5;
+  ctx.beginPath();ctx.moveTo(LPAD,HEADER);ctx.lineTo(CVS_W-RPAD,HEADER);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(LPAD,CVS_H-16);ctx.lineTo(CVS_W-RPAD,CVS_H-16);ctx.stroke();
+  for(let yr=-4000;yr<=120;yr+=200){
+    ctx.fillStyle='#2c3450';ctx.font='10px system-ui';ctx.textAlign='center';
+    ctx.fillText(yr===0?'1 AD':(yr<0?Math.abs(yr)+' BC':yr+' AD'),yx(yr),CVS_H-4);
+  }
+  const jbx=yx(-6);
+  ctx.strokeStyle='rgba(255,220,50,0.4)';ctx.lineWidth=1.2;ctx.setLineDash([5,3]);
+  ctx.beginPath();ctx.moveTo(jbx,HEADER-2);ctx.lineTo(jbx,CVS_H-16);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#FFE040';ctx.font='700 9px system-ui';ctx.textAlign='center';
+  ctx.fillText('Jesus born ~6 BC',jbx,HEADER-26);
+
+  // Flood marker
+  const floodX=yx(-2348);
+  ctx.strokeStyle='rgba(40,180,255,0.35)';ctx.lineWidth=1.2;ctx.setLineDash([5,3]);
+  ctx.beginPath();ctx.moveTo(floodX,HEADER-2);ctx.lineTo(floodX,CVS_H-16);ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#28C8FF';ctx.font='700 9px system-ui';ctx.textAlign='center';
+  ctx.fillText('The Flood ~2348 BC',floodX,HEADER-26);
+
+  people.forEach((p,i)=>{
+    if(sectionFromSet.has(i)){
+      const sy=getRowY(i)-SECTION_H;
+      ctx.fillStyle='rgba(255,255,255,0.03)';ctx.fillRect(0,sy,CVS_W,SECTION_H);
+      const sec=sections.find(s=>s.from===i);
+      ctx.fillStyle='#505A78';ctx.font='500 10px system-ui';ctx.textAlign='left';
+      ctx.fillText(sec.label,LPAD+6,sy+SECTION_H/2+4);
+    }
+    const col=C[p.g];
+    const ry=getRowY(i);
+    if(i%2===0){ctx.fillStyle='rgba(255,255,255,0.018)';ctx.fillRect(LPAD,ry,CVS_W-LPAD-RPAD,ROW);}
+
+    ctx.fillStyle=p.g==='jes'?'#FFF8D0':(p.g==='ancw'||p.g==='gpm'?'#FF88CC':'#8090b8');
+    ctx.font=(p.g==='jes'?'700 ':'400 ')+'11.5px system-ui';
+    ctx.textAlign='right';
+    ctx.fillText(p.n,LPAD-8,ry+ROW/2+4);
+
+    const bx=Math.max(yx(p.b),LPAD);
+    const endYr=p.d!==null?p.d:Math.min(p.b+70,YE-5);
+    const bw=Math.max(yx(endYr)-bx,5);
+    const by=ry+4,bh=ROW-8;
+    const isSel=i===selectedIdx;
+
+    if(p.g==='jes'||isSel){ctx.shadowColor=isSel?'#fff':col.s;ctx.shadowBlur=isSel?16:18;}
+    ctx.fillStyle=col.f;
+    ctx.strokeStyle=isSel?'#ffffff':col.s;
+    ctx.lineWidth=isSel?2.5:(p.g==='jes'?2.5:1.8);
+    if(p.d===null)ctx.setLineDash([4,2]);
+    rr(bx,by,bw,bh,3);ctx.fill();ctx.stroke();
+    ctx.setLineDash([]);ctx.shadowBlur=0;
+
+    ctx.save();
+    ctx.beginPath();ctx.rect(bx+2,by,Math.max(bw-4,0),bh);ctx.clip();
+    const age=calcAge(p);
+    const ageStr=age!==null?age+'y':'?';
+    const dateStr=fmtYr(p.b)+' – '+fmtYr(p.d);
+    if(bw>=16){
+      ctx.textAlign='left';
+      ctx.fillStyle=p.g==='jes'?'#FFF8C0':col.t;
+      ctx.font='600 9px system-ui';
+      ctx.fillText(p.n,bx+5,by+9);
+      ctx.fillStyle=col.s;
+      ctx.font='400 8px system-ui';
+      ctx.fillText(dateStr+'  ·  '+ageStr,bx+5,by+18);
+    }
+    ctx.restore();
+    if(p.d===null){
+      const ax=Math.min(yx(endYr)+9,CVS_W-RPAD-8);
+      ctx.fillStyle=col.s;ctx.font='13px system-ui';ctx.textAlign='left';
+      ctx.fillText('→',ax,by+bh/2+5);
+    }
+  });
+}
+
+draw();
+
+// Pan
+const outer=document.getElementById('chart-outer');
+let dragging=false,startX=0,scrollLeft0=0;
+outer.addEventListener('mousedown',e=>{dragging=true;startX=e.pageX-outer.offsetLeft;scrollLeft0=outer.scrollLeft;outer.style.cursor='grabbing';e.preventDefault();});
+document.addEventListener('mouseup',()=>{dragging=false;outer.style.cursor='grab';});
+outer.addEventListener('mousemove',e=>{if(!dragging)return;outer.scrollLeft=scrollLeft0-(e.pageX-outer.offsetLeft-startX)*1.2;});
+let tx0=0,tsx0=0,pinching=false,pinchStartDist=0,pinchStartZoom=1,pinchCenterX=0;
+
+function touchDist(a,b){
+  const dx=a.clientX-b.clientX;
+  const dy=a.clientY-b.clientY;
+  return Math.sqrt(dx*dx+dy*dy);
+}
+
+outer.addEventListener('touchstart',e=>{
+  if(e.touches.length===2){
+    pinching=true;
+    pinchStartDist=touchDist(e.touches[0],e.touches[1]);
+    pinchStartZoom=zoom;
+    pinchCenterX=(e.touches[0].clientX+e.touches[1].clientX)/2;
+    return;
+  }
+  if(e.touches.length===1){
+    pinching=false;
+    tx0=e.touches[0].pageX;
+    tsx0=outer.scrollLeft;
+  }
+},{passive:false});
+
+outer.addEventListener('touchmove',e=>{
+  if(pinching&&e.touches.length===2){
+    e.preventDefault();
+    const dist=touchDist(e.touches[0],e.touches[1]);
+    if(pinchStartDist>0){
+      const ratio=dist/pinchStartDist;
+      applyZoom(pinchStartZoom*ratio,pinchCenterX);
+    }
+    return;
+  }
+  if(e.touches.length===1){
+    outer.scrollLeft=tsx0-(e.touches[0].pageX-tx0);
+  }
+},{passive:false});
+
+outer.addEventListener('touchend',e=>{
+  if(e.touches.length<2)pinching=false;
+},{passive:true});
+
+outer.addEventListener('wheel',e=>{
+  if(!(e.ctrlKey||e.metaKey))return;
+  e.preventDefault();
+  const factor=Math.exp(-e.deltaY*0.002);
+  applyZoom(zoom*factor,e.clientX);
+},{passive:false});
+
+document.getElementById('pan-left').addEventListener('click',()=>outer.scrollBy({left:-Math.round(outer.clientWidth*0.5),behavior:'smooth'}));
+document.getElementById('pan-right').addEventListener('click',()=>outer.scrollBy({left:Math.round(outer.clientWidth*0.5),behavior:'smooth'}));
+document.getElementById('zoom-in').addEventListener('click',()=>applyZoom(zoom*1.15));
+document.getElementById('zoom-out').addEventListener('click',()=>applyZoom(zoom/1.15));
+document.getElementById('zoom-reset').addEventListener('click',()=>applyZoom(1));
+
+// Returns row index only if cursor is physically over that row's bar rectangle
+function findRow(clientX,clientY,rect){
+  const scaleX=CVS_W/rect.width;
+  const scaleY=CVS_H/rect.height;
+  const mx=(clientX-rect.left)*scaleX;
+  const my=(clientY-rect.top)*scaleY;
+  for(let i=0;i<people.length;i++){
+    const ry=getRowY(i);
+    if(my<ry||my>ry+ROW) continue;
+    const p=people[i];
+    const bx=Math.max(yx(p.b),LPAD);
+    const endYr=p.d!==null?p.d:Math.min(p.b+70,YE-5);
+    const bw=Math.max(yx(endYr)-bx,5);
+    if(mx>=bx&&mx<=bx+bw) return i;
+  }
+  return -1;
+}
+
+// Returns row index if cursor is over the name label in the left column
+function findNameLabel(clientX,clientY,rect){
+  const scaleX=CVS_W/rect.width;
+  const scaleY=CVS_H/rect.height;
+  const mx=(clientX-rect.left)*scaleX;
+  const my=(clientY-rect.top)*scaleY;
+  if(mx>LPAD-4) return -1; // must be in the name column
+  for(let i=0;i<people.length;i++){
+    const ry=getRowY(i);
+    if(my>=ry&&my<=ry+ROW) return i;
+  }
+  return -1;
+}
+
+// Center bar only if it is not already visible in the current viewport
+function centerBarIfNeeded(idx){
+  const p=people[idx];
+  const bx=Math.max(yx(p.b),LPAD);
+  const endYr=p.d!==null?p.d:Math.min(p.b+70,YE-5);
+  const ex=yx(endYr);
+  const visL=outer.scrollLeft;
+  const visR=outer.scrollLeft+outer.clientWidth;
+  // Bar is fully or partially visible — don't move
+  if(ex>=visL && bx<=visR) return;
+  // Bar is outside current view — center it
+  const cx=(bx+ex)/2;
+  outer.scrollTo({left:Math.max(0,cx-outer.clientWidth/2),behavior:'smooth'});
+}
+
+// ── Tooltip ───────────────────────────────────────────────────────────────────
+// Rules: only shows while mouse is physically over the bar row.
+// 2-second hold required before it appears. Hides instantly on leave.
+const tip    = document.getElementById('tip');
+const tipHov = document.getElementById('tip-hover');
+let tipShowTimer=null;
+let tipLeaveTimer=null;
+let lastRow=-1;
+let visibleTipRow=-1;
+let _navGuard=false;
+let _openAllDragCard=null, _openAllDragOX=0, _openAllDragOY=0;
+document.addEventListener('mousemove',e=>{
+  if(!_openAllDragCard)return;
+  _openAllDragCard.style.left=(e.clientX-_openAllDragOX)+'px';
+  _openAllDragCard.style.top =(e.clientY-_openAllDragOY)+'px';
+});
+document.addEventListener('mouseup',()=>{ _openAllDragCard=null; });
+
+let topZ = 1000; // keep above canvas and increase for each tooltip/card shown
+
+// ── Drag — tooltip is always draggable ───────────────────────────────────────
+let tipDragging=false, tipDragOX=0, tipDragOY=0;
+
+tip.addEventListener('mousedown',e=>{
+  if(e.target.closest('a,button,span.np')) return;
+  tipDragging=true;
+  tipDragOX=e.clientX-tip.getBoundingClientRect().left;
+  tipDragOY=e.clientY-tip.getBoundingClientRect().top;
+  tip.style.zIndex=String(++topZ);
+  e.preventDefault();
+});
+document.addEventListener('mousemove',e=>{
+  if(!tipDragging) return;
+  tip.style.left=(e.clientX-tipDragOX)+'px';
+  tip.style.top =(e.clientY-tipDragOY)+'px';
+});
+document.addEventListener('mouseup',()=>{ tipDragging=false; });
+
+// ✕ close button
+document.getElementById('tip-close').addEventListener('click',()=>hideTip());
+
+// ── Note parser: locations → map links, concepts → Wikipedia, person names → in-app navigation ─────
+const LOCS=[
+  ['Garden of Eden','https://maps.google.com/maps?q=Garden+of+Eden+Mesopotamia+Iraq'],
+  ['Tower of Babel','https://maps.google.com/maps?q=Tower+of+Babel+Babylon+Iraq'],
+  ['Mount Moriah','https://maps.google.com/maps?q=Temple+Mount,Jerusalem,Israel'],
+  ['Mount Ararat','https://maps.google.com/maps?q=Mount+Ararat,Turkey'],
+  ['Mount Sinai','https://maps.google.com/maps?q=Mount+Sinai,Egypt'],
+  ['Sea of Galilee','https://maps.google.com/maps?q=Sea+of+Galilee,Israel'],
+  ['Jordan River','https://maps.google.com/maps?q=Jordan+River,Israel'],
+  ['Red Sea','https://maps.google.com/maps?q=Red+Sea'],
+  ['Dead Sea','https://maps.google.com/maps?q=Dead+Sea,Israel'],
+  ['Machpelah','https://maps.google.com/maps?q=Cave+of+Machpelah,Hebron'],
+  ['Peniel','https://maps.google.com/maps?q=Penuel,Jordan'],
+  ['Goshen','https://maps.google.com/maps?q=Land+of+Goshen,Egypt'],
+  ['Jericho','https://maps.google.com/maps?q=Jericho,West+Bank'],
+  ['Bethlehem','https://maps.google.com/maps?q=Bethlehem,West+Bank'],
+  ['Jerusalem','https://maps.google.com/maps?q=Jerusalem,Israel'],
+  ['Nazareth','https://maps.google.com/maps?q=Nazareth,Israel'],
+  ['Nineveh','https://maps.google.com/maps?q=Nineveh,Iraq'],
+  ['Damascus','https://maps.google.com/maps?q=Damascus,Syria'],
+  ['Babylon','https://maps.google.com/maps?q=Babylon,Iraq'],
+  ['Hebron','https://maps.google.com/maps?q=Hebron,West+Bank'],
+  ['Samaria','https://maps.google.com/maps?q=Samaria,Israel'],
+  ['Megiddo','https://maps.google.com/maps?q=Megiddo,Israel'],
+  ['Capernaum','https://maps.google.com/maps?q=Capernaum,Israel'],
+  ['Alexandria','https://maps.google.com/maps?q=Alexandria,Egypt'],
+  ['Canaan','https://maps.google.com/maps?q=Canaan+ancient+land+Israel'],
+  ['Haran','https://maps.google.com/maps?q=Harran,Turkey'],
+  ['Sinai','https://maps.google.com/maps?q=Sinai+Peninsula,Egypt'],
+  ['Egypt','https://maps.google.com/maps?q=Egypt'],
+  ['Babel','https://maps.google.com/maps?q=Babylon+Iraq'],
+  ['Ur','https://maps.google.com/maps?q=Ur,Iraq'],
+];
+
+const CONCEPTS=[
+  // Events
+  ['abomination of desolation','https://en.wikipedia.org/wiki/Abomination_of_desolation'],
+  ['Babylonian captivity','https://en.wikipedia.org/wiki/Babylonian_captivity'],
+  ['Maccabean revolt','https://en.wikipedia.org/wiki/Maccabean_revolt'],
+  ['Ten Commandments','https://en.wikipedia.org/wiki/Ten_Commandments'],
+  ['Table of Nations','https://en.wikipedia.org/wiki/Table_of_Nations'],
+  ['Fall of Jerusalem','https://en.wikipedia.org/wiki/Siege_of_Jerusalem_(587_BC)'],
+  ['Passover','https://en.wikipedia.org/wiki/Passover'],
+  ['Exodus','https://en.wikipedia.org/wiki/The_Exodus'],
+  // Covenants
+  ['Abrahamic covenant','https://en.wikipedia.org/wiki/Abrahamic_covenant'],
+  ['Mosaic covenant','https://en.wikipedia.org/wiki/Mosaic_covenant'],
+  ['Noahic covenant','https://en.wikipedia.org/wiki/Covenant_(biblical)#Noahic_covenant'],
+  ['Davidic covenant','https://en.wikipedia.org/wiki/Davidic_covenant'],
+  // Peoples & nations
+  ['Semitic peoples','https://en.wikipedia.org/wiki/Semitic_peoples'],
+  ['Assyrian Empire','https://en.wikipedia.org/wiki/Neo-Assyrian_Empire'],
+  ['Babylonian Empire','https://en.wikipedia.org/wiki/Neo-Babylonian_Empire'],
+  ['Persian Empire','https://en.wikipedia.org/wiki/Achaemenid_Empire'],
+  ['Roman Empire','https://en.wikipedia.org/wiki/Roman_Empire'],
+  ['Ptolemies','https://en.wikipedia.org/wiki/Ptolemaic_Kingdom'],
+  ['Seleucids','https://en.wikipedia.org/wiki/Seleucid_Empire'],
+  ['Diadochi','https://en.wikipedia.org/wiki/Diadochi'],
+  ['Philistines','https://en.wikipedia.org/wiki/Philistines'],
+  ['Canaanites','https://en.wikipedia.org/wiki/Canaanites'],
+  ['Moabites','https://en.wikipedia.org/wiki/Moab'],
+  ['Hittites','https://en.wikipedia.org/wiki/Hittites'],
+  ['Assyrians','https://en.wikipedia.org/wiki/Assyria'],
+  ['Arameans','https://en.wikipedia.org/wiki/Arameans'],
+  // Religious concepts
+  ['Ark of the Covenant','https://en.wikipedia.org/wiki/Ark_of_the_Covenant'],
+  ['Second Temple','https://en.wikipedia.org/wiki/Second_Temple'],
+  ['First Temple','https://en.wikipedia.org/wiki/Solomon%27s_Temple'],
+  ['kinsman-redeemer','https://en.wikipedia.org/wiki/Go%27el'],
+  ['Levirate marriage','https://en.wikipedia.org/wiki/Levirate_marriage'],
+  ['High Priest','https://en.wikipedia.org/wiki/High_Priest_of_Israel'],
+  ['circumcision','https://en.wikipedia.org/wiki/Circumcision'],
+  ['Sanhedrin','https://en.wikipedia.org/wiki/Sanhedrin'],
+  ['Septuagint','https://en.wikipedia.org/wiki/Septuagint'],
+  ['Hellenization','https://en.wikipedia.org/wiki/Hellenization'],
+  // Messianic
+  ['Messianic prophecy','https://en.wikipedia.org/wiki/Messianic_prophecy'],
+  ['virgin birth','https://en.wikipedia.org/wiki/Virgin_birth_of_Jesus'],
+  ['Son of David','https://en.wikipedia.org/wiki/Son_of_David'],
+  ['Son of God','https://en.wikipedia.org/wiki/Son_of_God'],
+  ['Word became flesh','https://en.wikipedia.org/wiki/Logos_(Christianity)'],
+];
+
+function noteToHtml(rawText, selfIdx){
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  // Build term list: locations then people (skip self, skip short/ambiguous)
+  const terms=[];
+  LOCS.forEach(([name,url])=>{
+    terms.push({text:name,html:`<a class="nl" href="${url}" target="_blank" rel="noopener noreferrer">${esc(name)} 🗺</a>`});
+  });
+  CONCEPTS.forEach(([name,url])=>{
+    terms.push({text:name,html:`<a class="nc" href="${url}" target="_blank" rel="noopener noreferrer">${esc(name)}</a>`});
+  });
+  people.forEach((p,i)=>{
+    if(i===selfIdx) return;           // don't link person to themselves
+    const name=p.n.split(' ')[0];     // use first name for matching ("John" not "John the Baptist")
+    if(name.length<3) return;         // skip very short names that would false-match
+    terms.push({text:name,html:`<span class="np" onclick="window.navTo(${i})">${esc(name)}</span>`});
+  });
+  // Longest match first — prevents "Ur" matching inside "Uriah"
+  terms.sort((a,b)=>b.text.length-a.text.length);
+  // No escaping needed — all terms are plain words with no regex special chars
+  const escaped=terms.map(t=>t.text);
+  const re=new RegExp('\\b('+escaped.join('|')+')\\b','g');
+  let html='', last=0, m;
+  while((m=re.exec(rawText))!==null){
+    html+=esc(rawText.slice(last,m.index));
+    const t=terms.find(t=>t.text===m[0]);
+    html+=t?t.html:esc(m[0]);
+    last=m.index+m[0].length;
+  }
+  html+=esc(rawText.slice(last));
+  return html;
+}
+
+// Navigate to a person by index — called from inline onclick in note links
+window.navTo=function(idx){
+  // Already showing this person — nothing to do
+  if(lastRow===idx && tip.style.display!=='none') return;
+
+  _navGuard=true;
+
+  selectedIdx=idx; draw();
+
+  const p     = people[idx];
+  const bx    = Math.max(yx(p.b), LPAD);
+  const endYr = p.d !== null ? p.d : Math.min(p.b+70, YE-5);
+  const ex    = yx(endYr);
+  const cx    = (bx + ex) / 2;
+  outer.scrollLeft = Math.max(0, cx - outer.clientWidth / 2);
+
+  lastRow=idx;
+  showTip(p, idx);
+  _navGuard=false;
+};
+
+function buildTip(p){
+  const age=calcAge(p);
+  document.getElementById('tip-name').textContent=p.n;
+  document.getElementById('tip-era').textContent=fmtYr(p.b)+' – '+fmtYr(p.d)+(age?'  ·  lived '+age+' years':'')+'  ·  '+p.era;
+  const relEl=document.getElementById('tip-rel');
+  relEl.style.color=C[p.g].sw;relEl.textContent=p.rel;
+  document.getElementById('tip-heb').textContent=p.heb;
+  document.getElementById('tip-pro').textContent='Pronunciation: '+p.pro;
+  document.getElementById('tip-mng').textContent='Meaning: '+p.mng;
+  document.getElementById('tip-dates').textContent='Born: '+fmtYr(p.b)+'   ·   Died: '+fmtYr(p.d);
+  const selfIdx=people.indexOf(p);
+  document.getElementById('tip-note').innerHTML=noteToHtml(p.note,selfIdx);
+  // Scripture ref — parse each reference and make it a BibleGateway link
+  const refEl=document.getElementById('tip-ref');
+  refEl.innerHTML=p.ref.split(/;\s*/).map(r=>{
+    const clean=r.replace(/\s*\(.*?\)/g,'').trim();
+    if(!clean) return '';
+    return `<a class="tl" href="${bg(clean)}" target="_blank" rel="noopener noreferrer">${r.trim()}</a>`;
+  }).filter(Boolean).join(' ');
+  const ld=document.getElementById('tip-links');
+  ld.innerHTML='';
+  (p.links||[]).forEach(([lbl,url])=>{
+    const a=document.createElement('a');
+    a.href=url;a.target='_blank';a.rel='noopener noreferrer';
+    a.className='tl';a.textContent=lbl;
+    ld.appendChild(a);
+  });
+}
+
+function showTip(p,rowIdx){
+  buildTip(p);
+  const REM   = parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
+  const TIP_W = 360;
+  const TIP_H = 460;
+
+  // Bar left edge in canvas coords = birth year x position
+  const bx      = Math.max(yx(p.b), LPAD);
+  const ry      = getRowY(rowIdx);
+
+  // Convert to screen coords
+  const outerLeft = outer.getBoundingClientRect().left;
+  const cvsTop    = cvs.getBoundingClientRect().top;
+
+  // tx = left edge aligned with birth year on screen
+  let tx = outerLeft + bx - outer.scrollLeft;
+
+  // ty = 1rem below the bar's exact bottom edge
+  // bar draws at by=ry+4, height=ROW-8, so bar bottom = ry+4+(ROW-8) = ry+ROW-4
+  let ty = cvsTop + ry + ROW - 4 + REM;
+
+  // Keep within viewport horizontally
+  if(tx + TIP_W > window.innerWidth - REM){
+    tx = window.innerWidth - TIP_W - REM;
+  }
+  if(tx < REM) tx = REM;
+
+  // If the tooltip would overflow the viewport bottom, scroll the page down
+  // by the overflow amount instantly.  Because the canvas is in normal flow
+  // (not fixed), scrolling shifts it up in the viewport by the same amount,
+  // so we subtract that overflow from ty to keep the tooltip exactly 1rem
+  // below the bar's new on-screen position.
+  const overflow = ty + TIP_H - (window.innerHeight - REM);
+  if(overflow > 0){
+    window.scrollBy(0, overflow);
+    ty -= overflow;
+  }
+
+  tip.style.zIndex = String(++topZ);
+  tip.style.left = tx + 'px';
+  tip.style.top  = ty + 'px';
+  tip.style.display = 'block';
+  visibleTipRow = rowIdx;
+}
+
+function hideTip(){
+  clearTimeout(tipShowTimer);
+  tip.style.display='none';
+  lastRow=-1;
+  visibleTipRow=-1;
+}
+
+// 200ms grace when leaving a row — invisible to the user but long enough
+// to move the mouse from the bar to the tooltip card without it vanishing
+function hideTipSoon(){
+  clearTimeout(tipLeaveTimer);
+  tipLeaveTimer=setTimeout(()=>{if(!tipOnCard)hideTip();},200);
+}
+
+// Cursor only — no hover-open behaviour
+cvs.addEventListener('mousemove',e=>{
+  if(dragging) return;
+  const rect=cvs.getBoundingClientRect();
+  const nameRow=findNameLabel(e.clientX,e.clientY,rect);
+  if(nameRow>=0){ cvs.style.cursor='pointer'; return; }
+  const row=findRow(e.clientX,e.clientY,rect);
+  cvs.style.cursor=row>=0?'pointer':'default';
+});
+
+// Click bar → if locked: stamp current card and show new tooltip
+//             if unlocked: center + highlight + show tooltip
+cvs.addEventListener('click',e=>{
+  if(dragging)return;
+  const rect=cvs.getBoundingClientRect();
+  const nameRow=findNameLabel(e.clientX,e.clientY,rect);
+  if(nameRow>=0){
+    selectedIdx=nameRow; draw();
+    centerBarIfNeeded(nameRow);
+    lastRow=nameRow;
+    showTip(people[nameRow],nameRow);
+    return;
+  }
+  const row=findRow(e.clientX,e.clientY,rect);
+  if(row>=0){
+    if(row===selectedIdx){
+      // Toggle off — clicking same bar closes the card
+      selectedIdx=-1; draw(); hideTip();
+    } else {
+      selectedIdx=row; draw();
+      centerBarIfNeeded(row);
+      lastRow=row;
+      showTip(people[row],row);
+    }
+  } else {
+    // Empty canvas click — close and deselect
+    selectedIdx=-1; draw(); hideTip();
+  }
+});
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft')outer.scrollBy({left:-Math.round(outer.clientWidth*0.5),behavior:'smooth'});
+  if(e.key==='ArrowRight')outer.scrollBy({left:Math.round(outer.clientWidth*0.5),behavior:'smooth'});
+  if((e.key==='+'||e.key==='='||e.key==='Add')&&(e.ctrlKey||e.metaKey)){e.preventDefault();applyZoom(zoom*1.15);}
+  if((e.key==='-'||e.key==='Subtract')&&(e.ctrlKey||e.metaKey)){e.preventDefault();applyZoom(zoom/1.15);}
+  if((e.key==='0'||e.key==='Numpad0')&&(e.ctrlKey||e.metaKey)){e.preventDefault();applyZoom(1);}
+  if(e.key==='Escape'){tourStop();selectedIdx=-1;draw();hideTip();closeAllCards();}
+  if(e.key===' '&&tourIdx>=0){e.preventDefault();clearTimeout(tourTimer);tourShow(tourIdx+1);}
+});
+
+// ── Open All Tooltips ───────────────────────────────────────────────────────────────
+let _allCardsOpen=false;
+
+function openAllCards(){
+  if(_allCardsOpen){ closeAllCards(); return; }
+  hideTip();
+
+  const REM   = parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
+  const TIP_W = 340;
+  const TIP_H = 460;
+
+  people.forEach((p,idx)=>{
+    // Use buildTip to populate #tip, then snapshot its HTML into a new card.
+    buildTip(p);
+
+    const bx      = Math.max(yx(p.b), LPAD);
+    const ry      = getRowY(idx);
+    const outerLeft = outer.getBoundingClientRect().left;
+    const cvsTop    = cvs.getBoundingClientRect().top;
+
+    let tx = outerLeft + bx - outer.scrollLeft;
+    let ty = cvsTop + ry + ROW - 4 + REM;
+
+    // Clamp horizontally inside the viewport
+    if(tx + TIP_W > window.innerWidth  - REM) tx = window.innerWidth  - TIP_W - REM;
+    if(tx < REM) tx = REM;
+    // Clamp vertically (no page-scroll for bulk cards)
+    if(ty + TIP_H > window.innerHeight - REM) ty = window.innerHeight - TIP_H - REM;
+    if(ty < REM) ty = REM;
+
+    const card = document.createElement('div');
+    card.className = 'pinned-card open-all-card';
+    card.style.cssText = `left:${tx}px;top:${ty}px;z-index:${++topZ}`;
+    card.innerHTML = tip.innerHTML;
+
+    // Each card gets its own ✕ close button (remove shared id first)
+    const cb = card.querySelector('#tip-close');
+    if(cb){
+      cb.removeAttribute('id');
+      cb.addEventListener('click', e=>{ e.stopPropagation(); card.remove(); });
+    }
+
+    // Drag via shared global handler
+    card.addEventListener('mousedown', e=>{
+      if(e.target.closest('a,button,span.np')) return;
+      _openAllDragCard = card;
+      card.style.zIndex = String(++topZ);
+      _openAllDragOX = e.clientX - card.getBoundingClientRect().left;
+      _openAllDragOY = e.clientY - card.getBoundingClientRect().top;
+      e.preventDefault();
+    });
+
+    document.body.appendChild(card);
+  });
+
+  _allCardsOpen = true;
+  document.getElementById('open-all-btn').textContent = '▲ Close All';
+}
+
+function closeAllCards(){
+  document.querySelectorAll('.open-all-card').forEach(c=>c.remove());
+  _allCardsOpen = false;
+  document.getElementById('open-all-btn').textContent = '▼ Open All';
+}
+
+document.getElementById('open-all-btn').addEventListener('click', openAllCards);
+
+// ── Tour mode ─────────────────────────────────────────────────────────────────
+// Cycles through all people one at a time, centering each bar and showing
+// their tooltip. Prev / Next / Stop controls appear below the pan bar.
+let tourIdx   = -1;
+let tourTimer = null;
+const TOUR_DWELL = 4000; // ms per person before auto-advancing
+
+function tourShow(idx){
+  tourIdx = ((idx % people.length) + people.length) % people.length;
+  selectedIdx = tourIdx;
+  draw();
+  centerBarIfNeeded(tourIdx);
+  lastRow   = tourIdx;
+  showTip(people[tourIdx], tourIdx);
+  document.getElementById('tour-counter').textContent =
+    (tourIdx+1) + ' / ' + people.length + '  —  ' + people[tourIdx].n;
+  const hint = document.getElementById('tip-tour-hint');
+  hint.style.display = 'block';
+  hint.textContent   = 'PRESS SPACEBAR TO CONTINUE  ·  ESC TO EXIT';
+}
+
+function tourStart(){
+  document.getElementById('tour-btn').classList.add('active');
+  document.getElementById('tour-btn').textContent = '⏸ Tour';
+  document.getElementById('tour-nav').classList.add('visible');
+  tourShow(0);
+}
+
+function tourStop(){
+  clearTimeout(tourTimer);
+  tourIdx = -1;
+  document.getElementById('tip-tour-hint').style.display = 'none';
+  document.getElementById('tour-btn').classList.remove('active');
+  document.getElementById('tour-btn').textContent = '▶ Tour';
+  document.getElementById('tour-nav').classList.remove('visible');
+  selectedIdx=-1; draw(); hideTip();
+}
+
+document.getElementById('tour-btn').addEventListener('click',()=>{
+  tourIdx >= 0 ? tourStop() : tourStart();
+});
+document.getElementById('tour-prev').addEventListener('click',()=>{
+  clearTimeout(tourTimer); tourShow(tourIdx-1);
+});
+document.getElementById('tour-next').addEventListener('click',()=>{
+  clearTimeout(tourTimer); tourShow(tourIdx+1);
+});
+document.getElementById('tour-stop').addEventListener('click', tourStop);
+
+})();</script>
+</body>
+</html>

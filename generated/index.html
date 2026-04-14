@@ -13,6 +13,11 @@ header{text-align:center;padding:56px 24px 40px;background:radial-gradient(ellip
 .kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--purple);margin-bottom:14px}
 h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:700;background:linear-gradient(135deg,var(--blue),var(--purple),var(--coral));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
 .release{display:inline-block;font-size:.75rem;font-weight:700;color:var(--purple);background:rgba(139,124,248,.12);border:1px solid rgba(139,124,248,.3);padding:3px 12px;border-radius:20px;letter-spacing:.06em}
+.toolbar{max-width:1000px;margin:0 auto 18px;padding:0 24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.toolbar select,.toolbar button{background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:8px 11px;font:inherit}
+.toolbar button{cursor:pointer}
+.toolbar button:hover,.toolbar select:hover{border-color:var(--purple)}
+.count{margin-left:auto;color:var(--muted);font-size:.84rem}
 .grid{max-width:1000px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
 .site-card{display:block;background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;text-decoration:none;color:inherit;transition:border-color .2s,transform .15s}
 .site-card:hover{border-color:var(--purple);transform:translateY(-3px)}
@@ -21,6 +26,10 @@ h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:700;background:linear-gradient
 .site-meta{font-size:.73rem;color:var(--muted);margin-bottom:10px}
 .site-card h2{font-size:1rem;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:8px}
 .site-kicker{font-size:.76rem;color:var(--purple);font-weight:600}
+.site-actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.site-actions button{border:1px solid var(--border);background:var(--bg3);color:var(--muted);border-radius:7px;padding:5px 9px;font-size:.76rem;cursor:pointer}
+.site-actions button:hover{border-color:var(--purple);color:var(--text)}
+.empty{max-width:1000px;margin:0 auto;padding:28px 24px;color:var(--muted);text-align:center}
 footer{text-align:center;margin-top:56px;font-size:.78rem;color:var(--muted)}
 </style>
 </head>
@@ -28,122 +37,157 @@ footer{text-align:center;margin-top:56px;font-size:.78rem;color:var(--muted)}
 <header>
   <div class="kicker">CieloVista Software</div>
   <h1>Published Sites</h1>
-  <div class="release">r25 &nbsp;·&nbsp; 2026-04-11</div>
+  <div class="release">r26 &nbsp;·&nbsp; 2026-04-14</div>
 </header>
-<div class="grid">
-<a class="site-card" href="https://cielovistasoftware.github.io/one-electron-universe/does-quantum-mechanics-consider-a-collapsed-wave/" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">Classic · 🌌 Dark Tech · Apr 10, 2026</div>
-    <h2>Does Absorbing Energy Collapse a Quantum Wave?</h2>
-    
-  </div>
-</a>
-<a class="site-card" href="https://cielovistasoftware.github.io/one-electron-universe/the-amazing-universe-1/" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">Classic · 🌌 Dark Tech · Apr 10, 2026</div>
-    <h2>Eyes on the Cosmos: The Most Spectacular Images from the James Webb Space Telescope</h2>
-    
-  </div>
-</a>
-<a class="site-card" href="https://cielovistasoftware.github.io/one-electron-universe/the-amazing-universe-7/" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">Showcase · 🌌 Dark Tech · Apr 10, 2026</div>
-    <h2>Windows on the Cosmos: The Most Spectacular Images from the James Webb Space Telescope</h2>
-    <div class="site-kicker">James Webb Space Telescope</div>
-  </div>
-</a>
-<a class="site-card" href="https://cielovistasoftware.github.io/one-electron-universe/the-james-webb-space-telescope/" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">Showcase · 🌌 Dark Tech · Apr 10, 2026</div>
-    <h2>Seeing the Invisible Universe: How the James Webb Space Telescope Changed Everything</h2>
-    <div class="site-kicker">Deep Space Astronomy &amp; Engineering</div>
-  </div>
-</a>
-<a class="site-card" href="https://cielovistasoftware.github.io/one-electron-universe/the-amazing-universe-3/" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">Showcase · 🌌 Dark Tech · Apr 10, 2026</div>
-    <h2>Windows on the Cosmos: The Most Spectacular Images from the James Webb Space Telescope</h2>
-    <div class="site-kicker">James Webb Space Telescope</div>
-  </div>
-</a>
-<a class="site-card" href="https://cielovistasoftware.github.io/one-electron-universe/the-amazing-universe-2/" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">Showcase · 🌌 Dark Tech · Apr 10, 2026</div>
-    <h2>Windows on the Cosmos: The Most Spectacular Images from the James Webb Space Telescope</h2>
-    <div class="site-kicker">James Webb Space Telescope</div>
-  </div>
-</a>
-<a class="site-card" href="https://cielovistasoftware.github.io/one-electron-universe/the-amazing-universe-6/" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">Showcase · 🌌 Dark Tech · Apr 10, 2026</div>
-    <h2>Windows on the Cosmos: The Most Spectacular Images from the James Webb Space Telescope</h2>
-    <div class="site-kicker">James Webb Space Telescope</div>
-  </div>
-</a>
-<a class="site-card" href="https://cielovistasoftware.github.io/one-electron-universe/the-james-webb-space-telescope-3/" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">Showcase · 🌌 Dark Tech · Apr 10, 2026</div>
-    <h2>Seeing the Invisible Universe: How the James Webb Space Telescope Changed Everything</h2>
-    <div class="site-kicker">Deep Space Astronomy &amp; Engineering</div>
-  </div>
-</a>
-<a class="site-card" href="https://cielovistasoftware.github.io/one-electron-universe/quantum-mechanics-math/" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">Classic · 🌌 Dark Tech · Apr 10, 2026</div>
-    <h2>The Mathematics of Quantum Mechanics: A Plain-Language Guide</h2>
-    
-  </div>
-</a>
-<a class="site-card" href="https://cielovistasoftware.github.io/one-electron-universe/the-james-webb-space-telescope-4/" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">Showcase · 🌌 Dark Tech · Apr 10, 2026</div>
-    <h2>Seeing the Invisible Universe: How the James Webb Space Telescope Changed Everything</h2>
-    <div class="site-kicker">Deep Space Astronomy &amp; Engineering</div>
-  </div>
-</a>
-<a class="site-card" href="https://cielovistasoftware.github.io/one-electron-universe/the-amazing-black-widow-spider/" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">Showcase · 🌌 Dark Tech · Apr 10, 2026</div>
-    <h2>Black Widow Spider: Biology, Venom, and Ecological Role</h2>
-    <div class="site-kicker">Arachnology &amp; Venom Biology</div>
-  </div>
-</a>
-<a class="site-card" href="https://cielovistasoftware.github.io/one-electron-universe/the-amazing-universe-4/" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">Showcase · 🌌 Dark Tech · Apr 10, 2026</div>
-    <h2>Windows on the Cosmos: The Most Spectacular Images from the James Webb Space Telescope</h2>
-    <div class="site-kicker">James Webb Space Telescope</div>
-  </div>
-</a>
-<a class="site-card" href="https://cielovistasoftware.github.io/one-electron-universe/the-amazing-universe-5/" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">Showcase · 🌌 Dark Tech · Apr 10, 2026</div>
-    <h2>Windows on the Cosmos: The Most Spectacular Images from the James Webb Space Telescope</h2>
-    <div class="site-kicker">James Webb Space Telescope</div>
-  </div>
-</a>
-<a class="site-card" href="https://cielovistasoftware.github.io/one-electron-universe/guitar-music-theroy/" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">Magazine · 📰 Editorial · Apr 10, 2026</div>
-    <h2>Guitar Music Theory: The Professional's Framework for Understanding Chords, Keys, and Harmony</h2>
-    <div class="site-kicker">Guitar Theory &amp; Harmony</div>
-  </div>
-</a>
+<div class="toolbar">
+  <label for="sort">Order:</label>
+  <select id="sort">
+    <option value="newest">Newest</option>
+    <option value="oldest">Oldest</option>
+    <option value="title">Title A-Z</option>
+  </select>
+  <button id="toggle-hidden" type="button">Show Hidden</button>
+  <button id="reset-prefs" type="button">Reset Hidden/Deleted</button>
+  <div class="count" id="count"></div>
 </div>
+<div class="grid" id="grid"></div>
+<div class="empty" id="empty" style="display:none">No cards to display with current filters.</div>
 <footer>Generated by CieloVista AI Website Generator · wb-starter design system</footer>
+<script>
+const STORAGE_KEY = 'cv-published-gallery-v2';
+const ALL_SITES = [{"slug":"JesusFamilyTree","title":"JesusFamilyTree","kicker":"","layout":"Classic","style":"","isoDate":"2026-04-14T01:04:23.428Z","url":"https://cielovistasoftware.github.io/one-electron-universe/JesusFamilyTree/"},{"slug":"does-quantum-mechanics-consider-a-collapsed-wave","title":"Does Absorbing Energy Collapse a Quantum Wave?","kicker":"","layout":"Classic","style":"🌌 Dark Tech","isoDate":"2026-04-11T01:30:00.622Z","url":"https://cielovistasoftware.github.io/one-electron-universe/does-quantum-mechanics-consider-a-collapsed-wave/"},{"slug":"the-amazing-universe-1","title":"Eyes on the Cosmos: The Most Spectacular Images from the James Webb Space Telescope","kicker":"","layout":"Classic","style":"🌌 Dark Tech","isoDate":"2026-04-11T01:29:47.379Z","url":"https://cielovistasoftware.github.io/one-electron-universe/the-amazing-universe-1/"},{"slug":"the-amazing-universe-7","title":"Windows on the Cosmos: The Most Spectacular Images from the James Webb Space Telescope","kicker":"James Webb Space Telescope","layout":"Showcase","style":"🌌 Dark Tech","isoDate":"2026-04-11T01:29:15.800Z","url":"https://cielovistasoftware.github.io/one-electron-universe/the-amazing-universe-7/"},{"slug":"the-james-webb-space-telescope","title":"Seeing the Invisible Universe: How the James Webb Space Telescope Changed Everything","kicker":"Deep Space Astronomy & Engineering","layout":"Showcase","style":"🌌 Dark Tech","isoDate":"2026-04-11T01:28:05.286Z","url":"https://cielovistasoftware.github.io/one-electron-universe/the-james-webb-space-telescope/"},{"slug":"quantum-mechanics-math","title":"The Mathematics of Quantum Mechanics: A Plain-Language Guide","kicker":"","layout":"Classic","style":"🌌 Dark Tech","isoDate":"2026-04-11T01:23:38.412Z","url":"https://cielovistasoftware.github.io/one-electron-universe/quantum-mechanics-math/"},{"slug":"the-amazing-black-widow-spider","title":"Black Widow Spider: Biology, Venom, and Ecological Role","kicker":"Arachnology & Venom Biology","layout":"Showcase","style":"🌌 Dark Tech","isoDate":"2026-04-11T01:22:26.755Z","url":"https://cielovistasoftware.github.io/one-electron-universe/the-amazing-black-widow-spider/"},{"slug":"guitar-music-theroy","title":"Guitar Music Theory: The Professional's Framework for Understanding Chords, Keys, and Harmony","kicker":"Guitar Theory & Harmony","layout":"Magazine","style":"📰 Editorial","isoDate":"2026-04-11T01:19:44.331Z","url":"https://cielovistasoftware.github.io/one-electron-universe/guitar-music-theroy/"}];
+
+function readState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return {
+      hidden: Array.isArray(parsed.hidden) ? parsed.hidden : [],
+      deleted: Array.isArray(parsed.deleted) ? parsed.deleted : [],
+      showHidden: !!parsed.showHidden,
+      sort: parsed.sort || 'newest'
+    };
+  } catch {
+    return { hidden: [], deleted: [], showHidden: false, sort: 'newest' };
+  }
+}
+
+function writeState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function fmtDate(d) {
+  try { return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+  catch { return ''; }
+}
+
+const sortEl = document.getElementById('sort');
+const gridEl = document.getElementById('grid');
+const emptyEl = document.getElementById('empty');
+const countEl = document.getElementById('count');
+const toggleHiddenBtn = document.getElementById('toggle-hidden');
+const resetPrefsBtn = document.getElementById('reset-prefs');
+
+let state = readState();
+sortEl.value = state.sort;
+
+function render() {
+  const deletedSet = new Set(state.deleted);
+  const hiddenSet = new Set(state.hidden);
+  let visible = ALL_SITES.filter(s => !deletedSet.has(s.slug));
+  if (!state.showHidden) {
+    visible = visible.filter(s => !hiddenSet.has(s.slug));
+  }
+
+  if (state.sort === 'title') {
+    visible.sort((a, b) => String(a.title || '').localeCompare(String(b.title || '')));
+  } else if (state.sort === 'oldest') {
+    visible.sort((a, b) => String(a.isoDate || '').localeCompare(String(b.isoDate || '')));
+  } else {
+    visible.sort((a, b) => String(b.isoDate || '').localeCompare(String(a.isoDate || '')));
+  }
+
+  gridEl.innerHTML = visible.map(function (s) {
+    const date = fmtDate(s.isoDate);
+    const meta = esc(s.layout + (s.style ? ' · ' + s.style : '') + (date ? ' · ' + date : ''));
+    const isHidden = hiddenSet.has(s.slug);
+    return ''
+      + '<article class="site-card">'
+      + '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">'
+      + '<div class="site-card-accent"></div>'
+      + '<div class="site-card-body">'
+      + '<div class="site-meta">' + meta + '</div>'
+      + '<h2>' + esc(s.title) + '</h2>'
+      + (s.kicker ? '<div class="site-kicker">' + esc(s.kicker) + '</div>' : '')
+      + '</div>'
+      + '</a>'
+      + '<div class="site-card-body" style="padding-top:0">'
+      + '<div class="site-actions">'
+      + '<button type="button" data-action="delete" data-slug="' + esc(s.slug) + '">Delete</button>'
+      + '<button type="button" data-action="hide" data-slug="' + esc(s.slug) + '">' + (isHidden ? 'Unhide' : 'Hide') + '</button>'
+      + '</div>'
+      + '</div>'
+      + '</article>';
+  }).join('');
+
+  emptyEl.style.display = visible.length ? 'none' : 'block';
+  countEl.textContent = visible.length + ' shown · ' + ALL_SITES.length + ' total';
+  toggleHiddenBtn.textContent = state.showHidden ? 'Hide Hidden' : 'Show Hidden';
+}
+
+sortEl.addEventListener('change', function () {
+  state.sort = sortEl.value;
+  writeState(state);
+  render();
+});
+
+toggleHiddenBtn.addEventListener('click', function () {
+  state.showHidden = !state.showHidden;
+  writeState(state);
+  render();
+});
+
+resetPrefsBtn.addEventListener('click', function () {
+  state.hidden = [];
+  state.deleted = [];
+  state.showHidden = false;
+  state.sort = 'newest';
+  sortEl.value = state.sort;
+  writeState(state);
+  render();
+});
+
+gridEl.addEventListener('click', function (e) {
+  const btn = e.target.closest('button[data-action]');
+  if (!btn) return;
+  const slug = btn.getAttribute('data-slug');
+  const action = btn.getAttribute('data-action');
+  if (!slug || !action) return;
+
+  if (action === 'delete') {
+    if (!confirm('Delete this card from published gallery view?')) return;
+    if (!state.deleted.includes(slug)) {
+      state.deleted.push(slug);
+      writeState(state);
+      render();
+    }
+    return;
+  }
+
+  if (action === 'hide') {
+    const idx = state.hidden.indexOf(slug);
+    if (idx >= 0) state.hidden.splice(idx, 1);
+    else state.hidden.push(slug);
+    writeState(state);
+    render();
+  }
+});
+
+render();
+</script>
 </body>
 </html>
