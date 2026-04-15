@@ -27,8 +27,37 @@ const __dirname  = path.dirname(__filename);
 const PORT       = Number(process.env.PORT) || 3000;
 const ROOT_DIR   = __dirname;
 const GEN_DIR    = process.env.GENERATED_DIR || path.join(ROOT_DIR, 'generated');
+const REPO_GEN_DIR = path.join(ROOT_DIR, 'generated');
+const SITE_SLUG  = process.env.CV_SITE_SLUG || '_shared';
+const ARTIFACTS_DIR = path.join(GEN_DIR, SITE_SLUG, 'artifacts');
+const TRACE_LOG_PATH = path.join(ARTIFACTS_DIR, 'logs', 'ai-trace.log');
+const START_DEMO_CARDS = process.argv.includes('--demo-cards');
 
 if (!fs.existsSync(GEN_DIR)) { fs.mkdirSync(GEN_DIR, { recursive: true }); }
+
+function getGeneratedRoots() {
+  return [...new Set([GEN_DIR, REPO_GEN_DIR].map(p => path.resolve(p)))];
+}
+
+function resolveGeneratedSiteDir(slug) {
+  for (const root of getGeneratedRoots()) {
+    const siteDir = path.join(root, slug);
+    if (siteDir.startsWith(root) && fs.existsSync(siteDir) && fs.statSync(siteDir).isDirectory()) {
+      return siteDir;
+    }
+  }
+  return null;
+}
+
+function resolveGeneratedFile(relPath) {
+  for (const root of getGeneratedRoots()) {
+    const filePath = path.join(root, relPath);
+    if (filePath.startsWith(root) && fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+      return filePath;
+    }
+  }
+  return null;
+}
 
 // ── wb-starter asset resolution ───────────────────────────────────────────────
 
@@ -171,27 +200,31 @@ function rmrf(dir) {
 function buildPortfolioIndex(sites, version, baseUrl) {
   const LAYOUTS = { classic:'Classic', magazine:'Magazine', landing:'Landing', academic:'Academic', showcase:'Showcase' };
   const STYLES  = { 'dark-tech':'🌌 Dark Tech','light-clean':'☀️ Light','editorial':'📰 Editorial','interactive':'⚡ Interactive','academic':'🎓 Academic','minimal':'◻️ Minimal' };
-  const fmtDate = d => { try { return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); } catch { return ''; } };
-  const esc = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const normalizeTitle = s => String(s || '').trim().toLowerCase().replace(/\s+/g, ' ');
 
-  const cards = sites.map(s => {
+  const entries = sites.map(s => {
     const meta    = s.meta || {};
     const content = meta.content || {};
-    const title   = esc(content.title || meta.subject || s.slug);
-    const kicker  = esc(meta.autoKicker || '');
-    const layout  = esc(LAYOUTS[meta.layout] || meta.layout || 'Classic');
-    const style   = esc(STYLES[meta.style] || meta.style || '');
-    const date    = fmtDate(s.created || s.publishedAt);
+    const title   = content.title || meta.subject || s.slug;
+    const kicker  = meta.autoKicker || '';
+    const layout  = LAYOUTS[meta.layout] || meta.layout || 'Classic';
+    const style   = STYLES[meta.style] || meta.style || '';
+    const isoDate = s.created || s.publishedAt || '';
     const url     = baseUrl + s.slug + '/';
-    return `<a class="site-card" href="${url}" target="_blank" rel="noopener">
-  <div class="site-card-accent"></div>
-  <div class="site-card-body">
-    <div class="site-meta">${layout}${style ? ' · ' + style : ''}${date ? ' · ' + date : ''}</div>
-    <h2>${title}</h2>
-    ${kicker ? `<div class="site-kicker">${kicker}</div>` : ''}
-  </div>
-</a>`;
-  }).join('\n');
+    return { slug: s.slug, title, kicker, layout, style, isoDate, url };
+  }).sort((a, b) => String(b.isoDate || '').localeCompare(String(a.isoDate || '')));
+
+  // De-duplicate by normalized title so published gallery shows only one card per article name.
+  const seenTitles = new Set();
+  const deduped = [];
+  for (const item of entries) {
+    const key = normalizeTitle(item.title);
+    if (key && seenTitles.has(key)) { continue; }
+    if (key) { seenTitles.add(key); }
+    deduped.push(item);
+  }
+
+  const serialized = JSON.stringify(deduped).replace(/</g, '\\u003c');
 
   return `<!DOCTYPE html>
 <html lang="en" data-theme="dark">
@@ -208,6 +241,11 @@ header{text-align:center;padding:56px 24px 40px;background:radial-gradient(ellip
 .kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--purple);margin-bottom:14px}
 h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:700;background:linear-gradient(135deg,var(--blue),var(--purple),var(--coral));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
 .release{display:inline-block;font-size:.75rem;font-weight:700;color:var(--purple);background:rgba(139,124,248,.12);border:1px solid rgba(139,124,248,.3);padding:3px 12px;border-radius:20px;letter-spacing:.06em}
+.toolbar{max-width:1000px;margin:0 auto 18px;padding:0 24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.toolbar select,.toolbar button{background:var(--bg2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:8px 11px;font:inherit}
+.toolbar button{cursor:pointer}
+.toolbar button:hover,.toolbar select:hover{border-color:var(--purple)}
+.count{margin-left:auto;color:var(--muted);font-size:.84rem}
 .grid{max-width:1000px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
 .site-card{display:block;background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;text-decoration:none;color:inherit;transition:border-color .2s,transform .15s}
 .site-card:hover{border-color:var(--purple);transform:translateY(-3px)}
@@ -216,6 +254,10 @@ h1{font-size:clamp(1.6rem,4vw,2.6rem);font-weight:700;background:linear-gradient
 .site-meta{font-size:.73rem;color:var(--muted);margin-bottom:10px}
 .site-card h2{font-size:1rem;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:8px}
 .site-kicker{font-size:.76rem;color:var(--purple);font-weight:600}
+.site-actions{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+.site-actions button{border:1px solid var(--border);background:var(--bg3);color:var(--muted);border-radius:7px;padding:5px 9px;font-size:.76rem;cursor:pointer}
+.site-actions button:hover{border-color:var(--purple);color:var(--text)}
+.empty{max-width:1000px;margin:0 auto;padding:28px 24px;color:var(--muted);text-align:center}
 footer{text-align:center;margin-top:56px;font-size:.78rem;color:var(--muted)}
 </style>
 </head>
@@ -225,10 +267,156 @@ footer{text-align:center;margin-top:56px;font-size:.78rem;color:var(--muted)}
   <h1>Published Sites</h1>
   <div class="release">r${version.release} &nbsp;·&nbsp; ${version.lastPublished}</div>
 </header>
-<div class="grid">
-${cards}
+<div class="toolbar">
+  <label for="sort">Order:</label>
+  <select id="sort">
+    <option value="newest">Newest</option>
+    <option value="oldest">Oldest</option>
+    <option value="title">Title A-Z</option>
+  </select>
+  <button id="toggle-hidden" type="button">Show Hidden</button>
+  <button id="reset-prefs" type="button">Reset Hidden/Deleted</button>
+  <div class="count" id="count"></div>
 </div>
+<div class="grid" id="grid"></div>
+<div class="empty" id="empty" style="display:none">No cards to display with current filters.</div>
 <footer>Generated by CieloVista AI Website Generator · wb-starter design system</footer>
+<script>
+const STORAGE_KEY = 'cv-published-gallery-v2';
+const ALL_SITES = ${serialized};
+
+function readState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return {
+      hidden: Array.isArray(parsed.hidden) ? parsed.hidden : [],
+      deleted: Array.isArray(parsed.deleted) ? parsed.deleted : [],
+      showHidden: !!parsed.showHidden,
+      sort: parsed.sort || 'newest'
+    };
+  } catch {
+    return { hidden: [], deleted: [], showHidden: false, sort: 'newest' };
+  }
+}
+
+function writeState(state) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function fmtDate(d) {
+  try { return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+  catch { return ''; }
+}
+
+const sortEl = document.getElementById('sort');
+const gridEl = document.getElementById('grid');
+const emptyEl = document.getElementById('empty');
+const countEl = document.getElementById('count');
+const toggleHiddenBtn = document.getElementById('toggle-hidden');
+const resetPrefsBtn = document.getElementById('reset-prefs');
+
+let state = readState();
+sortEl.value = state.sort;
+
+function render() {
+  const deletedSet = new Set(state.deleted);
+  const hiddenSet = new Set(state.hidden);
+  let visible = ALL_SITES.filter(s => !deletedSet.has(s.slug));
+  if (!state.showHidden) {
+    visible = visible.filter(s => !hiddenSet.has(s.slug));
+  }
+
+  if (state.sort === 'title') {
+    visible.sort((a, b) => String(a.title || '').localeCompare(String(b.title || '')));
+  } else if (state.sort === 'oldest') {
+    visible.sort((a, b) => String(a.isoDate || '').localeCompare(String(b.isoDate || '')));
+  } else {
+    visible.sort((a, b) => String(b.isoDate || '').localeCompare(String(a.isoDate || '')));
+  }
+
+  gridEl.innerHTML = visible.map(function (s) {
+    const date = fmtDate(s.isoDate);
+    const meta = esc(s.layout + (s.style ? ' · ' + s.style : '') + (date ? ' · ' + date : ''));
+    const isHidden = hiddenSet.has(s.slug);
+    return ''
+      + '<article class="site-card">'
+      + '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">'
+      + '<div class="site-card-accent"></div>'
+      + '<div class="site-card-body">'
+      + '<div class="site-meta">' + meta + '</div>'
+      + '<h2>' + esc(s.title) + '</h2>'
+      + (s.kicker ? '<div class="site-kicker">' + esc(s.kicker) + '</div>' : '')
+      + '</div>'
+      + '</a>'
+      + '<div class="site-card-body" style="padding-top:0">'
+      + '<div class="site-actions">'
+      + '<button type="button" data-action="delete" data-slug="' + esc(s.slug) + '">Delete</button>'
+      + '<button type="button" data-action="hide" data-slug="' + esc(s.slug) + '">' + (isHidden ? 'Unhide' : 'Hide') + '</button>'
+      + '</div>'
+      + '</div>'
+      + '</article>';
+  }).join('');
+
+  emptyEl.style.display = visible.length ? 'none' : 'block';
+  countEl.textContent = visible.length + ' shown · ' + ALL_SITES.length + ' total';
+  toggleHiddenBtn.textContent = state.showHidden ? 'Hide Hidden' : 'Show Hidden';
+}
+
+sortEl.addEventListener('change', function () {
+  state.sort = sortEl.value;
+  writeState(state);
+  render();
+});
+
+toggleHiddenBtn.addEventListener('click', function () {
+  state.showHidden = !state.showHidden;
+  writeState(state);
+  render();
+});
+
+resetPrefsBtn.addEventListener('click', function () {
+  state.hidden = [];
+  state.deleted = [];
+  state.showHidden = false;
+  state.sort = 'newest';
+  sortEl.value = state.sort;
+  writeState(state);
+  render();
+});
+
+gridEl.addEventListener('click', function (e) {
+  const btn = e.target.closest('button[data-action]');
+  if (!btn) return;
+  const slug = btn.getAttribute('data-slug');
+  const action = btn.getAttribute('data-action');
+  if (!slug || !action) return;
+
+  if (action === 'delete') {
+    if (!confirm('Delete this card from published gallery view?')) return;
+    if (!state.deleted.includes(slug)) {
+      state.deleted.push(slug);
+      writeState(state);
+      render();
+    }
+    return;
+  }
+
+  if (action === 'hide') {
+    const idx = state.hidden.indexOf(slug);
+    if (idx >= 0) state.hidden.splice(idx, 1);
+    else state.hidden.push(slug);
+    writeState(state);
+    render();
+  }
+});
+
+render();
+</script>
 </body>
 </html>`;
 }
@@ -254,15 +442,29 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  if (req.method === 'GET' && req.url === '/demo-cards') {
+    const demoPath = path.join(ROOT_DIR, 'demo-cards.html');
+    try {
+      res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
+      res.end(fs.readFileSync(demoPath, 'utf8'));
+    } catch (e) {
+      res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('demo-cards.html not found: ' + e.message);
+    }
+    return;
+  }
+
   if (req.method === 'GET' && req.url === '/trace-log-raw') {
-    const logPath = path.join(ROOT_DIR, 'logs', 'ai-trace.log');
     res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-cache' });
-    res.end(fs.existsSync(logPath) ? fs.readFileSync(logPath, 'utf8') : '');
+    res.end(fs.existsSync(TRACE_LOG_PATH) ? fs.readFileSync(TRACE_LOG_PATH, 'utf8') : '');
     return;
   }
 
   if (req.method === 'GET' && req.url === '/trace-log-clear') {
-    try { fs.writeFileSync(path.join(ROOT_DIR, 'logs', 'ai-trace.log'), '', 'utf8'); } catch {}
+    try {
+      fs.mkdirSync(path.dirname(TRACE_LOG_PATH), { recursive: true });
+      fs.writeFileSync(TRACE_LOG_PATH, '', 'utf8');
+    } catch {}
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ ok: true }));
     return;
@@ -361,11 +563,13 @@ const server = http.createServer(async (req, res) => {
 
   if (req.method === 'GET' && req.url === '/list') {
     try {
-      const sites = fs.readdirSync(GEN_DIR, { withFileTypes: true })
-        .filter(e => e.isDirectory())
-        .map(e => {
-          const f    = path.join(GEN_DIR, e.name, 'index.html');
-          const mf   = path.join(GEN_DIR, e.name, 'meta.json');
+      const seen = new Set();
+      const sites = getGeneratedRoots()
+        .flatMap(root => fs.existsSync(root) ? fs.readdirSync(root, { withFileTypes: true }).map(e => ({ root, entry: e })) : [])
+        .filter(({ entry }) => entry.isDirectory() && !seen.has(entry.name) && seen.add(entry.name))
+        .map(({ root, entry }) => {
+          const f    = path.join(root, entry.name, 'index.html');
+          const mf   = path.join(root, entry.name, 'meta.json');
           const s    = fs.existsSync(f) ? fs.statSync(f) : null;
           let   meta = null;
           try { if (fs.existsSync(mf)) meta = JSON.parse(fs.readFileSync(mf, 'utf8')); } catch {}
@@ -382,10 +586,14 @@ const server = http.createServer(async (req, res) => {
               }
             } catch {}
           }
-          return { slug: e.name, url: 'http://localhost:' + PORT + '/generated/' + e.name + '/index.html', size: s ? s.size : 0, created: s ? s.birthtime.toISOString() : null, meta };
+          return { slug: entry.name, url: 'http://localhost:' + PORT + '/generated/' + entry.name + '/index.html', size: s ? s.size : 0, created: s ? s.birthtime.toISOString() : null, meta };
         })
         .filter(s => s.size > 0)
-        .sort((a, b) => (b.created || '').localeCompare(a.created || ''));
+        .sort((a, b) => {
+          const aDate = (a.meta && a.meta.publishedAt) || a.created || '';
+          const bDate = (b.meta && b.meta.publishedAt) || b.created || '';
+          return bDate.localeCompare(aDate);
+        });
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(sites));
     } catch (err) {
@@ -402,18 +610,19 @@ const server = http.createServer(async (req, res) => {
       res.end(JSON.stringify({ error: 'Invalid slug' }));
       return;
     }
-    const targetDir = path.join(GEN_DIR, slug);
-    if (!targetDir.startsWith(GEN_DIR)) {
+    const targetDir = resolveGeneratedSiteDir(slug);
+    if (!targetDir) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Site not found: ' + slug }));
+      return;
+    }
+    const targetRoot = getGeneratedRoots().find(root => targetDir.startsWith(root));
+    if (!targetRoot) {
       res.writeHead(403, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: 'Forbidden' }));
       return;
     }
     try {
-      if (!fs.existsSync(targetDir)) {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ error: 'Site not found: ' + slug }));
-        return;
-      }
       rmrf(targetDir);
       console.log('[deleted]', slug);
       res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -446,7 +655,11 @@ const server = http.createServer(async (req, res) => {
       res.writeHead(400, { 'Content-Type': 'application/json' });
       return res.end(JSON.stringify({ error: 'Invalid slug' }));
     }
-    const siteDir  = path.join(GEN_DIR, slug);
+    const siteDir  = resolveGeneratedSiteDir(slug);
+    if (!siteDir) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      return res.end(JSON.stringify({ error: 'Site not found: ' + slug }));
+    }
     const htmlFile = path.join(siteDir, 'index.html');
     if (!fs.existsSync(htmlFile)) {
       res.writeHead(404, { 'Content-Type': 'application/json' });
@@ -526,6 +739,26 @@ const server = http.createServer(async (req, res) => {
       try { entry.meta = JSON.parse(fs.readFileSync(path.join(repoSiteDir, 'meta.json'), 'utf8')); } catch {}
       entry.publishedAt = new Date().toISOString();
       if (existing >= 0) manifest[existing] = entry; else manifest.push(entry);
+
+      // Keep only the most recent entry for each normalized title.
+      const normalizeTitle = (site) => {
+        const m = site && site.meta ? site.meta : {};
+        const content = m.content || {};
+        return String(content.title || m.subject || site.slug || '')
+          .trim()
+          .toLowerCase()
+          .replace(/\s+/g, ' ');
+      };
+      const byTitle = new Map();
+      for (const item of manifest) {
+        const key = normalizeTitle(item);
+        const prev = byTitle.get(key);
+        if (!prev || String(item.publishedAt || '').localeCompare(String(prev.publishedAt || '')) > 0) {
+          byTitle.set(key, item);
+        }
+      }
+      manifest = Array.from(byTitle.values());
+
       manifest.sort((a, b) => (b.publishedAt || '').localeCompare(a.publishedAt || ''));
       fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, 2), 'utf8');
 
@@ -560,6 +793,7 @@ const server = http.createServer(async (req, res) => {
         let m = {};
         try { m = JSON.parse(fs.readFileSync(srcMeta, 'utf8')); } catch {}
         m.publishedUrl = pagesUrl;
+        m.publishedAt  = new Date().toISOString();
         fs.writeFileSync(srcMeta, JSON.stringify(m, null, 2), 'utf8');
       } catch {}
 
@@ -584,8 +818,8 @@ const server = http.createServer(async (req, res) => {
   // Serve generated sites from GEN_DIR when URL starts with /generated/
   if (urlPath.startsWith('/generated/')) {
     const rel      = urlPath.slice('/generated/'.length);
-    const filePath = path.join(GEN_DIR, rel);
-    if (filePath.startsWith(GEN_DIR) && fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+    const filePath = resolveGeneratedFile(rel);
+    if (filePath) {
       const mime = MIME[path.extname(filePath)] || 'application/octet-stream';
       res.writeHead(200, { 'Content-Type': mime });
       fs.createReadStream(filePath).pipe(res);
@@ -613,7 +847,8 @@ function startServer() {
   const hasFalAI = !!process.env.FALAI;
   const hasWb    = !!WB_ASSETS.themecontrolJs;
   server.listen(PORT, () => {
-    const url = 'http://localhost:' + PORT + '/';
+    const startPath = START_DEMO_CARDS ? '/demo-cards' : '/';
+    const url = 'http://localhost:' + PORT + startPath;
     console.log('\n  CieloVista Website Generator');
     console.log('  ─────────────────────────────');
     console.log('  Open:     ', url);

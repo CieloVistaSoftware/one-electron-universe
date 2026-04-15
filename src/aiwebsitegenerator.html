@@ -18,6 +18,13 @@
   header h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;background:linear-gradient(135deg,var(--blue) 0%,var(--purple) 50%,var(--coral) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:12px}
   header p{max-width:560px;margin:0 auto;color:var(--muted);font-size:.95rem}
 
+  .tab-nav{display:flex;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:28px}
+  .tab-btn{flex:1;padding:11px;text-align:center;cursor:pointer;font-size:.88rem;font-weight:600;color:var(--muted);transition:background .2s,color .2s;border:none;background:transparent;font-family:inherit;letter-spacing:.03em}
+  .tab-btn:not(:last-child){border-right:1px solid var(--border)}
+  .tab-btn.active{background:rgba(139,124,248,.15);color:var(--purple)}
+  .tab-btn:hover:not(.active){background:var(--bg3);color:var(--text)}
+  .tab-panel{display:none}.tab-panel.active{display:block}
+
   main{max-width:720px;margin:0 auto;padding:48px 24px 80px}
 
   .form-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:24px}
@@ -30,22 +37,30 @@
   .field textarea{resize:vertical;min-height:80px}
   .field select option{background:var(--bg3)}
 
+  /* Style grid */
   .style-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
   .style-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 6px;cursor:pointer;text-align:center;transition:border-color .2s,background .2s;font-size:.8rem;color:var(--muted)}
   .style-btn:hover{border-color:var(--purple);color:var(--text)}
   .style-btn.active{border-color:var(--purple);background:rgba(139,124,248,.12);color:var(--purple);font-weight:600}
   .style-btn .icon{font-size:1.1rem;display:block;margin-bottom:3px}
+  .style-btn.auto-btn{grid-column:1/-1;padding:10px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:.85rem}
+  .style-btn.auto-btn .icon{display:inline;font-size:1rem;margin:0}
+  .auto-badge{display:none;font-size:.72rem;background:rgba(139,124,248,.2);color:var(--purple);padding:2px 8px;border-radius:20px;margin-left:6px;font-weight:700}
+  .style-btn.auto-btn.active .auto-badge{display:inline}
+
+  /* Layout picker */
+  .layout-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+  .layout-btn{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:8px 6px 10px;cursor:pointer;text-align:center;transition:border-color .2s,background .2s;font-size:.78rem;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:7px}
+  .layout-btn:hover{border-color:var(--purple);color:var(--text)}
+  .layout-btn.active{border-color:var(--purple);background:rgba(139,124,248,.12);color:var(--purple);font-weight:600}
+  .layout-btn svg{display:block;border-radius:4px;overflow:hidden}
+  .layout-btn .layout-name{font-size:.75rem;line-height:1;letter-spacing:.03em}
 
   .provider-tabs{display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:18px}
   .provider-tab{flex:1;padding:9px;text-align:center;cursor:pointer;font-size:.82rem;color:var(--muted);transition:background .2s,color .2s;border:none;background:transparent;font-family:inherit}
   .provider-tab:not(:last-child){border-right:1px solid var(--border)}
   .provider-tab.active{background:rgba(139,124,248,.15);color:var(--purple);font-weight:600}
   .provider-tab:hover:not(.active){background:var(--bg3);color:var(--text)}
-
-  .key-row{display:flex;gap:8px;align-items:flex-end}
-  .key-row .field{flex:1;margin-bottom:0}
-  .vis-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:10px 12px;cursor:pointer;font-size:.82rem;white-space:nowrap;transition:color .2s,border-color .2s}
-  .vis-btn:hover{color:var(--text);border-color:var(--purple)}
 
   .key-panel{display:none}.key-panel.show{display:block}
 
@@ -55,9 +70,7 @@
   .section-tag input{display:none}
 
   .gen-btn{width:100%;padding:14px;border:none;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:1rem;font-weight:700;cursor:pointer;transition:opacity .2s,transform .1s;margin-top:4px}
-  .gen-btn:hover{opacity:.9}
-  .gen-btn:active{transform:scale(.99)}
-  .gen-btn:disabled{opacity:.45;cursor:not-allowed}
+  .gen-btn:hover{opacity:.9}.gen-btn:active{transform:scale(.99)}.gen-btn:disabled{opacity:.45;cursor:not-allowed}
 
   #status{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:20px}
   #status.show{display:block}
@@ -71,7 +84,10 @@
 
   #result{display:none;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:26px}
   #result.show{display:block}
-  #result h3{font-size:.95rem;font-weight:700;margin-bottom:14px;color:var(--teal)}
+  #result h3{font-size:.95rem;font-weight:700;margin-bottom:6px;color:var(--teal)}
+  .result-badge{font-size:.75rem;color:var(--muted);margin-bottom:14px;display:flex;flex-wrap:wrap;gap:6px}
+  .result-badge span{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:2px 10px}
+  .result-badge span.hi{color:var(--purple);border-color:rgba(139,124,248,.4)}
   .result-actions{display:flex;gap:9px;flex-wrap:wrap}
   .btn-dl{background:var(--teal);color:#000;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:700;transition:opacity .2s}
   .btn-dl:hover{opacity:.88}
@@ -80,6 +96,29 @@
   .btn-new{background:transparent;color:var(--muted);border:1px solid var(--border);padding:10px 16px;border-radius:8px;cursor:pointer;font-size:.88rem;transition:color .2s,border-color .2s}
   .btn-new:hover{color:var(--text)}
   .result-meta{margin-top:14px;font-size:.78rem;color:var(--muted);border-top:1px solid var(--border);padding-top:10px}
+
+  /* Gallery */
+  .gallery-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+  .gallery-count{font-size:.82rem;color:var(--muted)}
+  .gallery-refresh{background:var(--bg3);border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:8px;cursor:pointer;font-size:.8rem;transition:color .2s,border-color .2s}
+  .gallery-refresh:hover{color:var(--text);border-color:var(--purple)}
+  .gallery-empty{text-align:center;padding:60px 24px;color:var(--muted);font-size:.92rem;border:1px dashed var(--border);border-radius:12px}
+  .gallery-empty strong{display:block;font-size:1.1rem;color:var(--text);margin-bottom:8px}
+  .gallery-list{display:flex;flex-direction:column;gap:14px}
+  .gallery-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px 24px;transition:border-color .2s}
+  .gallery-card:hover{border-color:#3a3e52}
+  .gallery-card-title{font-size:.97rem;font-weight:700;color:var(--text);margin-bottom:8px}
+  .gallery-card-meta{font-size:.75rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:14px}
+  .gallery-meta-pill{background:var(--bg3);border:1px solid var(--border);padding:2px 9px;border-radius:20px}
+  .gallery-meta-pill.hi{color:var(--purple)}
+  .gallery-card-actions{display:flex;gap:8px;flex-wrap:wrap}
+  .btn-view{background:var(--purple);color:#fff;border:none;padding:7px 16px;border-radius:7px;cursor:pointer;font-size:.82rem;font-weight:700;transition:opacity .2s}
+  .btn-view:hover{opacity:.85}
+  .btn-add-images{background:var(--bg3);color:var(--amber);border:1px solid var(--amber);padding:7px 14px;border-radius:7px;cursor:pointer;font-size:.82rem;font-weight:600;transition:background .2s}
+  .btn-add-images:hover{background:rgba(232,167,48,.1)}
+  .btn-delete{background:transparent;color:var(--muted);border:1px solid var(--border);padding:7px 12px;border-radius:7px;cursor:pointer;font-size:.82rem;transition:color .2s,border-color .2s;margin-left:auto}
+  .btn-delete:hover{color:#f87171;border-color:#f87171}
+  .gallery-loading{text-align:center;padding:40px;color:var(--muted);font-size:.9rem}
 
   #preview-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.88);flex-direction:column}
   #preview-modal.show{display:flex}
@@ -95,6 +134,8 @@
   #log-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 13px;font-size:.76rem;font-family:monospace;color:var(--muted);line-height:1.6;margin-top:7px;white-space:pre-wrap;max-height:150px;overflow-y:auto}
 
   .provider-note{font-size:.78rem;color:var(--muted);margin-top:8px;padding:8px 12px;background:var(--bg3);border-radius:6px;border-left:2px solid var(--purple)}
+
+  @media(max-width:540px){.layout-grid{grid-template-columns:repeat(3,1fr)}.style-grid{grid-template-columns:repeat(2,1fr)}.style-btn.auto-btn{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -110,138 +151,295 @@
 <header>
   <div class="kicker">CieloVista Software · wb-starter design system</div>
   <h1>AI Website Generator</h1>
-  <p>Enter any subject — Claude or OpenAI generates real content and wraps it in production-quality HTML with the wb-starter visual language.</p>
+  <p>Enter any subject — Claude generates real content and wraps it in production-quality HTML with your chosen layout and visual style.</p>
 </header>
 
 <main>
-  <div class="form-card">
-    <h2>Website content</h2>
-
-    <div class="field">
-      <label>Subject / Topic</label>
-      <input type="text" id="subject" placeholder="e.g. The One Electron Universe, Roman History, Rust Programming…" autocomplete="off">
-    </div>
-
-    <div class="field">
-      <label>Context or angle (optional)</label>
-      <textarea id="desc" placeholder="Focus on Feynman's path integrals and the parallels with AI probability…"></textarea>
-    </div>
-
-    <div class="field">
-      <label>Target audience</label>
-      <select id="audience">
-        <option value="general">General audience</option>
-        <option value="technical">Technical / expert</option>
-        <option value="students">Students / beginners</option>
-        <option value="business">Business / professional</option>
-      </select>
-    </div>
-
-    <div class="field">
-      <label>Visual style</label>
-      <div class="style-grid">
-        <button class="style-btn active" data-style="dark-tech"><span class="icon">🌌</span>Dark &amp; Tech</button>
-        <button class="style-btn" data-style="light-clean"><span class="icon">☀️</span>Light Clean</button>
-        <button class="style-btn" data-style="editorial"><span class="icon">📰</span>Editorial</button>
-        <button class="style-btn" data-style="interactive"><span class="icon">⚡</span>Interactive</button>
-        <button class="style-btn" data-style="academic"><span class="icon">🎓</span>Academic</button>
-        <button class="style-btn" data-style="minimal"><span class="icon">◻️</span>Minimal</button>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Sections</label>
-      <div class="section-tags">
-        <label class="section-tag"><input type="checkbox" value="overview" checked> Overview</label>
-        <label class="section-tag"><input type="checkbox" value="concepts" checked> Key Concepts</label>
-        <label class="section-tag"><input type="checkbox" value="timeline"> Timeline</label>
-        <label class="section-tag"><input type="checkbox" value="cards" checked> Detail Cards</label>
-        <label class="section-tag"><input type="checkbox" value="quote"> Quote</label>
-        <label class="section-tag"><input type="checkbox" value="faq"> FAQ</label>
-      </div>
-    </div>
+  <div class="tab-nav">
+    <button class="tab-btn active" id="tab-generate" onclick="switchTab('generate')">✦ Generate</button>
+    <button class="tab-btn" id="tab-gallery" onclick="switchTab('gallery')">🗂 My Sites</button>
   </div>
 
-  <div class="form-card">
-    <h2>AI provider</h2>
+  <!-- ── Generate tab ── -->
+  <div class="tab-panel active" id="panel-generate">
+    <div class="form-card">
+      <h2>Website content</h2>
 
-    <div class="provider-tabs">
-      <button class="provider-tab active" data-prov="auto" onclick="setProvider('auto')">Auto (Claude → OpenAI)</button>
-      <button class="provider-tab" data-prov="claude" onclick="setProvider('claude')">Claude only</button>
-      <button class="provider-tab" data-prov="openai" onclick="setProvider('openai')">OpenAI only</button>
-    </div>
+      <div class="field">
+        <label>Subject / Topic</label>
+        <input type="text" id="subject" value="Guitar Theory" placeholder="e.g. The One Electron Universe, Roman History, Rust Programming…" autocomplete="off">
+      </div>
 
-    <div class="provider-note" id="prov-note">
-      Auto mode tries Claude first. If credits are exhausted it falls back to OpenAI automatically.
-    </div>
+      <div class="field">
+        <label>Context or angle (optional)</label>
+        <textarea id="desc" placeholder="Focus on Feynman's path integrals and the parallels with AI probability…">Diatonic chords, modes, major and minor chord spellings, 7th chord spellings, intervals, harmonic minor scale, chord progressions</textarea>
+      </div>
 
-
-    <!-- OpenAI model selection only -->
-    <div class="key-panel show" id="panel-openai" style="margin-top:12px">
-      <div class="field" style="margin-top:10px">
-        <label>OpenAI Model</label>
-        <select id="openai-model">
-          <option value="gpt-4o-mini">gpt-4o-mini (fast, cheap)</option>
-          <option value="gpt-4o">gpt-4o (best quality)</option>
+      <div class="field">
+        <label>Target audience</label>
+        <select id="audience">
+          <option value="general">General audience</option>
+          <option value="technical">Technical / expert</option>
+          <option value="students">Students / beginners</option>
+          <option value="business">Business / professional</option>
         </select>
       </div>
+
+      <!-- Layout picker -->
+      <div class="field">
+        <label>Layout</label>
+        <div class="layout-grid">
+
+          <!-- Classic -->
+          <button class="layout-btn active" data-layout="classic">
+            <svg viewBox="0 0 90 64" width="90" height="64" xmlns="http://www.w3.org/2000/svg">
+              <rect width="90" height="64" fill="#0d0f14"/>
+              <!-- header centered -->
+              <rect x="15" y="3" width="60" height="6" rx="2" fill="#2e3347"/>
+              <!-- hero -->
+              <rect x="5" y="11" width="80" height="10" rx="1" fill="#1e2130"/>
+              <!-- 3-col concepts -->
+              <rect x="5" y="23" width="24" height="7" rx="1" fill="#2e3347"/>
+              <rect x="33" y="23" width="24" height="7" rx="1" fill="#2e3347"/>
+              <rect x="61" y="23" width="24" height="7" rx="1" fill="#8b7cf8" opacity=".5"/>
+              <!-- 2x2 cards -->
+              <rect x="5" y="33" width="38" height="12" rx="1" fill="#1e2130"/>
+              <rect x="47" y="33" width="38" height="12" rx="1" fill="#1e2130"/>
+              <rect x="5" y="48" width="38" height="12" rx="1" fill="#1e2130"/>
+              <rect x="47" y="48" width="38" height="12" rx="1" fill="#1e2130"/>
+            </svg>
+            <span class="layout-name">Classic</span>
+          </button>
+
+          <!-- Magazine -->
+          <button class="layout-btn" data-layout="magazine">
+            <svg viewBox="0 0 90 64" width="90" height="64" xmlns="http://www.w3.org/2000/svg">
+              <rect width="90" height="64" fill="#0d0f14"/>
+              <!-- split header -->
+              <rect x="5" y="3" width="38" height="8" rx="1" fill="#2e3347"/>
+              <rect x="47" y="3" width="38" height="8" rx="1" fill="#1e2130"/>
+              <!-- hero strip -->
+              <rect x="5" y="13" width="80" height="8" rx="1" fill="#1e2130"/>
+              <!-- 2-col overview -->
+              <rect x="5" y="23" width="37" height="7" rx="1" fill="#2e3347"/>
+              <rect x="48" y="23" width="37" height="7" rx="1" fill="#2e3347"/>
+              <!-- concept chips row -->
+              <rect x="5" y="32" width="17" height="5" rx="2" fill="#8b7cf8" opacity=".5"/>
+              <rect x="24" y="32" width="17" height="5" rx="2" fill="#2e3347"/>
+              <rect x="43" y="32" width="17" height="5" rx="2" fill="#2e3347"/>
+              <rect x="62" y="32" width="17" height="5" rx="2" fill="#2e3347"/>
+              <!-- featured card full width -->
+              <rect x="5" y="39" width="80" height="10" rx="1" fill="#1e2130"/>
+              <!-- 2 small cards -->
+              <rect x="5" y="52" width="38" height="9" rx="1" fill="#1e2130"/>
+              <rect x="47" y="52" width="38" height="9" rx="1" fill="#1e2130"/>
+            </svg>
+            <span class="layout-name">Magazine</span>
+          </button>
+
+          <!-- Landing -->
+          <button class="layout-btn" data-layout="landing">
+            <svg viewBox="0 0 90 64" width="90" height="64" xmlns="http://www.w3.org/2000/svg">
+              <rect width="90" height="64" fill="#0d0f14"/>
+              <!-- big centered header -->
+              <rect x="10" y="2" width="70" height="12" rx="2" fill="#2e3347"/>
+              <!-- large hero -->
+              <rect x="0" y="16" width="90" height="13" fill="#1e2130"/>
+              <!-- pills row -->
+              <rect x="3" y="31" width="13" height="4" rx="2" fill="#8b7cf8" opacity=".5"/>
+              <rect x="18" y="31" width="13" height="4" rx="2" fill="#2e3347"/>
+              <rect x="33" y="31" width="13" height="4" rx="2" fill="#2e3347"/>
+              <rect x="48" y="31" width="13" height="4" rx="2" fill="#2e3347"/>
+              <rect x="63" y="31" width="13" height="4" rx="2" fill="#2e3347"/>
+              <!-- alt section 1: img left, text right -->
+              <rect x="3" y="37" width="38" height="11" rx="1" fill="#1e2130"/>
+              <rect x="45" y="37" width="42" height="11" rx="1" fill="#2e3347"/>
+              <!-- alt section 2: text left, img right -->
+              <rect x="3" y="51" width="42" height="11" rx="1" fill="#2e3347"/>
+              <rect x="49" y="51" width="38" height="11" rx="1" fill="#1e2130"/>
+            </svg>
+            <span class="layout-name">Landing</span>
+          </button>
+
+          <!-- Academic -->
+          <button class="layout-btn" data-layout="academic">
+            <svg viewBox="0 0 90 64" width="90" height="64" xmlns="http://www.w3.org/2000/svg">
+              <rect width="90" height="64" fill="#0d0f14"/>
+              <!-- compact header -->
+              <rect x="5" y="2" width="80" height="6" rx="1" fill="#2e3347"/>
+              <!-- timeline sidebar -->
+              <rect x="5" y="10" width="14" height="52" rx="1" fill="#1e2130"/>
+              <!-- timeline dots -->
+              <circle cx="12" cy="16" r="2" fill="#8b7cf8" opacity=".7"/>
+              <circle cx="12" cy="26" r="2" fill="#2e3347"/>
+              <circle cx="12" cy="36" r="2" fill="#2e3347"/>
+              <circle cx="12" cy="46" r="2" fill="#2e3347"/>
+              <!-- overview text lines -->
+              <rect x="23" y="10" width="62" height="5" rx="1" fill="#2e3347"/>
+              <rect x="23" y="17" width="62" height="5" rx="1" fill="#2e3347"/>
+              <rect x="23" y="24" width="50" height="5" rx="1" fill="#2e3347"/>
+              <!-- concept rows -->
+              <rect x="23" y="33" width="62" height="5" rx="1" fill="#1e2130"/>
+              <rect x="23" y="40" width="62" height="5" rx="1" fill="#1e2130"/>
+              <!-- card rows -->
+              <rect x="23" y="49" width="14" height="8" rx="1" fill="#1e2130"/>
+              <rect x="39" y="49" width="46" height="8" rx="1" fill="#2e3347"/>
+            </svg>
+            <span class="layout-name">Academic</span>
+          </button>
+
+          <!-- Showcase -->
+          <button class="layout-btn" data-layout="showcase">
+            <svg viewBox="0 0 90 64" width="90" height="64" xmlns="http://www.w3.org/2000/svg">
+              <rect width="90" height="64" fill="#0d0f14"/>
+              <!-- slim header -->
+              <rect x="0" y="0" width="90" height="5" fill="#1e2130"/>
+              <!-- masonry col 1 — tall, short, tall -->
+              <rect x="3" y="7" width="40" height="16" rx="1" fill="#2e3347"/>
+              <rect x="3" y="25" width="40" height="11" rx="1" fill="#1e2130"/>
+              <rect x="3" y="38" width="40" height="14" rx="1" fill="#2e3347"/>
+              <!-- masonry col 2 — short, tall, short -->
+              <rect x="47" y="7" width="40" height="11" rx="1" fill="#8b7cf8" opacity=".35"/>
+              <rect x="47" y="20" width="40" height="16" rx="1" fill="#1e2130"/>
+              <rect x="47" y="38" width="40" height="14" rx="1" fill="#1e2130"/>
+              <!-- overview strip -->
+              <rect x="3" y="54" width="84" height="8" rx="1" fill="#1e2130"/>
+            </svg>
+            <span class="layout-name">Showcase</span>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Style picker -->
+      <div class="field">
+        <label>Visual style</label>
+        <div class="style-grid">
+          <button class="style-btn auto-btn active" data-style="auto">
+            <span class="icon">✨</span> Auto — let Claude choose
+            <span class="auto-badge" id="auto-badge">dark-tech</span>
+          </button>
+          <button class="style-btn" data-style="dark-tech"><span class="icon">🌌</span>Dark &amp; Tech</button>
+          <button class="style-btn" data-style="light-clean"><span class="icon">☀️</span>Light Clean</button>
+          <button class="style-btn" data-style="editorial"><span class="icon">📰</span>Editorial</button>
+          <button class="style-btn" data-style="interactive"><span class="icon">⚡</span>Interactive</button>
+          <button class="style-btn" data-style="academic"><span class="icon">🎓</span>Academic</button>
+          <button class="style-btn" data-style="minimal"><span class="icon">◻️</span>Minimal</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Sections</label>
+        <div class="section-tags">
+          <label class="section-tag"><input type="checkbox" value="overview" checked> Overview</label>
+          <label class="section-tag"><input type="checkbox" value="concepts" checked> Key Concepts</label>
+          <label class="section-tag"><input type="checkbox" value="timeline"> Timeline</label>
+          <label class="section-tag"><input type="checkbox" value="cards" checked> Detail Cards</label>
+          <label class="section-tag"><input type="checkbox" value="quote"> Quote</label>
+          <label class="section-tag"><input type="checkbox" value="faq"> FAQ</label>
+        </div>
+      </div>
     </div>
 
-    <button class="gen-btn" id="gen-btn" onclick="generate()">✦ Generate Website</button>
-  </div>
-
-  <div id="status">
-    <div class="status-hdr">
-      <div class="spinner"></div>
-      <div class="status-text" id="status-text">Generating…</div>
+    <div class="form-card">
+      <h2>AI provider</h2>
+      <div class="provider-tabs">
+        <button class="provider-tab active" data-prov="auto" onclick="setProvider('auto')">Auto (Claude → OpenAI)</button>
+        <button class="provider-tab" data-prov="claude" onclick="setProvider('claude')">Claude only</button>
+        <button class="provider-tab" data-prov="openai" onclick="setProvider('openai')">OpenAI only</button>
+      </div>
+      <div class="provider-note" id="prov-note">Auto mode tries Claude first. Falls back to OpenAI automatically if credits are exhausted.</div>
+      <div class="key-panel show" id="panel-openai" style="margin-top:12px">
+        <div class="field" style="margin-top:10px">
+          <label>OpenAI Model</label>
+          <select id="openai-model">
+            <option value="gpt-4o-mini">gpt-4o-mini (fast, cheap)</option>
+            <option value="gpt-4o">gpt-4o (best quality)</option>
+          </select>
+        </div>
+      </div>
+      <button class="gen-btn" id="gen-btn" onclick="generate()">✦ Generate Website</button>
     </div>
-    <div class="status-detail" id="status-detail"></div>
-    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-  </div>
 
-  <div id="result">
-    <h3>✅ Website ready</h3>
-    <div class="result-actions">
-      <button class="btn-dl" id="btn-dl">⬇ Download HTML</button>
-      <button class="btn-prev" onclick="openPreview()">👁 Preview</button>
-      <button class="btn-new" onclick="resetForm()">＋ New website</button>
+    <div id="status">
+      <div class="status-hdr">
+        <div class="spinner"></div>
+        <div class="status-text" id="status-text">Generating…</div>
+      </div>
+      <div class="status-detail" id="status-detail"></div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     </div>
-    <div class="result-meta" id="result-meta"></div>
+
+    <div id="result">
+      <h3>✅ Website ready</h3>
+      <div class="result-badge" id="result-badge"></div>
+      <div class="result-actions">
+        <button class="btn-dl" id="btn-dl">⬇ Download HTML</button>
+        <button class="btn-prev" onclick="openPreview()">👁 Preview</button>
+        <button class="btn-new" onclick="resetForm()">＋ New website</button>
+      </div>
+      <div class="result-meta" id="result-meta"></div>
+    </div>
+
+    <details>
+      <summary>Session log</summary>
+      <div id="log-box">No activity yet.</div>
+    </details>
   </div>
 
-  <details>
-    <summary>Session log</summary>
-    <div id="log-box">No activity yet.</div>
-  </details>
+  <!-- ── Gallery tab ── -->
+  <div class="tab-panel" id="panel-gallery">
+    <div class="gallery-toolbar">
+      <span class="gallery-count" id="gallery-count">Loading…</span>
+      <button class="gallery-refresh" onclick="loadGallery()">↻ Refresh</button>
+    </div>
+    <div id="gallery-content">
+      <div class="gallery-loading">Loading your sites…</div>
+    </div>
+  </div>
 </main>
 
 <script src="src/generator.js"></script>
 <script>
-  // Style picker
-  document.querySelectorAll('.style-btn').forEach(btn =>
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('active'));
+  // ── Subject / desc persistence ────────────────────────────────────────────
+  (function() {
+    var FIELDS = ['subject', 'desc'];
+    FIELDS.forEach(function(id) {
+      var el = document.getElementById(id);
+      var saved = localStorage.getItem('cvg_' + id);
+      if (saved !== null) el.value = saved;
+      el.addEventListener('input', function() {
+        localStorage.setItem('cvg_' + id, el.value);
+      });
+    });
+  })();
+
+  // ── Layout picker ─────────────────────────────────────────────────────────
+  document.querySelectorAll('.layout-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.layout-btn').forEach(function(b){ b.classList.remove('active'); });
       btn.classList.add('active');
-    })
-  );
+    });
+  });
+
+  // ── Style picker ──────────────────────────────────────────────────────────
+  document.querySelectorAll('.style-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.style-btn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      if (btn.dataset.style !== 'auto') document.getElementById('auto-badge').textContent = '';
+    });
+  });
 
   const PROV_NOTES = {
-    auto:   'Auto mode tries Claude first. If credits are exhausted it falls back to OpenAI automatically.',
+    auto:   'Auto mode tries Claude first. Falls back to OpenAI automatically if credits are exhausted.',
     claude: 'Claude only — will error if credits are exhausted.',
-    openai: 'OpenAI only — uses GPT-4o or GPT-4o-mini. Same quality as Copilot\'s underlying model.',
+    openai: 'OpenAI only — uses GPT-4o or GPT-4o-mini.',
   };
-
   function setProvider(p) {
-    document.querySelectorAll('.provider-tab').forEach(t => t.classList.toggle('active', t.dataset.prov === p));
+    document.querySelectorAll('.provider-tab').forEach(function(t){ t.classList.toggle('active', t.dataset.prov === p); });
     document.getElementById('prov-note').textContent = PROV_NOTES[p];
-    document.getElementById('panel-claude').classList.toggle('show', p === 'auto' || p === 'claude');
     document.getElementById('panel-openai').classList.toggle('show', p === 'auto' || p === 'openai');
-  }
-
-  function toggleVis(id, btn) {
-    const el = document.getElementById(id);
-    el.type = el.type === 'password' ? 'text' : 'password';
-    btn.textContent = el.type === 'password' ? 'Show' : 'Hide';
   }
 
   function setProgress(pct, text, detail) {
@@ -253,61 +451,87 @@
   function appendLog(msg) {
     const box = document.getElementById('log-box');
     const ts  = new Date().toLocaleTimeString();
-    box.textContent += `[${ts}] ${msg}\n`;
+    box.textContent += '[' + ts + '] ' + msg + '\n';
     box.scrollTop = box.scrollHeight;
   }
 
   let _generatedHTML = '';
 
+  // ── Generate ──────────────────────────────────────────────────────────────
   async function generate() {
     const subject = document.getElementById('subject').value.trim();
     if (!subject) { alert('Please enter a subject.'); return; }
 
-    const provider   = document.querySelector('.provider-tab.active').dataset.prov;
+    const provider    = document.querySelector('.provider-tab.active').dataset.prov;
     const desc        = document.getElementById('desc').value.trim();
     const audience    = document.getElementById('audience').value;
     const style       = document.querySelector('.style-btn.active').dataset.style;
-    const sections    = [...document.querySelectorAll('.section-tags input:checked')].map(i => i.value);
+    const layout      = document.querySelector('.layout-btn.active').dataset.layout;
+    const sections    = [...document.querySelectorAll('.section-tags input:checked')].map(function(i){ return i.value; });
     const openaiModel = document.getElementById('openai-model').value;
 
     document.getElementById('gen-btn').disabled = true;
     document.getElementById('result').classList.remove('show');
     document.getElementById('status').classList.add('show');
     setProgress(5, 'Starting…', 'Connecting to AI provider');
-    appendLog(`subject="${subject}" provider=${provider} style=${style} audience=${audience}`);
+    appendLog('subject="' + subject + '" style=' + style + ' layout=' + layout + ' audience=' + audience);
 
     try {
-      const html = await generateWebsite({
-        subject, desc, audience, style, sections,
-        provider, openaiModel,
-        onStatus: (text, detail, pct) => {
+      const result = await generateWebsite({
+        subject, desc, audience, style, layout, sections, provider, openaiModel,
+        onStatus: function(text, detail, pct) {
           setProgress(pct, text, detail);
-          appendLog(`${text}${detail ? ' — ' + detail : ''}`);
+          appendLog(text + (detail ? ' — ' + detail : ''));
+          // Show auto-selected style in badge
+          if (style === 'auto' && text === 'Style selected' && detail) {
+            const chosen = detail.split(' · ')[0].trim();
+            if (window.STYLE_CONFIG && window.STYLE_CONFIG[chosen]) {
+              document.getElementById('auto-badge').textContent = chosen;
+            }
+          }
         },
       });
 
-      _generatedHTML = html;
-      appendLog(`Done — ${html.length.toLocaleString()} chars`);
+      _generatedHTML = result.html || result;
+      const finalStyle  = result.resolvedStyle  || style;
+      const finalLayout = result.resolvedLayout || layout;
+      const finalKicker = result.autoKicker;
+      appendLog('Done — ' + (typeof _generatedHTML === 'string' ? _generatedHTML.length.toLocaleString() : '?') + ' chars');
 
-      setTimeout(() => {
+      setTimeout(function() {
         document.getElementById('status').classList.remove('show');
         document.getElementById('result').classList.add('show');
+
+        // Result badge pills
+        const badge = document.getElementById('result-badge');
+        badge.innerHTML = '';
+        function addPill(text, hi) {
+          const s = document.createElement('span');
+          s.textContent = text;
+          if (hi) s.className = 'hi';
+          badge.appendChild(s);
+        }
+        if (style === 'auto') { addPill('✨ auto', true); addPill(finalStyle, true); addPill(finalLayout, true); }
+        else { addPill(finalStyle); addPill(finalLayout); }
+        if (finalKicker) addPill(finalKicker);
+        addPill(audience);
+
         document.getElementById('result-meta').textContent =
-          `"${subject}" · ${style} · ${audience} · sections: ${sections.join(', ')} · ${(html.length/1024).toFixed(1)} KB`;
+          '"' + subject + '" · ' + sections.join(', ') + ' · ' + (typeof _generatedHTML === 'string' ? (_generatedHTML.length/1024).toFixed(1) : '?') + ' KB';
 
         const slug = subject.replace(/\s+/g,'_').replace(/[^a-z0-9_]/gi,'').toLowerCase();
-        const blob = new Blob([html], {type:'text/html'});
+        const blob = new Blob([_generatedHTML], {type:'text/html'});
         const url  = URL.createObjectURL(blob);
-        document.getElementById('btn-dl').onclick = () => {
+        document.getElementById('btn-dl').onclick = function() {
           const a = document.createElement('a'); a.href=url; a.download=slug+'.html'; a.click();
         };
         document.getElementById('preview-label').textContent = subject;
       }, 350);
 
     } catch (err) {
-      appendLog(`ERROR: ${err.message}`);
+      appendLog('ERROR: ' + err.message);
       document.getElementById('status').classList.remove('show');
-      alert(`Generation failed:\n\n${err.message}`);
+      alert('Generation failed:\n\n' + err.message);
     } finally {
       document.getElementById('gen-btn').disabled = false;
     }
@@ -327,7 +551,109 @@
     document.getElementById('subject').focus();
   }
 
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePreview(); });
+  // ── Tab switching ─────────────────────────────────────────────────────────
+  function switchTab(name) {
+    document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.querySelectorAll('.tab-panel').forEach(function(p){ p.classList.remove('active'); });
+    document.getElementById('tab-' + name).classList.add('active');
+    document.getElementById('panel-' + name).classList.add('active');
+    if (name === 'gallery') loadGallery();
+  }
+
+  // ── Gallery ───────────────────────────────────────────────────────────────
+  const STYLE_LABELS  = { 'dark-tech':'🌌 Dark Tech','light-clean':'☀️ Light Clean','editorial':'📰 Editorial','interactive':'⚡ Interactive','academic':'🎓 Academic','minimal':'◻️ Minimal' };
+  const LAYOUT_LABELS = { classic:'▤ Classic', magazine:'▥ Magazine', landing:'▦ Landing', academic:'▧ Academic', showcase:'▨ Showcase' };
+
+  function formatDate(iso) { try { return new Date(iso).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}); } catch { return ''; } }
+  function formatSize(b)   { if (!b) return ''; return b > 900000 ? (b/1048576).toFixed(1)+' MB' : Math.round(b/1024)+' KB'; }
+
+  async function loadGallery() {
+    const container = document.getElementById('gallery-content');
+    const countEl   = document.getElementById('gallery-count');
+    container.innerHTML = '<div class="gallery-loading">Loading your sites…</div>';
+    countEl.textContent = 'Loading…';
+    try {
+      const sites = await listWebsites();
+      countEl.textContent = sites.length === 0 ? 'No sites yet' : sites.length + ' site' + (sites.length===1?'':'s');
+      if (!sites.length) { container.innerHTML = '<div class="gallery-empty"><strong>No sites generated yet</strong>Switch to the Generate tab and create your first website.</div>'; return; }
+      container.innerHTML = '<div class="gallery-list" id="gallery-list"></div>';
+      const list = document.getElementById('gallery-list');
+      sites.forEach(function(site){ list.appendChild(buildGalleryCard(site)); });
+    } catch (err) {
+      container.innerHTML = '<div class="gallery-empty"><strong>Could not load sites</strong>' + escHtml(err.message) + '</div>';
+      countEl.textContent = 'Error';
+    }
+  }
+
+  function buildGalleryCard(site) {
+    const meta    = site.meta || {};
+    const content = meta.content || {};
+    const title   = content.title || meta.subject || site.slug;
+    const style   = meta.style   || 'dark-tech';
+    const layout  = meta.layout  || 'classic';
+    const hasImages = meta.generateImages === true;
+    const isAuto  = meta.autoStyle === true;
+    const kicker  = meta.autoKicker || null;
+
+    const card = document.createElement('div');
+    card.className = 'gallery-card';
+    card.dataset.slug = site.slug;
+    card.innerHTML =
+      '<div class="gallery-card-title">' + escHtml(title) + '</div>'
+      + '<div class="gallery-card-meta">'
+      + (meta.subject ? '<span class="gallery-meta-pill">' + escHtml(meta.subject) + '</span>' : '')
+      + '<span class="gallery-meta-pill hi">' + escHtml(LAYOUT_LABELS[layout]||layout) + '</span>'
+      + '<span class="gallery-meta-pill">' + escHtml(STYLE_LABELS[style]||style) + (isAuto?' ✨':'') + '</span>'
+      + (kicker ? '<span class="gallery-meta-pill">' + escHtml(kicker) + '</span>' : '')
+      + (formatDate(site.created) ? '<span class="gallery-meta-pill">' + formatDate(site.created) + '</span>' : '')
+      + (site.size ? '<span class="gallery-meta-pill">' + formatSize(site.size) + '</span>' : '')
+      + (hasImages ? '<span class="gallery-meta-pill" style="color:var(--amber)">with images</span>' : '')
+      + '</div>'
+      + '<div class="gallery-card-actions">'
+      + '<button class="btn-view" onclick="viewSite(\'' + escHtml(site.url) + '\')">👁 View</button>'
+      + (!hasImages ? '<button class="btn-add-images" onclick="addImages(\'' + escHtml(site.slug) + '\', this)">🖼 Add Images</button>' : '')
+      + '<button class="btn-delete" onclick="deleteSite(\'' + escHtml(site.slug) + '\', this)">Delete</button>'
+      + '</div>';
+    return card;
+  }
+
+  function escHtml(str) {
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function viewSite(url) { window.open(url, '_blank', 'noopener'); }
+
+  async function deleteSite(slug, btn) {
+    if (!confirm('Delete "' + slug + '"? This cannot be undone.')) return;
+    btn.disabled = true; btn.textContent = 'Deleting…';
+    try {
+      const res = await fetch('/delete/' + encodeURIComponent(slug), { method:'DELETE' });
+      if (!res.ok) { const d = await res.json().catch(function(){return{};}); throw new Error(d.error||'Delete failed'); }
+      const card = btn.closest('.gallery-card');
+      if (card) card.remove();
+      const remaining = document.querySelectorAll('.gallery-card').length;
+      document.getElementById('gallery-count').textContent = remaining + ' site' + (remaining===1?'':'s');
+      if (!remaining) {
+        document.getElementById('gallery-content').innerHTML = '<div class="gallery-empty"><strong>No sites generated yet</strong>Switch to the Generate tab and create your first website.</div>';
+        document.getElementById('gallery-count').textContent = 'No sites yet';
+      }
+    } catch (err) { alert('Delete failed: ' + err.message); btn.disabled=false; btn.textContent='Delete'; }
+  }
+
+  async function addImages(slug, btn) {
+    btn.disabled = true; btn.textContent = '⏳ Generating…';
+    try {
+      const listRes = await fetch('/list');
+      const sites   = await listRes.json();
+      const site    = sites.find(function(s){ return s.slug===slug; });
+      if (!site || !site.meta) throw new Error('Site metadata not found');
+      await addImagesToSite(site.meta, function(text){ btn.textContent = '⏳ ' + text.slice(0,20); });
+      btn.textContent = '✅ Done';
+      setTimeout(function(){ loadGallery(); }, 1000);
+    } catch (err) { alert('Image generation failed: ' + err.message); btn.disabled=false; btn.textContent='🖼 Add Images'; }
+  }
+
+  document.addEventListener('keydown', function(e){ if (e.key==='Escape') closePreview(); });
 </script>
 </body>
 </html>

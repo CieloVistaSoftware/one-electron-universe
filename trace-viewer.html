@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Trace Log</title>
+<meta http-equiv="refresh" content="3" id="rmeta">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0d0f14;color:#d4d6e0;font-family:monospace;padding:16px}
+#hdr{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+h2{color:#8b7cf8;font-size:14px;font-family:sans-serif;flex:1;margin:0}
+button{background:#13161e;color:#d4d6e0;border:1px solid #2a2e3d;padding:5px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-family:monospace;transition:border-color .15s,color .15s}
+button:hover{border-color:#8b7cf8;color:#8b7cf8}
+#log{background:#13161e;border:1px solid #2a2e3d;border-radius:8px;padding:14px;max-height:85vh;overflow-y:auto}
+.row{padding:3px 0;border-bottom:1px solid #1a1e2a;font-size:12px;word-break:break-all}
+.empty{color:#6b7080;padding:20px;text-align:center}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#3ecfa8;color:#000;padding:7px 18px;border-radius:20px;font-size:12px;font-weight:700;opacity:0;transition:opacity .3s;pointer-events:none;white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="hdr">
+  <h2>🔍 AI Trace Log <span style="font-size:10px;color:#6b7080">(auto-refreshes every 3s)</span></h2>
+  <button onclick="copyAll()">📋 Copy All</button>
+  <button onclick="clearLog()">🗑 Clear</button>
+  <button onclick="togglePause(this)">⏸ Pause</button>
+</div>
+<div id="log"><div class="empty">Loading…</div></div>
+<div id="toast"></div>
+
+<script>
+var _paused = false;
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.opacity = '1';
+  setTimeout(function() { t.style.opacity = '0'; }, 2000);
+}
+
+function copyAll() {
+  var rows = document.querySelectorAll('#log .row');
+  if (!rows.length) { showToast('Nothing to copy'); return; }
+  var text = Array.from(rows).map(function(r) { return r.textContent; }).join('\n');
+  navigator.clipboard.writeText(text)
+    .then(function() { showToast('✓ Copied ' + rows.length + ' lines'); })
+    .catch(function() { showToast('✗ Copy failed'); });
+}
+
+function clearLog() {
+  fetch('/trace-log-clear').then(function() { location.reload(); });
+}
+
+function togglePause(btn) {
+  _paused = !_paused;
+  btn.textContent = _paused ? '▶ Resume' : '⏸ Pause';
+  var m = document.getElementById('rmeta');
+  if (_paused) { m.removeAttribute('content'); } else { m.setAttribute('content', '3'); }
+  showToast(_paused ? 'Paused' : 'Resumed');
+}
+
+// Load log via fetch so we can render without a server-side template
+function loadLog() {
+  if (_paused) return;
+  fetch('/trace-log-raw')
+    .then(function(r) { return r.text(); })
+    .then(function(raw) {
+      var logEl = document.getElementById('log');
+      var lines = raw.trim().split('\n').filter(Boolean);
+      if (!lines.length) {
+        logEl.innerHTML = '<div class="empty">No entries yet — start a generation to see trace events here.</div>';
+        return;
+      }
+      logEl.innerHTML = lines.map(function(l) {
+        var isErr = l.indexOf('[error]') !== -1 || l.indexOf('timed out') !== -1 || l.indexOf('\u2717') !== -1;
+        var isOk  = l.indexOf('[reply]') !== -1 || l.indexOf('OK |') !== -1 || l.indexOf('\u2190') !== -1;
+        var color = isErr ? '#f07a5a' : isOk ? '#3ecfa8' : '#d4d6e0';
+        var esc = l.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        return '<div class="row" style="color:' + color + '">' + esc + '</div>';
+      }).join('');
+      logEl.scrollTop = logEl.scrollHeight;
+    })
+    .catch(function() {});
+}
+
+loadLog();
+setInterval(loadLog, 3000);
+</script>
+</body>
+</html>

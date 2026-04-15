@@ -570,7 +570,8 @@ const sections=[
 const ROW=30,GAP=5,STEP=ROW+GAP;
 const HEADER=58,LPAD=175,RPAD=50,SECTION_H=22;
 const YS=-4100,YE=130,YR=YE-YS;
-const CVS_W=5000;
+const isMobile=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||window.innerWidth<768;
+const CVS_W=isMobile?2800:5000;
 const sectionFromSet=new Set(sections.map(s=>s.from));
 
 function getRowY(idx){
@@ -589,7 +590,7 @@ function calcAge(p){return p.d===null?null:Math.abs(p.d-p.b);}
 
 const CVS_H=totalH();
 const cvs=document.getElementById('tlc');
-const dpr=window.devicePixelRatio||1;
+const dpr=isMobile?1:Math.min(window.devicePixelRatio||1,2);
 cvs.width=CVS_W*dpr;cvs.height=CVS_H*dpr;
 cvs.style.width=CVS_W+'px';cvs.style.height=CVS_H+'px';
 const ctx=cvs.getContext('2d');
@@ -860,10 +861,12 @@ let topZ = 1000; // keep above canvas and increase for each tooltip/card shown
 
 // ── Drag — tooltip is always draggable ───────────────────────────────────────
 let tipDragging=false, tipDragOX=0, tipDragOY=0;
+let _tipDragged=false;  // true once user drags the tip — stops scroll-reposition
 
 tip.addEventListener('mousedown',e=>{
   if(e.target.closest('a,button,span.np')) return;
   tipDragging=true;
+  _tipDragged=true;
   tipDragOX=e.clientX-tip.getBoundingClientRect().left;
   tipDragOY=e.clientY-tip.getBoundingClientRect().top;
   tip.style.zIndex=String(++topZ);
@@ -1045,6 +1048,7 @@ function buildTip(p){
 }
 
 function showTip(p,rowIdx){
+  _tipDragged=false;  // new tip — not yet dragged, scroll-reposition active
   buildTip(p);
   const REM   = parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
   const TIP_W = 360;
@@ -1095,6 +1099,31 @@ function hideTip(){
   lastRow=-1;
   visibleTipRow=-1;
 }
+
+// Reposition the active tooltip to stay below its bar as the page or chart scrolls.
+// Skipped if the user has dragged the tooltip to a custom position.
+function repositionTip(){
+  if(tip.style.display!=='block' || visibleTipRow<0 || _tipDragged) return;
+  const p   = people[visibleTipRow];
+  const REM = parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
+  const TIP_W = 360;
+  const TIP_H = 460;
+  const bx        = Math.max(yx(p.b), LPAD);
+  const ry        = getRowY(visibleTipRow);
+  const outerLeft = outer.getBoundingClientRect().left;
+  const cvsTop    = cvs.getBoundingClientRect().top;
+  let tx = outerLeft + bx - outer.scrollLeft;
+  let ty = cvsTop + ry + ROW - 4 + REM;
+  if(tx + TIP_W > window.innerWidth  - REM) tx = window.innerWidth  - TIP_W - REM;
+  if(tx < REM) tx = REM;
+  if(ty + TIP_H > window.innerHeight - REM) ty = window.innerHeight - TIP_H - REM;
+  if(ty < REM) ty = REM;
+  tip.style.left = tx + 'px';
+  tip.style.top  = ty + 'px';
+}
+
+window.addEventListener('scroll',  repositionTip, {passive:true});
+outer.addEventListener('scroll',   repositionTip, {passive:true});
 
 // 200ms grace when leaving a row — invisible to the user but long enough
 // to move the mouse from the bar to the tooltip card without it vanishing
@@ -1218,7 +1247,8 @@ function closeAllCards(){
   document.getElementById('open-all-btn').textContent = '▼ Open All';
 }
 
-document.getElementById('open-all-btn').addEventListener('click', openAllCards);
+const openAllBtnEl=document.getElementById('open-all-btn');
+if(isMobile){openAllBtnEl.style.display='none';}else{openAllBtnEl.addEventListener('click',openAllCards);}
 
 // ── Tour mode ─────────────────────────────────────────────────────────────────
 // Cycles through all people one at a time, centering each bar and showing

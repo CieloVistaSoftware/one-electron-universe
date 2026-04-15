@@ -1,8 +1,10 @@
 node_modules/
 **/node_modules/
 .env
+*.log
 logs/
 playwright-report/
 test-results/
-*.log
+generated/*/artifacts/
+generated/_shared/artifacts/
 # generated/ is intentionally NOT gitignored — committed sites deploy via GitHub Pages
