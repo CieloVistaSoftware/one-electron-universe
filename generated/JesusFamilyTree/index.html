@@ -6,7 +6,7 @@
 <title>Family Tree of Jesus — Abraham to the Brothers</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{background:#080a10;color:#d4d6e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:60px;}
+body{background:#080a10;color:#d4d6e0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding-bottom:60px;overflow-x:hidden}
 header{text-align:center;padding:44px 24px 28px;border-bottom:1px solid #141828}
 .kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#e8a030;margin-bottom:10px}
 header h1{font-size:clamp(1.4rem,3vw,2.3rem);font-weight:700;color:#f5ecd4;margin-bottom:8px}
@@ -31,7 +31,11 @@ main{padding:0 16px}
 .tnav{background:#141828;border:1px solid #252d48;color:#5060a0;padding:4px 14px;border-radius:6px;cursor:pointer;font-size:13px;transition:background .15s,color .15s}
 .tnav:hover{background:#1c2238;color:#FFD040}
 #tour-counter{font-size:11px;color:#404868;flex:1;text-align:center}
-.chart-outer{position:relative;border-radius:8px;border:1px solid #141828;}
+.chart-outer{max-width:100%;overflow-x:auto;overflow-y:visible;position:relative;cursor:grab;border-radius:8px;border:1px solid #141828;scrollbar-width:thin;scrollbar-color:#252d48 #080a10}
+.chart-outer:active{cursor:grabbing}
+.chart-outer::-webkit-scrollbar{height:6px}
+.chart-outer::-webkit-scrollbar-track{background:#080a10}
+.chart-outer::-webkit-scrollbar-thumb{background:#252d48;border-radius:3px}
 canvas{display:block}
 #tip{display:none;position:fixed;background:#0c0f1c;border:1px solid #252d48;border-radius:10px;padding:13px 16px;font-size:12px;max-width:340px;z-index:999;line-height:1.65;pointer-events:auto;user-select:none}
 .pinned-card{position:fixed;background:#0c0f1c;border:2px solid #FFD040;border-radius:10px;padding:13px 16px;font-size:12px;max-width:340px;z-index:1000;line-height:1.65;pointer-events:auto;user-select:none;cursor:move}
@@ -591,7 +595,6 @@ cvs.width=CVS_W*dpr;cvs.height=CVS_H*dpr;
 cvs.style.width=CVS_W+'px';cvs.style.height=CVS_H+'px';
 const ctx=cvs.getContext('2d');
 ctx.scale(dpr,dpr);
-document.body.style.minWidth=CVS_W+'px';
 
 let zoom=1;
 const ZOOM_MIN=0.55;
@@ -604,13 +607,13 @@ function applyZoom(nextZoom,anchorClientX){
   const prev=zoom;
   zoom=clamp(nextZoom,ZOOM_MIN,ZOOM_MAX);
   if(Math.abs(zoom-prev)<0.0001)return;
-  const anchorViewportX=(typeof anchorClientX==='number')?clamp(anchorClientX,0,window.innerWidth):window.innerWidth/2;
-  const anchorWorldX=window.scrollX+anchorViewportX;
+  const rect=outer.getBoundingClientRect();
+  const anchorViewportX=(typeof anchorClientX==='number')?clamp(anchorClientX-rect.left,0,outer.clientWidth):outer.clientWidth/2;
+  const anchorWorldX=outer.scrollLeft+anchorViewportX;
   const ratio=zoom/prev;
   cvs.style.width=(CVS_W*zoom)+'px';
   cvs.style.height=(CVS_H*zoom)+'px';
-  document.body.style.minWidth=(CVS_W*zoom)+'px';
-  window.scroll(Math.max(0,anchorWorldX*ratio-anchorViewportX),window.scrollY);
+  outer.scrollLeft=anchorWorldX*ratio-anchorViewportX;
   zoomVal.textContent=Math.round(zoom*100)+'%';
 }
 
@@ -731,9 +734,9 @@ draw();
 // Pan
 const outer=document.getElementById('chart-outer');
 let dragging=false,startX=0,scrollLeft0=0;
-outer.addEventListener('mousedown',e=>{dragging=true;startX=e.pageX;scrollLeft0=window.scrollX;outer.style.cursor='grabbing';e.preventDefault();});
-document.addEventListener('mouseup',()=>{dragging=false;outer.style.cursor='default';});
-outer.addEventListener('mousemove',e=>{if(!dragging)return;window.scroll(Math.max(0,scrollLeft0-(e.pageX-startX)*1.2),window.scrollY);});
+outer.addEventListener('mousedown',e=>{dragging=true;startX=e.pageX-outer.offsetLeft;scrollLeft0=outer.scrollLeft;outer.style.cursor='grabbing';e.preventDefault();});
+document.addEventListener('mouseup',()=>{dragging=false;outer.style.cursor='grab';});
+outer.addEventListener('mousemove',e=>{if(!dragging)return;outer.scrollLeft=scrollLeft0-(e.pageX-outer.offsetLeft-startX)*1.2;});
 let tx0=0,tsx0=0,pinching=false,pinchStartDist=0,pinchStartZoom=1,pinchCenterX=0;
 
 function touchDist(a,b){
@@ -748,9 +751,12 @@ outer.addEventListener('touchstart',e=>{
     pinchStartDist=touchDist(e.touches[0],e.touches[1]);
     pinchStartZoom=zoom;
     pinchCenterX=(e.touches[0].clientX+e.touches[1].clientX)/2;
-    e.preventDefault();
-  } else {
+    return;
+  }
+  if(e.touches.length===1){
     pinching=false;
+    tx0=e.touches[0].pageX;
+    tsx0=outer.scrollLeft;
   }
 },{passive:false});
 
@@ -762,6 +768,10 @@ outer.addEventListener('touchmove',e=>{
       const ratio=dist/pinchStartDist;
       applyZoom(pinchStartZoom*ratio,pinchCenterX);
     }
+    return;
+  }
+  if(e.touches.length===1){
+    outer.scrollLeft=tsx0-(e.touches[0].pageX-tx0);
   }
 },{passive:false});
 
@@ -776,8 +786,8 @@ window.addEventListener('wheel',e=>{
   applyZoom(zoom*factor,e.clientX);
 },{passive:false});
 
-document.getElementById('pan-left').addEventListener('click',()=>window.scrollBy({left:-Math.round(window.innerWidth*0.5),behavior:'smooth'}));
-document.getElementById('pan-right').addEventListener('click',()=>window.scrollBy({left:Math.round(window.innerWidth*0.5),behavior:'smooth'}));
+document.getElementById('pan-left').addEventListener('click',()=>outer.scrollBy({left:-Math.round(outer.clientWidth*0.5),behavior:'smooth'}));
+document.getElementById('pan-right').addEventListener('click',()=>outer.scrollBy({left:Math.round(outer.clientWidth*0.5),behavior:'smooth'}));
 document.getElementById('zoom-in').addEventListener('click',()=>applyZoom(zoom*1.15));
 document.getElementById('zoom-out').addEventListener('click',()=>applyZoom(zoom/1.15));
 document.getElementById('zoom-reset').addEventListener('click',()=>applyZoom(1));
@@ -820,11 +830,11 @@ function centerBarIfNeeded(idx){
   const bx=Math.max(yx(p.b),LPAD);
   const endYr=p.d!==null?p.d:Math.min(p.b+70,YE-5);
   const ex=yx(endYr);
-  const visL=window.scrollX;
-  const visR=window.scrollX+window.innerWidth;
+  const visL=outer.scrollLeft;
+  const visR=outer.scrollLeft+outer.clientWidth;
   if(ex>=visL && bx<=visR) return;
   const cx=(bx+ex)/2;
-  window.scrollTo({left:Math.max(0,cx-window.innerWidth/2),behavior:'smooth'});
+  outer.scrollTo({left:Math.max(0,cx-outer.clientWidth/2),behavior:'smooth'});
 }
 
 // ── Tooltip ───────────────────────────────────────────────────────────────────
@@ -999,7 +1009,7 @@ window.navTo=function(idx){
   const endYr = p.d !== null ? p.d : Math.min(p.b+70, YE-5);
   const ex    = yx(endYr);
   const cx    = (bx + ex) / 2;
-  window.scroll(Math.max(0,cx-window.innerWidth/2),window.scrollY);
+  outer.scrollLeft = Math.max(0, cx - outer.clientWidth / 2);
 
   lastRow=idx;
   showTip(p, idx);
@@ -1046,20 +1056,15 @@ function showTip(p,rowIdx){
   const bx      = Math.max(yx(p.b), LPAD);
   const ry      = getRowY(rowIdx);
 
-  // Bar left edge in screen coords — tooltip aligns with it
-  const cvsTop = cvs.getBoundingClientRect().top;
-  let tx = bx - window.scrollX;
+  // Position tooltip — same calc as openAllCards
+  const outerLeft = outer.getBoundingClientRect().left;
+  const cvsTop    = cvs.getBoundingClientRect().top;
+  let tx = outerLeft + bx - outer.scrollLeft;
   let ty = cvsTop + ry + ROW - 4 + REM;
-
-  // Clamp right edge only so tooltip stays on screen
   if(tx + TIP_W > window.innerWidth - REM) tx = window.innerWidth - TIP_W - REM;
   if(tx < REM) tx = REM;
-
-  const overflow = ty + TIP_H - (window.innerHeight - REM);
-  if(overflow > 0){
-    window.scrollBy(0, overflow);
-    ty -= overflow;
-  }
+  if(ty + TIP_H > window.innerHeight - REM) ty = window.innerHeight - TIP_H - REM;
+  if(ty < REM) ty = REM;
 
   tip.style.zIndex = String(++topZ);
   tip.style.left = tx + 'px';
@@ -1085,8 +1090,9 @@ function repositionTip(){
   const TIP_H = 460;
   const bx        = Math.max(yx(p.b), LPAD);
   const ry        = getRowY(visibleTipRow);
+  const outerLeft = outer.getBoundingClientRect().left;
   const cvsTop    = cvs.getBoundingClientRect().top;
-  let tx = bx - window.scrollX;
+  let tx = outerLeft + bx - outer.scrollLeft;
   let ty = cvsTop + ry + ROW - 4 + REM;
   if(tx + TIP_W > window.innerWidth  - REM) tx = window.innerWidth  - TIP_W - REM;
   if(tx < REM) tx = REM;
@@ -1096,7 +1102,7 @@ function repositionTip(){
   tip.style.top  = ty + 'px';
 }
 
-window.addEventListener('scroll', repositionTip, {passive:true});
+outer.addEventListener('scroll', repositionTip, {passive:true});
 
 // 200ms grace when leaving a row — invisible to the user but long enough
 // to move the mouse from the bar to the tooltip card without it vanishing
@@ -1146,8 +1152,8 @@ cvs.addEventListener('click',e=>{
 });
 
 document.addEventListener('keydown',e=>{
-  if(e.key==='ArrowLeft')window.scrollBy({left:-Math.round(window.innerWidth*0.5),behavior:'smooth'});
-  if(e.key==='ArrowRight')window.scrollBy({left:Math.round(window.innerWidth*0.5),behavior:'smooth'});
+  if(e.key==='ArrowLeft')outer.scrollBy({left:-Math.round(outer.clientWidth*0.5),behavior:'smooth'});
+  if(e.key==='ArrowRight')outer.scrollBy({left:Math.round(outer.clientWidth*0.5),behavior:'smooth'});
   if((e.key==='+'||e.key==='='||e.key==='Add')&&(e.ctrlKey||e.metaKey)){e.preventDefault();applyZoom(zoom*1.15);}
   if((e.key==='-'||e.key==='Subtract')&&(e.ctrlKey||e.metaKey)){e.preventDefault();applyZoom(zoom/1.15);}
   if((e.key==='0'||e.key==='Numpad0')&&(e.ctrlKey||e.metaKey)){e.preventDefault();applyZoom(1);}
@@ -1172,9 +1178,10 @@ function openAllCards(){
 
     const bx      = Math.max(yx(p.b), LPAD);
     const ry      = getRowY(idx);
+    const outerLeft = outer.getBoundingClientRect().left;
     const cvsTop    = cvs.getBoundingClientRect().top;
 
-    let tx = bx - window.scrollX;
+    let tx = outerLeft + bx - outer.scrollLeft;
     let ty = cvsTop + ry + ROW - 4 + REM;
 
     // Clamp horizontally inside the viewport
