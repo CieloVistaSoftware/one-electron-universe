@@ -1122,7 +1122,12 @@ function repositionTip(){
   tip.style.top  = ty + 'px';
 }
 
-window.addEventListener('scroll',  repositionTip, {passive:true});
+window.addEventListener('scroll', function(){
+  const pageMax=document.documentElement.scrollHeight-window.innerHeight;
+  const canvasMax=CVS_W*zoom-outer.clientWidth;
+  if(pageMax>0&&canvasMax>0) outer.scrollLeft=(window.scrollY/pageMax)*canvasMax;
+  repositionTip();
+},{passive:true});
 outer.addEventListener('scroll',   repositionTip, {passive:true});
 
 // 200ms grace when leaving a row — invisible to the user but long enough
