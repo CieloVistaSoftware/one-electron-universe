@@ -1122,13 +1122,28 @@ function repositionTip(){
   tip.style.top  = ty + 'px';
 }
 
-window.addEventListener('scroll', function(){
-  const pageMax=document.documentElement.scrollHeight-window.innerHeight;
-  const canvasMax=CVS_W*zoom-outer.clientWidth;
-  if(pageMax>0&&canvasMax>0) outer.scrollLeft=(window.scrollY/pageMax)*canvasMax;
+// Track outer's last scrollTop so we can detect vertical vs horizontal scroll
+let _outerLastScrollTop=0;
+
+// Vertical scroll inside chart-outer → drive horizontal pan
+outer.addEventListener('scroll',function(){
+  const st=outer.scrollTop;
+  if(st!==_outerLastScrollTop){
+    _outerLastScrollTop=st;
+    const vMax=outer.scrollHeight-outer.clientHeight;
+    const hMax=outer.scrollWidth-outer.clientWidth;
+    if(vMax>0&&hMax>0) outer.scrollLeft=(st/vMax)*hMax;
+  }
   repositionTip();
 },{passive:true});
-outer.addEventListener('scroll',   repositionTip, {passive:true});
+
+// Vertical scroll in the window (fallback if browser scrolls window instead)
+window.addEventListener('scroll',function(){
+  const pageMax=document.documentElement.scrollHeight-window.innerHeight;
+  const hMax=outer.scrollWidth-outer.clientWidth;
+  if(pageMax>0&&hMax>0) outer.scrollLeft=(window.scrollY/pageMax)*hMax;
+  repositionTip();
+},{passive:true});
 
 // 200ms grace when leaving a row — invisible to the user but long enough
 // to move the mouse from the bar to the tooltip card without it vanishing
