@@ -1066,7 +1066,7 @@ function showTip(p,rowIdx){
   if(ty + TIP_H > window.innerHeight - REM) ty = window.innerHeight - TIP_H - REM;
   if(ty < REM) ty = REM;
 
-  tip.style.zIndex = String(++topZ);
+  tip.style.zIndex = String(rowIdx);
   tip.style.left = tx + 'px';
   tip.style.top  = ty + 'px';
   tip.style.display = 'block';
@@ -1193,7 +1193,7 @@ function openAllCards(){
 
     const card = document.createElement('div');
     card.className = 'pinned-card open-all-card';
-    card.style.cssText = `left:${tx}px;top:${ty}px;z-index:${++topZ}`;
+    card.style.cssText = `left:${tx}px;top:${ty}px;z-index:${idx}`;
     card.innerHTML = tip.innerHTML;
 
     // Each card gets its own ✕ close button (remove shared id first)
