@@ -1104,6 +1104,32 @@ function repositionTip(){
 
 outer.addEventListener('scroll', repositionTip, {passive:true});
 
+// ── Scroll-triggered tooltip ─────────────────────────────────────────────────
+let _scrollTipRow=-1;
+
+function updateTipFromScroll(){
+  const cvsRect=cvs.getBoundingClientRect();
+  const targetY=window.innerHeight*0.3-cvsRect.top; // 30% down viewport in canvas coords
+  let bestIdx=0,bestDist=Infinity;
+  for(let i=0;i<people.length;i++){
+    const dist=Math.abs(getRowY(i)+ROW/2-targetY);
+    if(dist<bestDist){bestDist=dist;bestIdx=i;}
+  }
+  if(bestIdx===_scrollTipRow) return;
+  _scrollTipRow=bestIdx;
+  selectedIdx=bestIdx;
+  draw();
+  showTip(people[bestIdx],bestIdx);
+}
+
+window.addEventListener('scroll',function(){
+  updateTipFromScroll();
+  repositionTip();
+},{passive:true});
+
+// Show first tooltip on load
+window.addEventListener('load',updateTipFromScroll);
+
 // 200ms grace when leaving a row — invisible to the user but long enough
 // to move the mouse from the bar to the tooltip card without it vanishing
 function hideTipSoon(){
