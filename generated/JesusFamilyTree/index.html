@@ -1147,13 +1147,13 @@ outer.addEventListener('scroll',function(){
     _scrollTipRow=activeIdx;
     selectedIdx=activeIdx;
     draw();
-    (function(p){
-      const bx=Math.max(yx(p.b),LPAD);
-      const ex=yx(p.d!==null?p.d:Math.min(p.b+70,YE-5));
-      const cx=(bx+ex)/2*zoom;
-      outer.scrollTo({left:Math.max(0,cx-outer.clientWidth/2),behavior:'smooth'});
-    })(people[activeIdx]);
-    showTip(people[activeIdx],activeIdx);
+    // Scroll bar into view instantly so showTip positions correctly
+    const _p=people[activeIdx];
+    const _bxCSS=Math.max(yx(_p.b),LPAD)*zoom;
+    if(_bxCSS < outer.scrollLeft || _bxCSS > outer.scrollLeft+outer.clientWidth-REM){
+      outer.scrollLeft=Math.max(0,_bxCSS-REM);
+    }
+    showTip(_p,activeIdx);
   } else {
     repositionTip();
   }
