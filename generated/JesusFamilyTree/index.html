@@ -769,11 +769,23 @@ window.addEventListener('wheel',e=>{
   const factor=Math.exp(-e.deltaY*0.002);
   applyZoom(zoom*factor,e.clientX);
 },{passive:false});
+let _stY=null,_stX=null,_sRaf=null;
+function _animScroll(){
+  const dy=_stY-outer.scrollTop, dx=_stX-outer.scrollLeft;
+  if(Math.abs(dy)<0.5&&Math.abs(dx)<0.5){
+    outer.scrollTop=_stY; outer.scrollLeft=_stX;
+    _stY=_stX=_sRaf=null; return;
+  }
+  outer.scrollTop +=dy*0.12; outer.scrollLeft+=dx*0.12;
+  _sRaf=requestAnimationFrame(_animScroll);
+}
 outer.addEventListener('wheel',e=>{
   if(e.ctrlKey||e.metaKey) return;
   e.preventDefault();
-  outer.scrollTop  += e.deltaY * 0.35;
-  outer.scrollLeft += e.deltaX * 0.35;
+  if(_stY===null){_stY=outer.scrollTop; _stX=outer.scrollLeft;}
+  _stY=Math.max(0,Math.min(_stY+e.deltaY*0.35, outer.scrollHeight-outer.clientHeight));
+  _stX=Math.max(0,Math.min(_stX+e.deltaX*0.35, outer.scrollWidth -outer.clientWidth));
+  if(!_sRaf) _sRaf=requestAnimationFrame(_animScroll);
 },{passive:false});
 
 document.getElementById('pan-left').addEventListener('click',()=>outer.scrollBy({left:-Math.round(outer.clientWidth*0.5),behavior:'smooth'}));
