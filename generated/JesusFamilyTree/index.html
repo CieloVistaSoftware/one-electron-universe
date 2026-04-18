@@ -834,8 +834,8 @@ function centerBarIfNeeded(idx){
   const ex=yx(endYr);
   const visL=outer.scrollLeft;
   const visR=outer.scrollLeft+outer.clientWidth;
-  if(ex>=visL && bx<=visR) return;
-  const cx=(bx+ex)/2;
+  if(ex*zoom>=visL && bx*zoom<=visR) return;
+  const cx=(bx+ex)/2*zoom;
   outer.scrollTo({left:Math.max(0,cx-outer.clientWidth/2),behavior:'smooth'});
 }
 
@@ -1150,7 +1150,7 @@ outer.addEventListener('scroll',function(){
     (function(p){
       const bx=Math.max(yx(p.b),LPAD);
       const ex=yx(p.d!==null?p.d:Math.min(p.b+70,YE-5));
-      const cx=(bx+ex)/2;
+      const cx=(bx+ex)/2*zoom;
       outer.scrollTo({left:Math.max(0,cx-outer.clientWidth/2),behavior:'smooth'});
     })(people[activeIdx]);
     showTip(people[activeIdx],activeIdx);
