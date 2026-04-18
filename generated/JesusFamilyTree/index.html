@@ -31,12 +31,12 @@ main{padding:0 16px}
 .tnav{background:#141828;border:1px solid #252d48;color:#5060a0;padding:4px 14px;border-radius:6px;cursor:pointer;font-size:13px;transition:background .15s,color .15s}
 .tnav:hover{background:#1c2238;color:#FFD040}
 #tour-counter{font-size:11px;color:#404868;flex:1;text-align:center}
-.chart-outer{max-width:100%;overflow-x:auto;overflow-y:auto;height:calc(100vh - 180px);position:relative;cursor:grab;border-radius:8px;border:1px solid #141828;scrollbar-width:thin;scrollbar-color:#252d48 #080a10}
+.chart-outer{max-width:100%;overflow-x:auto;overflow-y:auto;height:calc(100vh - 180px);position:relative;cursor:grab;border-radius:8px;border:1px solid #141828;scrollbar-width:thin;scrollbar-color:#252d48 #080a10;-webkit-overflow-scrolling:touch;}
 .chart-outer:active{cursor:grabbing}
 .chart-outer::-webkit-scrollbar{height:6px}
 .chart-outer::-webkit-scrollbar-track{background:#080a10}
 .chart-outer::-webkit-scrollbar-thumb{background:#252d48;border-radius:3px}
-canvas{display:block}
+canvas{display:block;touch-action:pan-x pan-y;}
 #tip{display:none;position:fixed;background:#0c0f1c;border:1px solid #252d48;border-radius:10px;padding:13px 16px;font-size:12px;max-width:340px;z-index:999;line-height:1.65;pointer-events:auto;user-select:none}
 .pinned-card{position:fixed;background:#0c0f1c;border:2px solid #FFD040;border-radius:10px;padding:13px 16px;font-size:12px;max-width:340px;z-index:1000;line-height:1.65;pointer-events:auto;user-select:none;cursor:move}
 .pinned-card-close{position:absolute;top:6px;right:6px;background:none;border:none;color:#6070a0;font-size:14px;cursor:pointer;line-height:1;padding:2px 5px;border-radius:3px}
@@ -745,28 +745,25 @@ function touchDist(a,b){
   return Math.sqrt(dx*dx+dy*dy);
 }
 
-// Touch: native scroll handles single-finger pan (both H and V).
-// Only intercept two-finger pinch for zoom.
-outer.addEventListener('touchstart',e=>{
-  if(e.touches.length===2){
+// Touch: pinch-zoom only. All scroll (H+V) handled natively by browser.
+let pinching=false,pinchStartDist=0,pinchStartZoom=1,pinchCenterX=0;
+function touchDist(a,b){const dx=a.clientX-b.clientX,dy=a.clientY-b.clientY;return Math.sqrt(dx*dx+dy*dy);}
+document.addEventListener('touchstart',e=>{
+  if(e.touches.length===2&&e.target.closest('#chart-outer')){
     pinching=true;
     pinchStartDist=touchDist(e.touches[0],e.touches[1]);
     pinchStartZoom=zoom;
     pinchCenterX=(e.touches[0].clientX+e.touches[1].clientX)/2;
-  } else {
-    pinching=false;
-  }
+  } else { pinching=false; }
 },{passive:true});
-
-outer.addEventListener('touchmove',e=>{
+document.addEventListener('touchmove',e=>{
   if(pinching&&e.touches.length===2){
     e.preventDefault();
     const dist=touchDist(e.touches[0],e.touches[1]);
     if(pinchStartDist>0) applyZoom(pinchStartZoom*(dist/pinchStartDist),pinchCenterX);
   }
 },{passive:false});
-
-outer.addEventListener('touchend',e=>{
+document.addEventListener('touchend',e=>{
   if(e.touches.length<2)pinching=false;
 },{passive:true});
 
