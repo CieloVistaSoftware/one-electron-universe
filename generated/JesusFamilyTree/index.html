@@ -1106,6 +1106,9 @@ outer.addEventListener('scroll', repositionTip, {passive:true});
 
 // ── Scroll-triggered tooltip: bump-at-top mechanic ──────────────────────
 let _scrollTipRow=0;
+let _cvsPageTop=0; // canvas top in page coords — fixed after load
+
+function rowPageY(i){ return _cvsPageTop+getRowY(i); }
 
 function openScrollTip(idx){
   idx=Math.max(0,Math.min(people.length-1,idx));
@@ -1117,27 +1120,20 @@ function openScrollTip(idx){
 }
 
 window.addEventListener('scroll',function(){
-  const outerTop=outer.getBoundingClientRect().top;
-  const cvsTop=cvs.getBoundingClientRect().top;
-
-  // Check if current row has bumped past the top of chart-outer
-  const curRowScreenY=cvsTop+getRowY(_scrollTipRow);
-  if(curRowScreenY+ROW < outerTop){
-    // Bar has scrolled above chart-outer top — open next
+  const sy=window.scrollY;
+  if(sy > rowPageY(_scrollTipRow)+ROW){
     openScrollTip(_scrollTipRow+1);
+  } else if(_scrollTipRow>0 && sy <= rowPageY(_scrollTipRow-1)+ROW){
+    openScrollTip(_scrollTipRow-1);
   } else {
-    // Check if we've scrolled back up enough to show previous
-    const prevRowScreenY=_scrollTipRow>0?cvsTop+getRowY(_scrollTipRow-1):Infinity;
-    if(prevRowScreenY+ROW >= outerTop && _scrollTipRow>0){
-      openScrollTip(_scrollTipRow-1);
-    } else {
-      repositionTip();
-    }
+    repositionTip();
   }
 },{passive:true});
 
-// Open Adam on load
-window.addEventListener('load',()=>openScrollTip(0));
+window.addEventListener('load',function(){
+  _cvsPageTop=cvs.getBoundingClientRect().top+window.scrollY;
+  openScrollTip(0);
+});
 
 // 200ms grace when leaving a row — invisible to the user but long enough
 // to move the mouse from the bar to the tooltip card without it vanishing
