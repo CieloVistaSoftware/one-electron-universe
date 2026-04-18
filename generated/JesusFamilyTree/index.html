@@ -31,7 +31,7 @@ main{padding:0 16px}
 .tnav{background:#141828;border:1px solid #252d48;color:#5060a0;padding:4px 14px;border-radius:6px;cursor:pointer;font-size:13px;transition:background .15s,color .15s}
 .tnav:hover{background:#1c2238;color:#FFD040}
 #tour-counter{font-size:11px;color:#404868;flex:1;text-align:center}
-.chart-outer{max-width:100%;overflow-x:auto;overflow-y:visible;position:relative;cursor:grab;border-radius:8px;border:1px solid #141828;scrollbar-width:thin;scrollbar-color:#252d48 #080a10}
+.chart-outer{max-width:100%;overflow-x:auto;overflow-y:auto;height:calc(100vh - 180px);position:relative;cursor:grab;border-radius:8px;border:1px solid #141828;scrollbar-width:thin;scrollbar-color:#252d48 #080a10}
 .chart-outer:active{cursor:grabbing}
 .chart-outer::-webkit-scrollbar{height:6px}
 .chart-outer::-webkit-scrollbar-track{background:#080a10}
@@ -1106,9 +1106,6 @@ outer.addEventListener('scroll', repositionTip, {passive:true});
 
 // ── Scroll-triggered tooltip: bump-at-top mechanic ──────────────────────
 let _scrollTipRow=0;
-let _cvsPageTop=0; // canvas top in page coords — fixed after load
-
-function rowPageY(i){ return _cvsPageTop+getRowY(i); }
 
 function openScrollTip(idx){
   idx=Math.max(0,Math.min(people.length-1,idx));
@@ -1119,11 +1116,11 @@ function openScrollTip(idx){
   showTip(people[idx],idx);
 }
 
-window.addEventListener('scroll',function(){
-  const sy=window.scrollY;
-  if(sy > rowPageY(_scrollTipRow)+ROW){
+outer.addEventListener('scroll',function(){
+  const st=outer.scrollTop;
+  if(st > getRowY(_scrollTipRow)+ROW){
     openScrollTip(_scrollTipRow+1);
-  } else if(_scrollTipRow>0 && sy <= rowPageY(_scrollTipRow-1)+ROW){
+  } else if(_scrollTipRow>0 && st <= getRowY(_scrollTipRow-1)+ROW){
     openScrollTip(_scrollTipRow-1);
   } else {
     repositionTip();
@@ -1131,10 +1128,7 @@ window.addEventListener('scroll',function(){
 },{passive:true});
 
 window.addEventListener('load',function(){
-  setTimeout(function(){
-    _cvsPageTop=cvs.getBoundingClientRect().top+window.scrollY;
-    openScrollTip(0);
-  },100);
+  setTimeout(function(){ openScrollTip(0); },100);
 });
 
 // 200ms grace when leaving a row — invisible to the user but long enough
