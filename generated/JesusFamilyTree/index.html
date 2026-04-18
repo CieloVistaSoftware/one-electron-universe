@@ -769,6 +769,12 @@ window.addEventListener('wheel',e=>{
   const factor=Math.exp(-e.deltaY*0.002);
   applyZoom(zoom*factor,e.clientX);
 },{passive:false});
+outer.addEventListener('wheel',e=>{
+  if(e.ctrlKey||e.metaKey) return;
+  e.preventDefault();
+  outer.scrollTop  += e.deltaY * 0.35;
+  outer.scrollLeft += e.deltaX * 0.35;
+},{passive:false});
 
 document.getElementById('pan-left').addEventListener('click',()=>outer.scrollBy({left:-Math.round(outer.clientWidth*0.5),behavior:'smooth'}));
 document.getElementById('pan-right').addEventListener('click',()=>outer.scrollBy({left:Math.round(outer.clientWidth*0.5),behavior:'smooth'}));
