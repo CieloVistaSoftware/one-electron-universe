@@ -737,17 +737,13 @@ let dragging=false,startX=0,scrollLeft0=0;
 outer.addEventListener('mousedown',e=>{dragging=true;startX=e.pageX-outer.offsetLeft;scrollLeft0=outer.scrollLeft;outer.style.cursor='grabbing';e.preventDefault();});
 document.addEventListener('mouseup',()=>{dragging=false;outer.style.cursor='grab';});
 outer.addEventListener('mousemove',e=>{if(!dragging)return;outer.scrollLeft=scrollLeft0-(e.pageX-outer.offsetLeft-startX)*1.2;});
-let tx0=0,tsx0=0,pinching=false,pinchStartDist=0,pinchStartZoom=1,pinchCenterX=0;
-
+// Touch: pinch-zoom only. All scroll handled natively by browser.
+let pinching=false,pinchStartDist=0,pinchStartZoom=1,pinchCenterX=0;
 function touchDist(a,b){
   const dx=a.clientX-b.clientX;
   const dy=a.clientY-b.clientY;
   return Math.sqrt(dx*dx+dy*dy);
 }
-
-// Touch: pinch-zoom only. All scroll (H+V) handled natively by browser.
-let pinching=false,pinchStartDist=0,pinchStartZoom=1,pinchCenterX=0;
-function touchDist(a,b){const dx=a.clientX-b.clientX,dy=a.clientY-b.clientY;return Math.sqrt(dx*dx+dy*dy);}
 document.addEventListener('touchstart',e=>{
   if(e.touches.length===2&&e.target.closest('#chart-outer')){
     pinching=true;
@@ -1122,11 +1118,6 @@ function openScrollTip(idx){
 
 outer.addEventListener('scroll',function(){
   const st=outer.scrollTop;
-  const sl=outer.scrollLeft;
-  // debug overlay
-  let dbg=document.getElementById('_dbg');
-  if(!dbg){dbg=document.createElement('div');dbg.id='_dbg';dbg.style.cssText='position:fixed;bottom:8px;right:8px;background:rgba(0,0,0,.85);color:#0f0;font:11px monospace;padding:6px 10px;border-radius:6px;z-index:9999;pointer-events:none;';document.body.appendChild(dbg);}
-  dbg.textContent='sT:'+st+' sL:'+sl+' row:'+_scrollTipRow;
   // trigger: open tooltip for last row within 1rem of top
   const REM=parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
   let activeIdx=0;
