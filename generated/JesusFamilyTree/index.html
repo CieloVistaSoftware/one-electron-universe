@@ -1077,8 +1077,8 @@ function showTip(p,rowIdx){
   // Position tooltip — same calc as openAllCards
   const outerLeft = outer.getBoundingClientRect().left;
   const cvsTop    = cvs.getBoundingClientRect().top;
-  let tx = outerLeft + bx - outer.scrollLeft;
-  let ty = cvsTop + ry + ROW - 4 + REM;
+  let tx = outerLeft + bx * zoom - outer.scrollLeft;
+  let ty = cvsTop + (ry + ROW) * zoom + REM;
   if(tx + TIP_W > window.innerWidth - REM) tx = window.innerWidth - TIP_W - REM;
   if(tx < REM) tx = REM;
   if(ty + TIP_H > window.innerHeight - REM) ty = window.innerHeight - TIP_H - REM;
@@ -1110,8 +1110,8 @@ function repositionTip(){
   const ry        = getRowY(visibleTipRow);
   const outerLeft = outer.getBoundingClientRect().left;
   const cvsTop    = cvs.getBoundingClientRect().top;
-  let tx = outerLeft + bx - outer.scrollLeft;
-  let ty = cvsTop + ry + ROW - 4 + REM;
+  let tx = outerLeft + bx * zoom - outer.scrollLeft;
+  let ty = cvsTop + (ry + ROW) * zoom + REM;
   if(tx + TIP_W > window.innerWidth  - REM) tx = window.innerWidth  - TIP_W - REM;
   if(tx < REM) tx = REM;
   if(ty + TIP_H > window.innerHeight - REM) ty = window.innerHeight - TIP_H - REM;
@@ -1240,8 +1240,8 @@ function openAllCards(){
     const outerLeft = outer.getBoundingClientRect().left;
     const cvsTop    = cvs.getBoundingClientRect().top;
 
-    let tx = outerLeft + bx - outer.scrollLeft;
-    let ty = cvsTop + ry + ROW - 4 + REM;
+    let tx = outerLeft + bx * zoom - outer.scrollLeft;
+    let ty = cvsTop + (ry + ROW) * zoom + REM;
 
     // Clamp horizontally inside the viewport
     if(tx + TIP_W > window.innerWidth  - REM) tx = window.innerWidth  - TIP_W - REM;
