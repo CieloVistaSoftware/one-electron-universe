@@ -1126,15 +1126,22 @@ function openScrollTip(idx){
 outer.addEventListener('scroll',function(){
   const st=outer.scrollTop;
   const sl=outer.scrollLeft;
-  // debug
+  // debug overlay
   let dbg=document.getElementById('_dbg');
   if(!dbg){dbg=document.createElement('div');dbg.id='_dbg';dbg.style.cssText='position:fixed;bottom:8px;right:8px;background:rgba(0,0,0,.85);color:#0f0;font:11px monospace;padding:6px 10px;border-radius:6px;z-index:9999;pointer-events:none;';document.body.appendChild(dbg);}
   dbg.textContent='sT:'+st+' sL:'+sl+' row:'+_scrollTipRow;
-  // tooltip trigger
-  if(st > getRowY(_scrollTipRow)+ROW){
-    openScrollTip(_scrollTipRow+1);
-  } else if(_scrollTipRow>0 && st <= getRowY(_scrollTipRow-1)+ROW){
-    openScrollTip(_scrollTipRow-1);
+  // trigger: open tooltip for last row within 1rem of top
+  const REM=parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
+  let activeIdx=0;
+  for(let i=0;i<people.length;i++){
+    if(getRowY(i)-st<=REM) activeIdx=i;
+    else break;
+  }
+  if(activeIdx!==_scrollTipRow){
+    _scrollTipRow=activeIdx;
+    selectedIdx=activeIdx;
+    draw();
+    showTip(people[activeIdx],activeIdx);
   } else {
     repositionTip();
   }
