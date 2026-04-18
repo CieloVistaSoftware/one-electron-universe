@@ -932,7 +932,9 @@ const CONCEPTS=[
   ['Philistines','https://en.wikipedia.org/wiki/Philistines'],
   ['Canaanites','https://en.wikipedia.org/wiki/Canaanites'],
   ['Moabites','https://en.wikipedia.org/wiki/Moab'],
+  ['Moabite','https://en.wikipedia.org/wiki/Moab'],
   ['Hittites','https://en.wikipedia.org/wiki/Hittites'],
+  ['Hittite','https://en.wikipedia.org/wiki/Hittites'],
   ['Assyrians','https://en.wikipedia.org/wiki/Assyria'],
   ['Arameans','https://en.wikipedia.org/wiki/Arameans'],
   // Religious concepts
@@ -946,6 +948,16 @@ const CONCEPTS=[
   ['Sanhedrin','https://en.wikipedia.org/wiki/Sanhedrin'],
   ['Septuagint','https://en.wikipedia.org/wiki/Septuagint'],
   ['Hellenization','https://en.wikipedia.org/wiki/Hellenization'],
+  // Notable biblical figures not in genealogy
+  ['Naomi','https://en.wikipedia.org/wiki/Naomi_(Bible)'],
+  ['Goliath','https://en.wikipedia.org/wiki/Goliath'],
+  ['Elijah','https://en.wikipedia.org/wiki/Elijah'],
+  ['Nathan','https://en.wikipedia.org/wiki/Nathan_(prophet)'],
+  ['Nebuchadnezzar','https://en.wikipedia.org/wiki/Nebuchadnezzar_II'],
+  ['Jeroboam','https://en.wikipedia.org/wiki/Jeroboam'],
+  ['Pharaoh','https://en.wikipedia.org/wiki/Pharaoh'],
+  ['Pontius Pilate','https://en.wikipedia.org/wiki/Pontius_Pilate'],
+  ['Gabriel','https://en.wikipedia.org/wiki/Gabriel'],
   // Messianic
   ['Messianic prophecy','https://en.wikipedia.org/wiki/Messianic_prophecy'],
   ['virgin birth','https://en.wikipedia.org/wiki/Virgin_birth_of_Jesus'],
@@ -983,6 +995,10 @@ function noteToHtml(rawText, selfIdx){
     last=m.index+m[0].length;
   }
   html+=esc(rawText.slice(last));
+  // Pass 3: link inline scripture refs like (Ruth 1:16) or (Genesis 3:19)
+  const BOOKS='Genesis|Exodus|Leviticus|Numbers|Deuteronomy|Joshua|Judges|Ruth|1 Samuel|2 Samuel|1 Kings|2 Kings|1 Chronicles|2 Chronicles|Ezra|Nehemiah|Esther|Job|Psalm|Psalms|Proverbs|Ecclesiastes|Isaiah|Jeremiah|Lamentations|Ezekiel|Daniel|Hosea|Joel|Amos|Obadiah|Jonah|Micah|Nahum|Habakkuk|Zephaniah|Haggai|Zechariah|Malachi|Matthew|Mark|Luke|John|Acts|Romans|1 Corinthians|2 Corinthians|Galatians|Ephesians|Philippians|Colossians|1 Thessalonians|2 Thessalonians|1 Timothy|2 Timothy|Titus|Philemon|Hebrews|James|1 Peter|2 Peter|1 John|2 John|3 John|Jude|Revelation';
+  html=html.replace(new RegExp('('+BOOKS+')\\s+(\\d+:\\d+(?:[\u2013\u2014-]\\d+)?)','g'),
+    (m,book,ref)=>`<a class="tl" href="${bg(book+' '+ref)}" target="_blank" rel="noopener noreferrer">${m}</a>`);
   return html;
 }
 
