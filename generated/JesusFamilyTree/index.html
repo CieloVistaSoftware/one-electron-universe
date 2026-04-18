@@ -1104,31 +1104,40 @@ function repositionTip(){
 
 outer.addEventListener('scroll', repositionTip, {passive:true});
 
-// ── Scroll-triggered tooltip ─────────────────────────────────────────────────
-let _scrollTipRow=-1;
+// ── Scroll-triggered tooltip: bump-at-top mechanic ──────────────────────
+let _scrollTipRow=0;
 
-function updateTipFromScroll(){
-  const cvsRect=cvs.getBoundingClientRect();
-  const targetY=window.innerHeight*0.3-cvsRect.top; // 30% down viewport in canvas coords
-  let bestIdx=0,bestDist=Infinity;
-  for(let i=0;i<people.length;i++){
-    const dist=Math.abs(getRowY(i)+ROW/2-targetY);
-    if(dist<bestDist){bestDist=dist;bestIdx=i;}
-  }
-  if(bestIdx===_scrollTipRow) return;
-  _scrollTipRow=bestIdx;
-  selectedIdx=bestIdx;
+function openScrollTip(idx){
+  idx=Math.max(0,Math.min(people.length-1,idx));
+  if(idx===_scrollTipRow && tip.style.display==='block') return;
+  _scrollTipRow=idx;
+  selectedIdx=idx;
   draw();
-  showTip(people[bestIdx],bestIdx);
+  showTip(people[idx],idx);
 }
 
 window.addEventListener('scroll',function(){
-  updateTipFromScroll();
-  repositionTip();
+  const outerTop=outer.getBoundingClientRect().top;
+  const cvsTop=cvs.getBoundingClientRect().top;
+
+  // Check if current row has bumped past the top of chart-outer
+  const curRowScreenY=cvsTop+getRowY(_scrollTipRow);
+  if(curRowScreenY+ROW < outerTop){
+    // Bar has scrolled above chart-outer top — open next
+    openScrollTip(_scrollTipRow+1);
+  } else {
+    // Check if we've scrolled back up enough to show previous
+    const prevRowScreenY=_scrollTipRow>0?cvsTop+getRowY(_scrollTipRow-1):Infinity;
+    if(prevRowScreenY+ROW >= outerTop && _scrollTipRow>0){
+      openScrollTip(_scrollTipRow-1);
+    } else {
+      repositionTip();
+    }
+  }
 },{passive:true});
 
-// Show first tooltip on load
-window.addEventListener('load',updateTipFromScroll);
+// Open Adam on load
+window.addEventListener('load',()=>openScrollTip(0));
 
 // 200ms grace when leaving a row — invisible to the user but long enough
 // to move the mouse from the bar to the tooltip card without it vanishing
