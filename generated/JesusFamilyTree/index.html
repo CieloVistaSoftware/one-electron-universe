@@ -1147,6 +1147,7 @@ outer.addEventListener('scroll',function(){
     _scrollTipRow=activeIdx;
     selectedIdx=activeIdx;
     draw();
+    centerBarIfNeeded(activeIdx);
     showTip(people[activeIdx],activeIdx);
   } else {
     repositionTip();
