@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #111; color: #fff; font-family: monospace; }
+#header { padding: 10px 14px; background: #222; font-size: 13px; }
+#outer {
+  overflow-x: auto;
+  overflow-y: auto;
+  height: calc(100vh - 46px);
+  position: relative;
+  background: #1a1a2e;
+}
+#canvas-wrap { position: relative; width: 2000px; }
+.row {
+  height: 35px;
+  line-height: 35px;
+  padding-left: 14px;
+  border-bottom: 1px solid #252540;
+  font-size: 12px;
+  white-space: nowrap;
+  transition: background .15s;
+}
+.row.active { background: rgba(255,220,50,0.18); color: #ffe066; }
+#tip {
+  position: fixed;
+  background: #0c0f1c;
+  border: 2px solid #ffe066;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  z-index: 999;
+  display: none;
+  min-width: 200px;
+  pointer-events: none;
+}
+#debug {
+  position: fixed;
+  bottom: 6px;
+  right: 6px;
+  background: rgba(0,180,80,.92);
+  color: #000;
+  font: bold 11px monospace;
+  padding: 5px 9px;
+  border-radius: 5px;
+  z-index: 9999;
+  pointer-events: none;
+}
+#status {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  font: bold 13px monospace;
+  padding: 6px 10px;
+  z-index: 9999;
+  pointer-events: none;
+  display: none;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+<div id="header">↑↓ Scroll vertically inside the box. Tooltip must change per row. ←→ Horizontal scroll also works.</div>
+<div id="outer">
+  <div id="canvas-wrap"></div>
+</div>
+<div id="tip"></div>
+<div id="debug">waiting...</div>
+<div id="status"></div>
+
+<script>
+const NAMES = [
+  'Adam','Seth','Enosh','Kenan','Mahalalel','Jared',
+  'Enoch','Methuselah','Lamech','Noah','Shem','Arphaxad',
+  'Shelah','Eber','Peleg','Reu','Serug','Nahor','Terah','Abraham'
+];
+const ROW_H = 35;
+const outer = document.getElementById('outer');
+const wrap = document.getElementById('canvas-wrap');
+const tip = document.getElementById('tip');
+const dbg = document.getElementById('debug');
+const status = document.getElementById('status');
+
+NAMES.forEach((name, i) => {
+  const div = document.createElement('div');
+  div.className = 'row';
+  div.id = 'row-' + i;
+  div.textContent = name + '  —  row ' + i + '  (scrollTop trigger: >' + (i * ROW_H) + 'px)';
+  wrap.appendChild(div);
+});
+wrap.style.height = (NAMES.length * ROW_H + 400) + 'px';
+
+let currentRow = -1;
+let scrollEvents = 0;
+let changes = 0;
+
+function showTip(idx) {
+  if (idx === currentRow) return;
+  const old = document.getElementById('row-' + currentRow);
+  if (old) old.classList.remove('active');
+  currentRow = idx;
+  changes++;
+  const el = document.getElementById('row-' + idx);
+  if (el) el.classList.add('active');
+  const outerRect = outer.getBoundingClientRect();
+  const rowScreenY = outerRect.top + (idx * ROW_H) - outer.scrollTop;
+  tip.textContent = NAMES[idx] + '  (row ' + idx + ', change #' + changes + ')';
+  tip.style.left = '10px';
+  tip.style.top = Math.max(outerRect.top + 6, Math.min(rowScreenY + 6, outerRect.bottom - 60)) + 'px';
+  tip.style.display = 'block';
+  status.textContent = changes === 1 ? '✓ IT WORKS — tooltip changed to: ' + NAMES[idx] : '✓ Change #' + changes + ': ' + NAMES[idx];
+  status.style.background = '#006600';
+  status.style.color = '#90ff90';
+  status.style.display = 'block';
+}
+
+outer.addEventListener('scroll', function() {
+  scrollEvents++;
+  const st = outer.scrollTop;
+  const sl = outer.scrollLeft;
+  dbg.textContent = 'sT:' + st + ' sL:' + sl + ' row:' + currentRow + ' events:' + scrollEvents + ' changes:' + changes;
+  const newRow = Math.min(NAMES.length - 1, Math.max(0, Math.floor(st / ROW_H)));
+  showTip(newRow);
+}, {passive: true});
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    showTip(0);
+    status.style.background = '#880000';
+    status.style.color = '#fff';
+    status.textContent = 'Scroll DOWN inside the box — tooltip must change';
+    status.style.display = 'block';
+  }, 150);
+});
+</script>
+</body>
+</html>
