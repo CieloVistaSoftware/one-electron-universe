@@ -1151,7 +1151,9 @@ outer.addEventListener('scroll',function(){
     const _p=people[activeIdx];
     const _bxCSS=Math.max(yx(_p.b),LPAD)*zoom;
     if(_bxCSS < outer.scrollLeft || _bxCSS > outer.scrollLeft+outer.clientWidth-REM){
-      outer.scrollLeft=Math.max(0,_bxCSS-REM);
+      const _newLeft=Math.max(0,_bxCSS-REM);
+      outer.scrollLeft=_newLeft;
+      _stX=_newLeft; // keep RAF animator in sync
     }
     showTip(_p,activeIdx);
   } else {
