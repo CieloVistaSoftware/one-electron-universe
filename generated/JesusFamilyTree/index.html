@@ -745,33 +745,24 @@ function touchDist(a,b){
   return Math.sqrt(dx*dx+dy*dy);
 }
 
+// Touch: native scroll handles single-finger pan (both H and V).
+// Only intercept two-finger pinch for zoom.
 outer.addEventListener('touchstart',e=>{
   if(e.touches.length===2){
     pinching=true;
     pinchStartDist=touchDist(e.touches[0],e.touches[1]);
     pinchStartZoom=zoom;
     pinchCenterX=(e.touches[0].clientX+e.touches[1].clientX)/2;
-    return;
-  }
-  if(e.touches.length===1){
+  } else {
     pinching=false;
-    tx0=e.touches[0].pageX;
-    tsx0=outer.scrollLeft;
   }
-},{passive:false});
+},{passive:true});
 
 outer.addEventListener('touchmove',e=>{
   if(pinching&&e.touches.length===2){
     e.preventDefault();
     const dist=touchDist(e.touches[0],e.touches[1]);
-    if(pinchStartDist>0){
-      const ratio=dist/pinchStartDist;
-      applyZoom(pinchStartZoom*ratio,pinchCenterX);
-    }
-    return;
-  }
-  if(e.touches.length===1){
-    outer.scrollLeft=tsx0-(e.touches[0].pageX-tx0);
+    if(pinchStartDist>0) applyZoom(pinchStartZoom*(dist/pinchStartDist),pinchCenterX);
   }
 },{passive:false});
 
@@ -1118,6 +1109,12 @@ function openScrollTip(idx){
 
 outer.addEventListener('scroll',function(){
   const st=outer.scrollTop;
+  const sl=outer.scrollLeft;
+  // debug
+  let dbg=document.getElementById('_dbg');
+  if(!dbg){dbg=document.createElement('div');dbg.id='_dbg';dbg.style.cssText='position:fixed;bottom:8px;right:8px;background:rgba(0,0,0,.85);color:#0f0;font:11px monospace;padding:6px 10px;border-radius:6px;z-index:9999;pointer-events:none;';document.body.appendChild(dbg);}
+  dbg.textContent='sT:'+st+' sL:'+sl+' row:'+_scrollTipRow;
+  // tooltip trigger
   if(st > getRowY(_scrollTipRow)+ROW){
     openScrollTip(_scrollTipRow+1);
   } else if(_scrollTipRow>0 && st <= getRowY(_scrollTipRow-1)+ROW){
