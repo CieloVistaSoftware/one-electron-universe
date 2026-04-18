@@ -1131,8 +1131,10 @@ window.addEventListener('scroll',function(){
 },{passive:true});
 
 window.addEventListener('load',function(){
-  _cvsPageTop=cvs.getBoundingClientRect().top+window.scrollY;
-  openScrollTip(0);
+  setTimeout(function(){
+    _cvsPageTop=cvs.getBoundingClientRect().top+window.scrollY;
+    openScrollTip(0);
+  },100);
 });
 
 // 200ms grace when leaving a row — invisible to the user but long enough
