@@ -1156,8 +1156,9 @@ function gotoIdx(idx){
   const bxC = Math.max(yx(p.b), LPAD);
   const ryC = getRowY(idx);
 
-  // Target scroll: put bar REM px from container top-left
-  const newScrollLeft = Math.max(0, Math.min(bxC * zoom - REM, outer.scrollWidth  - outer.clientWidth));
+  // scrollLeft = 0: keep name label column always visible in left of screen.
+  // Setting scrollLeft to bxC*zoom scrolls names off-screen for post-exile people.
+  const newScrollLeft = 0;
   const newScrollTop  = Math.max(0, Math.min(ryC * zoom - REM, outer.scrollHeight - outer.clientHeight));
 
   // Set scroll synchronously and kill RAF animator so it doesn't fight us
@@ -1246,10 +1247,18 @@ function openScrollTip(idx){
   showTip(people[idx],idx);
 }
 
+let _prevScrollTop2 = 0;
 outer.addEventListener('scroll',function(){
   if(_suppressScrollListener) return;
   const st=outer.scrollTop;
-  // trigger: open tooltip for last row within 1rem of top
+  // Only run gotoIdx logic when scrollTop actually changed.
+  // Horizontal drag changes scrollLeft but NOT scrollTop — we must not call
+  // gotoIdx in that case or it resets scrollLeft and breaks dragging.
+  if(Math.abs(st - _prevScrollTop2) < 1){
+    repositionTip();
+    return;
+  }
+  _prevScrollTop2 = st;
   const REM=parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
   let activeIdx=0;
   for(let i=0;i<people.length;i++){
