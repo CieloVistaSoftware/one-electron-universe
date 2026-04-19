@@ -1038,6 +1038,55 @@ function noteToHtml(rawText, selfIdx){
   return html;
 }
 
+// ── showTipInPlace: click handler — tooltip at bar's CURRENT screen position, no scroll ─────────
+function showTipInPlace(idx){
+  idx = Math.max(0, Math.min(people.length-1, idx));
+  const p   = people[idx];
+  const REM = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+  const TIP_W = 360;
+
+  // Bar canvas coords → current screen position (live scroll, no changes)
+  const bxC = Math.max(yx(p.b), LPAD);
+  const ryC = getRowY(idx);
+  const outerRect = outer.getBoundingClientRect();
+  let tx = outerRect.left + bxC * zoom - outer.scrollLeft;
+  let ty = outerRect.top  + (ryC + ROW) * zoom - outer.scrollTop + REM;
+
+  // Update state — no scroll change.
+  // IMPORTANT: set _scrollTipRow to what the scroll listener would compute from current
+  // scrollTop, NOT the clicked idx. Otherwise the scroll listener fires after this and
+  // sees activeIdx != _scrollTipRow, calling gotoIdx to override the user's click.
+  const _sREM2 = parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
+  let _activeScrollRow = 0;
+  const _curST = outer.scrollTop;
+  for(let _si=0;_si<people.length;_si++){
+    if(getRowY(_si)-_curST<=_sREM2) _activeScrollRow=_si; else break;
+  }
+  selectedIdx   = idx;
+  _scrollTipRow = _activeScrollRow;  // matches scroll position, not click target
+  _tipDragged   = false;
+  visibleTipRow = idx;
+  draw();
+
+  // Build hidden to measure actual height
+  tip.style.visibility = 'hidden';
+  tip.style.display    = 'block';
+  buildTip(p);
+  const actualH = tip.offsetHeight || 400;
+
+  if(tx + TIP_W > window.innerWidth  - REM) tx = window.innerWidth  - TIP_W - REM;
+  if(tx < REM) tx = REM;
+  if(ty + actualH > window.innerHeight - REM) ty = window.innerHeight - actualH - REM;
+  if(ty < REM) ty = REM;
+
+  tip.style.zIndex     = String(idx);
+  tip.style.left       = tx + 'px';
+  tip.style.top        = ty + 'px';
+  tip.style.visibility = '';
+  lastRow = idx;
+  if(isMobile) mobNavUpdate(idx);
+}
+
 // Navigate to a person by index — called from inline onclick in note links
 window.navTo=function(idx){
   // Already showing this person — nothing to do
@@ -1049,10 +1098,12 @@ window.navTo=function(idx){
   _navGuard=false;
 };
 // Expose internals for testing
-window.gotoIdx  = gotoIdx;
-window.getPeople= ()=>people;
-window.getDebug = ()=>_debug;
-window.setDebug = (v)=>{ _debug=v; draw(); };
+window.gotoIdx        = gotoIdx;
+window.showTipInPlace = showTipInPlace;
+window.getPeople      = ()=>people;
+window.getDebug       = ()=>_debug;
+window.setDebug       = (v)=>{ _debug=v; draw(); };
+window.setSuppressScroll = (v)=>{ _suppressScrollListener=v; };
 
 function buildTip(p){
   const age=calcAge(p);
@@ -1177,6 +1228,7 @@ outer.addEventListener('scroll', repositionTip, {passive:true});
 
 // ── Scroll-triggered tooltip: bump-at-top mechanic ──────────────────────
 let _scrollTipRow=0;
+let _suppressScrollListener=false; // test hook only
 
 function openScrollTip(idx){
   idx=Math.max(0,Math.min(people.length-1,idx));
@@ -1188,6 +1240,7 @@ function openScrollTip(idx){
 }
 
 outer.addEventListener('scroll',function(){
+  if(_suppressScrollListener) return;
   const st=outer.scrollTop;
   // trigger: open tooltip for last row within 1rem of top
   const REM=parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
@@ -1231,7 +1284,7 @@ cvs.addEventListener('click',e=>{
   const rect=cvs.getBoundingClientRect();
   const nameRow=findNameLabel(e.clientX,e.clientY,rect);
   if(nameRow>=0){
-    gotoIdx(nameRow);
+    showTipInPlace(nameRow);
     return;
   }
   const row=findRow(e.clientX,e.clientY,rect);
@@ -1240,7 +1293,7 @@ cvs.addEventListener('click',e=>{
       // Toggle off — clicking same bar closes the card
       selectedIdx=-1; draw(); hideTip();
     } else {
-      gotoIdx(row);
+      showTipInPlace(row);
     }
   } else {
     // Empty canvas click — close and deselect
