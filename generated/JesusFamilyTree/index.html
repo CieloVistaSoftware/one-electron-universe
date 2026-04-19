@@ -642,6 +642,7 @@ LEGEND_ORDER.forEach(k=>{
 legEl.insertAdjacentHTML('beforeend','<span><span style="display:inline-block;width:20px;border-top:2px dashed #404860;margin-top:4px"></span>Death unrecorded</span>');
 
 let selectedIdx=-1;
+let _debug=false;
 
 function rr(x,y,w,h,r){
   if(w<1)return;r=Math.min(r,w/2,h/2);
@@ -704,8 +705,17 @@ function draw(){
 
     ctx.fillStyle=p.g==='jes'?'#FFF8D0':(p.g==='ancw'||p.g==='gpm'?'#FF88CC':'#8090b8');
     ctx.font=(p.g==='jes'?'700 ':'400 ')+'11.5px system-ui';
-    ctx.textAlign='right';
-    ctx.fillText(p.n,LPAD-8,ry+ROW/2+4);
+    if(_debug){
+      const bxC=Math.max(yx(p.b),LPAD);
+      const ryC=getRowY(i);
+      ctx.textAlign='left';
+      ctx.fillStyle='#22EAA8';
+      ctx.font='700 9px system-ui';
+      ctx.fillText('['+Math.round(bxC)+','+Math.round(ryC)+'] '+p.n, 8, ry+ROW/2+4);
+    } else {
+      ctx.textAlign='right';
+      ctx.fillText(p.n,LPAD-8,ry+ROW/2+4);
+    }
 
     const bx=Math.max(yx(p.b),LPAD);
     const endYr=p.d!==null?p.d:Math.min(p.b+70,YE-5);
@@ -1233,6 +1243,9 @@ document.addEventListener('keydown',e=>{
   if((e.key==='0'||e.key==='Numpad0')&&(e.ctrlKey||e.metaKey)){e.preventDefault();applyZoom(1);}
   if(e.key==='Escape'){tourStop();selectedIdx=-1;draw();hideTip();closeAllCards();}
   if(e.key===' '&&tourIdx>=0){e.preventDefault();clearTimeout(tourTimer);tourShow(tourIdx+1);}
+  if(e.key==='D'&&e.ctrlKey&&e.shiftKey){e.preventDefault();_debug=!_debug;draw();
+    if(_debug) console.log('Debug ON — canvas coords shown in name column. Format: [bxCanvas, ryCanvas]');
+  }
 });
 
 // ── Open All Tooltips ───────────────────────────────────────────────────────────────
