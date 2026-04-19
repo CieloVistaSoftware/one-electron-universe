@@ -763,7 +763,16 @@ draw();
 // Pan
 const outer=document.getElementById('chart-outer');
 let dragging=false,startX=0,scrollLeft0=0;
-outer.addEventListener('mousedown',e=>{dragging=true;startX=e.pageX-outer.offsetLeft;scrollLeft0=outer.scrollLeft;outer.style.cursor='grabbing';e.preventDefault();});
+outer.addEventListener('mousedown',e=>{
+  dragging=true;
+  startX=e.pageX-outer.offsetLeft;
+  scrollLeft0=outer.scrollLeft;
+  // Cancel any running RAF scroll animator — it resets scrollLeft to _stX (0)
+  // and would fight the drag every frame.
+  if(_sRaf!==null){cancelAnimationFrame(_sRaf);_sRaf=null;_stX=null;_stY=null;}
+  outer.style.cursor='grabbing';
+  e.preventDefault();
+});
 document.addEventListener('mouseup',()=>{dragging=false;outer.style.cursor='grab';});
 outer.addEventListener('mousemove',e=>{if(!dragging)return;outer.scrollLeft=scrollLeft0-(e.pageX-outer.offsetLeft-startX)*1.2;});
 // Touch: pinch-zoom only. All scroll handled natively by browser.
@@ -1157,15 +1166,17 @@ function gotoIdx(idx){
   const ryC = getRowY(idx);
 
   // scrollLeft = 0: keep name label column always visible in left of screen.
-  // Setting scrollLeft to bxC*zoom scrolls names off-screen for post-exile people.
+  // scrollTop: center the selected row vertically in the viewport ("name center screen").
+  const centeredTop = ryC * zoom - (outer.clientHeight / 2) + (ROW * zoom / 2);
   const newScrollLeft = 0;
-  const newScrollTop  = Math.max(0, Math.min(ryC * zoom - REM, outer.scrollHeight - outer.clientHeight));
+  const newScrollTop  = Math.max(0, Math.min(centeredTop, outer.scrollHeight - outer.clientHeight));
 
   // Set scroll synchronously and kill RAF animator so it doesn't fight us
   outer.scrollLeft = newScrollLeft;
   outer.scrollTop  = newScrollTop;
   _stX = newScrollLeft;
   _stY = newScrollTop;
+  _prevScrollTop2 = newScrollTop;  // prevent scroll listener from overriding this gotoIdx call
 
   // Update state
   selectedIdx   = idx;
@@ -1180,12 +1191,16 @@ function gotoIdx(idx){
   buildTip(p);
   const actualH = tip.offsetHeight || 460;
 
-  // Tooltip position: container screen rect is stable (doesn't change with scroll)
+  // Tooltip position
   const outerRect = outer.getBoundingClientRect();
-  // After our scroll: bar left is at outerRect.left + REM (we put bxC*zoom at scrollLeft+REM)
-  // Bar bottom is at outerRect.top + ROW*zoom + REM
+
+  // Bar is now vertically centered in container.
+  // Bar screen top = outerTop + clientHeight/2 - ROW*zoom/2
+  // Bar screen bottom = outerTop + clientHeight/2 + ROW*zoom/2
+  // Tooltip: 1rem below bar bottom, clamped into viewport.
   let tx = outerRect.left + REM;
-  let ty = outerRect.top  + ROW * zoom + 2 * REM;
+  const barScreenBottom = outerRect.top + outer.clientHeight / 2 + ROW * zoom / 2;
+  let ty = barScreenBottom + REM;
   if(tx + TIP_W > window.innerWidth  - REM) tx = window.innerWidth  - TIP_W - REM;
   if(tx < REM) tx = REM;
   if(ty + actualH > window.innerHeight - REM) ty = window.innerHeight - actualH - REM;
@@ -1210,20 +1225,18 @@ function hideTip(){
   visibleTipRow=-1;
 }
 
-// Reposition the active tooltip to stay below its bar as the page or chart scrolls.
-// Skipped if the user has dragged the tooltip to a custom position.
+// Reposition the active tooltip.
+// Uses the same FIXED formula as gotoIdx — tx=outerLeft+REM, ty=outerTop+centreH+ROW/2+REM.
+// This means the tooltip ALWAYS appears at the same screen position regardless of which
+// bar is active or how the canvas has been scrolled (drag, wheel, etc.).
+// Skipped if the user has manually dragged the tooltip to a custom position.
 function repositionTip(){
-  // repositionTip fires during NATIVE browser scroll — scrollLeft/scrollTop are live here
   if(tip.style.display!=='block' || visibleTipRow<0 || _tipDragged) return;
-  const p   = people[visibleTipRow];
   const REM = parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
   const TIP_W = 360, TIP_H = tip.offsetHeight || 460;
-  const bxC = Math.max(yx(p.b), LPAD);
-  const ryC = getRowY(visibleTipRow);
   const outerRect = outer.getBoundingClientRect();
-  // scrollLeft/scrollTop are safe to read here — native scroll already updated them
-  let tx = outerRect.left + bxC * zoom - outer.scrollLeft;
-  let ty = outerRect.top  + (ryC + ROW) * zoom - outer.scrollTop + REM;
+  let tx = outerRect.left + REM;
+  let ty = outerRect.top + outer.clientHeight / 2 + ROW * zoom / 2 + REM;
   if(tx + TIP_W > window.innerWidth  - REM) tx = window.innerWidth  - TIP_W - REM;
   if(tx < REM) tx = REM;
   if(ty + TIP_H > window.innerHeight - REM) ty = window.innerHeight - TIP_H - REM;
