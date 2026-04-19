@@ -1035,17 +1035,7 @@ window.navTo=function(idx){
 
   _navGuard=true;
 
-  selectedIdx=idx; draw();
-
-  const p     = people[idx];
-  const bx    = Math.max(yx(p.b), LPAD);
-  const endYr = p.d !== null ? p.d : Math.min(p.b+70, YE-5);
-  const ex    = yx(endYr);
-  const cx    = (bx + ex) / 2;
-  outer.scrollLeft = Math.max(0, cx - outer.clientWidth / 2);
-
-  lastRow=idx;
-  showTip(p, idx);
+  gotoIdx(idx);
   _navGuard=false;
 };
 
@@ -1078,33 +1068,58 @@ function buildTip(p){
   });
 }
 
-function showTip(p,rowIdx){
-  _tipDragged=false;  // new tip — not yet dragged, scroll-reposition active
-  buildTip(p);
-  const REM   = parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
-  const TIP_W = 360;
-  const TIP_H = 460;
+// Place tooltip for person idx, using the scroll values we are ABOUT to set
+// (or just set). Never reads outer.scrollLeft/scrollTop from DOM — uses known values.
+function gotoIdx(idx){
+  idx=Math.max(0,Math.min(people.length-1,idx));
+  const p   = people[idx];
+  const REM = parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
+  const TIP_W = 360, TIP_H = 460;
 
-  // Bar left edge in canvas coords = birth year x position
-  const bx      = Math.max(yx(p.b), LPAD);
-  const ry      = getRowY(rowIdx);
+  // Canvas coords of bar
+  const bxC = Math.max(yx(p.b), LPAD);
+  const ryC = getRowY(idx);
 
-  // Position tooltip — same calc as openAllCards
-  const outerLeft = outer.getBoundingClientRect().left;
-  const cvsTop    = cvs.getBoundingClientRect().top;
-  let tx = outerLeft + bx * zoom - outer.scrollLeft;
-  let ty = cvsTop + (ry + ROW) * zoom + REM;
-  if(tx + TIP_W > window.innerWidth - REM) tx = window.innerWidth - TIP_W - REM;
+  // Target scroll: put bar REM px from container top-left
+  const newScrollLeft = Math.max(0, Math.min(bxC * zoom - REM, outer.scrollWidth  - outer.clientWidth));
+  const newScrollTop  = Math.max(0, Math.min(ryC * zoom - REM, outer.scrollHeight - outer.clientHeight));
+
+  // Set scroll synchronously and kill RAF animator so it doesn't fight us
+  outer.scrollLeft = newScrollLeft;
+  outer.scrollTop  = newScrollTop;
+  _stX = newScrollLeft;
+  _stY = newScrollTop;
+
+  // Update state
+  selectedIdx   = idx;
+  _scrollTipRow = idx;
+  _tipDragged   = false;
+  visibleTipRow = idx;
+  draw();
+
+  // Tooltip position: container screen rect is stable (doesn't change with scroll)
+  const outerRect = outer.getBoundingClientRect();
+  // After our scroll: bar left is at outerRect.left + (bxC*zoom - newScrollLeft) = outerRect.left + REM
+  // Bar bottom is at outerRect.top + (ryC + ROW)*zoom - newScrollTop = outerRect.top + ROW*zoom + REM
+  let tx = outerRect.left + REM;
+  let ty = outerRect.top  + ROW * zoom + 2 * REM;
+  if(tx + TIP_W > window.innerWidth  - REM) tx = window.innerWidth  - TIP_W - REM;
   if(tx < REM) tx = REM;
   if(ty + TIP_H > window.innerHeight - REM) ty = window.innerHeight - TIP_H - REM;
   if(ty < REM) ty = REM;
 
-  tip.style.zIndex = String(rowIdx);
-  tip.style.left = tx + 'px';
-  tip.style.top  = ty + 'px';
+  buildTip(p);
+  tip.style.zIndex  = String(idx);
+  tip.style.left    = tx + 'px';
+  tip.style.top     = ty + 'px';
   tip.style.display = 'block';
-  visibleTipRow = rowIdx;
+  lastRow = idx;
+
+  if(isMobile) mobNavUpdate(idx);
 }
+
+// Legacy showTip kept for repositionTip compatibility — reads current (live) scroll
+function showTip(p,rowIdx){ gotoIdx(people.indexOf(p)); }
 
 function hideTip(){
   clearTimeout(tipShowTimer);
@@ -1116,17 +1131,17 @@ function hideTip(){
 // Reposition the active tooltip to stay below its bar as the page or chart scrolls.
 // Skipped if the user has dragged the tooltip to a custom position.
 function repositionTip(){
+  // repositionTip fires during NATIVE browser scroll — scrollLeft/scrollTop are live here
   if(tip.style.display!=='block' || visibleTipRow<0 || _tipDragged) return;
   const p   = people[visibleTipRow];
   const REM = parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
-  const TIP_W = 360;
-  const TIP_H = 460;
-  const bx        = Math.max(yx(p.b), LPAD);
-  const ry        = getRowY(visibleTipRow);
-  const outerLeft = outer.getBoundingClientRect().left;
-  const cvsTop    = cvs.getBoundingClientRect().top;
-  let tx = outerLeft + bx * zoom - outer.scrollLeft;
-  let ty = cvsTop + (ry + ROW) * zoom + REM;
+  const TIP_W = 360, TIP_H = 460;
+  const bxC = Math.max(yx(p.b), LPAD);
+  const ryC = getRowY(visibleTipRow);
+  const outerRect = outer.getBoundingClientRect();
+  // scrollLeft/scrollTop are safe to read here — native scroll already updated them
+  let tx = outerRect.left + bxC * zoom - outer.scrollLeft;
+  let ty = outerRect.top  + (ryC + ROW) * zoom - outer.scrollTop + REM;
   if(tx + TIP_W > window.innerWidth  - REM) tx = window.innerWidth  - TIP_W - REM;
   if(tx < REM) tx = REM;
   if(ty + TIP_H > window.innerHeight - REM) ty = window.innerHeight - TIP_H - REM;
@@ -1159,19 +1174,7 @@ outer.addEventListener('scroll',function(){
     else break;
   }
   if(activeIdx!==_scrollTipRow){
-    _scrollTipRow=activeIdx;
-    selectedIdx=activeIdx;
-    draw();
-    // Scroll bar into view instantly so showTip positions correctly
-    const _p=people[activeIdx];
-    const _bxCSS=Math.max(yx(_p.b),LPAD)*zoom;
-    if(_bxCSS < outer.scrollLeft || _bxCSS > outer.scrollLeft+outer.clientWidth-REM){
-      const _newLeft=Math.max(0,_bxCSS-REM);
-      outer.scrollLeft=_newLeft;
-      _stX=_newLeft; // keep RAF animator in sync
-    }
-    showTip(_p,activeIdx);
-    if(isMobile) mobNavUpdate(activeIdx);
+    gotoIdx(activeIdx);
   } else {
     repositionTip();
   }
@@ -1205,10 +1208,7 @@ cvs.addEventListener('click',e=>{
   const rect=cvs.getBoundingClientRect();
   const nameRow=findNameLabel(e.clientX,e.clientY,rect);
   if(nameRow>=0){
-    selectedIdx=nameRow; draw();
-    centerBarIfNeeded(nameRow);
-    lastRow=nameRow;
-    showTip(people[nameRow],nameRow);
+    gotoIdx(nameRow);
     return;
   }
   const row=findRow(e.clientX,e.clientY,rect);
@@ -1217,10 +1217,7 @@ cvs.addEventListener('click',e=>{
       // Toggle off — clicking same bar closes the card
       selectedIdx=-1; draw(); hideTip();
     } else {
-      selectedIdx=row; draw();
-      centerBarIfNeeded(row);
-      lastRow=row;
-      showTip(people[row],row);
+      gotoIdx(row);
     }
   } else {
     // Empty canvas click — close and deselect
@@ -1316,10 +1313,7 @@ const TOUR_DWELL = 4000; // ms per person before auto-advancing
 function tourShow(idx){
   tourIdx = ((idx % people.length) + people.length) % people.length;
   selectedIdx = tourIdx;
-  draw();
-  centerBarIfNeeded(tourIdx);
-  lastRow   = tourIdx;
-  showTip(people[tourIdx], tourIdx);
+  gotoIdx(tourIdx);
   document.getElementById('tour-counter').textContent =
     (tourIdx+1) + ' / ' + people.length + '  —  ' + people[tourIdx].n;
   const hint = document.getElementById('tip-tour-hint');
@@ -1362,14 +1356,7 @@ function mobNavGoto(idx){
   draw();
   // scroll vertically so this row is near top
   const ry=getRowY(idx);
-  outer.scrollTop=Math.max(0,ry-16);
-  // scroll horizontally to bar — outside touch event so it always works
-  const p=people[idx];
-  const bx=Math.max(yx(p.b),LPAD)*zoom;
-  outer.scrollLeft=Math.max(0,bx-16);
-  _stX=outer.scrollLeft;
-  showTip(p,idx);
-  mobNavUpdate(idx);
+  gotoIdx(idx);
 }
 function mobNavUpdate(idx){
   const el=document.getElementById('mob-nav-name');
