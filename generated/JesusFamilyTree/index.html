@@ -1051,7 +1051,8 @@ window.navTo=function(idx){
 
 function buildTip(p){
   const age=calcAge(p);
-  document.getElementById('tip-name').textContent=p.n;
+  const _bxD=Math.max(yx(p.b),LPAD), _ryD=getRowY(people.indexOf(p));
+  document.getElementById('tip-name').textContent=_debug?'['+Math.round(_bxD)+','+Math.round(_ryD)+'] '+p.n:p.n;
   document.getElementById('tip-era').textContent=fmtYr(p.b)+' – '+fmtYr(p.d)+(age?'  ·  lived '+age+' years':'')+'  ·  '+p.era;
   const relEl=document.getElementById('tip-rel');
   relEl.style.color=C[p.g].sw;relEl.textContent=p.rel;
