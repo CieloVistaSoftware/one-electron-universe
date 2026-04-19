@@ -1048,16 +1048,23 @@ window.navTo=function(idx){
   gotoIdx(idx);
   _navGuard=false;
 };
+// Expose internals for testing
+window.gotoIdx  = gotoIdx;
+window.getPeople= ()=>people;
+window.getDebug = ()=>_debug;
+window.setDebug = (v)=>{ _debug=v; draw(); };
 
 function buildTip(p){
   const age=calcAge(p);
   const _bxD=Math.max(yx(p.b),LPAD), _ryD=getRowY(people.indexOf(p));
   document.getElementById('tip-name').textContent=_debug?'['+Math.round(_bxD)+','+Math.round(_ryD)+'] '+p.n:p.n;
-  document.getElementById('tip-era').textContent=fmtYr(p.b)+' – '+fmtYr(p.d)+(age?'  ·  lived '+age+' years':'')+'  ·  '+p.era;
+  const eraEl=document.getElementById('tip-era');
+  eraEl.innerHTML=fmtYr(p.b)+' – '+fmtYr(p.d)+(age?'  ·  lived '+age+' years':'')+'<br><span style="color:#505878;letter-spacing:.12em">'+p.era.toUpperCase()+'</span>';
   const relEl=document.getElementById('tip-rel');
   relEl.style.color=C[p.g].sw;relEl.textContent=p.rel;
   document.getElementById('tip-heb').textContent=p.heb;
-  document.getElementById('tip-pro').textContent='Pronunciation: '+p.pro;
+  document.getElementById('tip-pro').innerHTML='Pronunciation: '+p.pro
+    +' <a href="#" style="color:#22EAA8;font-size:10px;text-decoration:none;border-bottom:1px solid rgba(34,234,168,.4);cursor:pointer" onclick="(function(){var u=new SpeechSynthesisUtterance(\''+p.n.replace(/['\\']/g,'').replace(/[()]/g,'')+' \');u.rate=0.85;speechSynthesis.cancel();speechSynthesis.speak(u);return false;})()">🔊 hear</a>';
   document.getElementById('tip-mng').textContent='Meaning: '+p.mng;
   document.getElementById('tip-dates').textContent='Born: '+fmtYr(p.b)+'   ·   Died: '+fmtYr(p.d);
   const selfIdx=people.indexOf(p);
@@ -1085,7 +1092,7 @@ function gotoIdx(idx){
   idx=Math.max(0,Math.min(people.length-1,idx));
   const p   = people[idx];
   const REM = parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
-  const TIP_W = 360, TIP_H = 460;
+  const TIP_W = 360;
 
   // Canvas coords of bar
   const bxC = Math.max(yx(p.b), LPAD);
@@ -1108,22 +1115,27 @@ function gotoIdx(idx){
   visibleTipRow = idx;
   draw();
 
+  // Build tip content first (hidden) so we can measure actual rendered height
+  tip.style.visibility = 'hidden';
+  tip.style.display    = 'block';
+  buildTip(p);
+  const actualH = tip.offsetHeight || 460;
+
   // Tooltip position: container screen rect is stable (doesn't change with scroll)
   const outerRect = outer.getBoundingClientRect();
-  // After our scroll: bar left is at outerRect.left + (bxC*zoom - newScrollLeft) = outerRect.left + REM
-  // Bar bottom is at outerRect.top + (ryC + ROW)*zoom - newScrollTop = outerRect.top + ROW*zoom + REM
+  // After our scroll: bar left is at outerRect.left + REM (we put bxC*zoom at scrollLeft+REM)
+  // Bar bottom is at outerRect.top + ROW*zoom + REM
   let tx = outerRect.left + REM;
   let ty = outerRect.top  + ROW * zoom + 2 * REM;
   if(tx + TIP_W > window.innerWidth  - REM) tx = window.innerWidth  - TIP_W - REM;
   if(tx < REM) tx = REM;
-  if(ty + TIP_H > window.innerHeight - REM) ty = window.innerHeight - TIP_H - REM;
+  if(ty + actualH > window.innerHeight - REM) ty = window.innerHeight - actualH - REM;
   if(ty < REM) ty = REM;
 
-  buildTip(p);
-  tip.style.zIndex  = String(idx);
-  tip.style.left    = tx + 'px';
-  tip.style.top     = ty + 'px';
-  tip.style.display = 'block';
+  tip.style.zIndex      = String(idx);
+  tip.style.left        = tx + 'px';
+  tip.style.top         = ty + 'px';
+  tip.style.visibility  = '';
   lastRow = idx;
 
   if(isMobile) mobNavUpdate(idx);
@@ -1146,7 +1158,7 @@ function repositionTip(){
   if(tip.style.display!=='block' || visibleTipRow<0 || _tipDragged) return;
   const p   = people[visibleTipRow];
   const REM = parseFloat(getComputedStyle(document.documentElement).fontSize)||16;
-  const TIP_W = 360, TIP_H = 460;
+  const TIP_W = 360, TIP_H = tip.offsetHeight || 460;
   const bxC = Math.max(yx(p.b), LPAD);
   const ryC = getRowY(visibleTipRow);
   const outerRect = outer.getBoundingClientRect();
@@ -1244,6 +1256,8 @@ document.addEventListener('keydown',e=>{
   if((e.key==='0'||e.key==='Numpad0')&&(e.ctrlKey||e.metaKey)){e.preventDefault();applyZoom(1);}
   if(e.key==='Escape'){tourStop();selectedIdx=-1;draw();hideTip();closeAllCards();}
   if(e.key===' '&&tourIdx>=0){e.preventDefault();clearTimeout(tourTimer);tourShow(tourIdx+1);}
+  if(e.key==='ArrowDown'&&visibleTipRow>=0){e.preventDefault();gotoIdx(visibleTipRow+1);}
+  if(e.key==='ArrowUp'  &&visibleTipRow>=0){e.preventDefault();gotoIdx(visibleTipRow-1);}
   if(e.key==='D'&&e.ctrlKey&&e.shiftKey){e.preventDefault();_debug=!_debug;draw();
     if(_debug) console.log('Debug ON — canvas coords shown in name column. Format: [bxCanvas, ryCanvas]');
   }
