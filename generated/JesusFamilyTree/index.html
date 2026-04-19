@@ -32,6 +32,7 @@ main{padding:0 16px}
 .tnav:hover{background:#1c2238;color:#FFD040}
 #tour-counter{font-size:11px;color:#404868;flex:1;text-align:center}
 .chart-outer{max-width:100%;overflow-x:auto;overflow-y:auto;height:calc(100vh - 180px);position:relative;cursor:grab;border-radius:8px;border:1px solid #141828;scrollbar-width:thin;scrollbar-color:#252d48 #080a10;-webkit-overflow-scrolling:touch;}
+@media(max-width:768px){.chart-outer{overflow-x:hidden;height:calc(100vh - 240px);}}
 .chart-outer:active{cursor:grabbing}
 .chart-outer::-webkit-scrollbar{height:6px}
 .chart-outer::-webkit-scrollbar-track{background:#080a10}
@@ -71,6 +72,12 @@ a.tl:hover{background:#1e2840;color:#a0c0ff}
 @keyframes tip-wiggle{0%{transform:translateX(0)}15%{transform:translateX(-6px)}30%{transform:translateX(6px)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}100%{transform:translateX(0)}}
 .tip-wiggle{animation:tip-wiggle .45s ease}
 footer{text-align:center;margin-top:36px;padding:18px;border-top:1px solid #141828;font-size:.75rem;color:#282e40}
+#mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:2000;background:#0c0f1c;border-top:1px solid #252d48;padding:8px 12px;align-items:center;gap:8px;}
+@media(max-width:768px){#mob-nav{display:flex;}body{padding-bottom:70px;}}
+.mob-nav-btn{background:#141828;border:1px solid #2a3458;color:#8ea8ff;border-radius:8px;font-size:24px;line-height:1;padding:8px 20px;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
+.mob-nav-btn:active{background:#1e2840;}
+#mob-nav-name{flex:1;text-align:center;font-size:12px;color:#d4d6e0;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#mob-nav-era{font-size:10px;color:#505878;}
 </style>
 </head>
 <body>
@@ -140,6 +147,14 @@ footer{text-align:center;margin-top:36px;padding:18px;border-top:1px solid #1418
   <div id="th-note" style="color:#9098a8;font-size:11px;margin-bottom:7px;line-height:1.7"></div>
 </div>
 <footer><p>CieloVista AI &nbsp;&middot;&nbsp; Family Layout &nbsp;&middot;&nbsp; wb-starter design system 2026</p></footer>
+<div id="mob-nav">
+  <button class="mob-nav-btn" id="mob-prev">&#8592;</button>
+  <div style="flex:1;text-align:center;min-width:0">
+    <div id="mob-nav-name">Adam</div>
+    <div id="mob-nav-era">1 of 77</div>
+  </div>
+  <button class="mob-nav-btn" id="mob-next">&#8594;</button>
+</div>
 <script>
 (function(){
 const C={
@@ -1156,6 +1171,7 @@ outer.addEventListener('scroll',function(){
       _stX=_newLeft; // keep RAF animator in sync
     }
     showTip(_p,activeIdx);
+    if(isMobile) mobNavUpdate(activeIdx);
   } else {
     repositionTip();
   }
@@ -1338,6 +1354,33 @@ document.getElementById('tour-next').addEventListener('click',()=>{
   clearTimeout(tourTimer); tourShow(tourIdx+1);
 });
 document.getElementById('tour-stop').addEventListener('click', tourStop);
+// ── Mobile bottom nav ────────────────────────────────────────────────────────
+function mobNavGoto(idx){
+  idx=Math.max(0,Math.min(people.length-1,idx));
+  _scrollTipRow=idx;
+  selectedIdx=idx;
+  draw();
+  // scroll vertically so this row is near top
+  const ry=getRowY(idx);
+  outer.scrollTop=Math.max(0,ry-16);
+  // scroll horizontally to bar — outside touch event so it always works
+  const p=people[idx];
+  const bx=Math.max(yx(p.b),LPAD)*zoom;
+  outer.scrollLeft=Math.max(0,bx-16);
+  _stX=outer.scrollLeft;
+  showTip(p,idx);
+  mobNavUpdate(idx);
+}
+function mobNavUpdate(idx){
+  const el=document.getElementById('mob-nav-name');
+  const er=document.getElementById('mob-nav-era');
+  if(el) el.textContent=people[idx].n;
+  if(er) er.textContent=(idx+1)+' of '+people.length+' · '+people[idx].era;
+}
+if(isMobile){
+  document.getElementById('mob-prev').addEventListener('click',()=>mobNavGoto(_scrollTipRow-1));
+  document.getElementById('mob-next').addEventListener('click',()=>mobNavGoto(_scrollTipRow+1));
+}
 
 })();</script>
 </body>
